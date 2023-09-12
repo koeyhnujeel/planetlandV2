@@ -1,5 +1,6 @@
 package com.planetlandV2.controller;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.http.MediaType.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
@@ -58,13 +59,25 @@ class PlanetControllerTest {
 		MockMultipartFile request = new MockMultipartFile("request", null,
 			"application/json", json.getBytes(StandardCharsets.UTF_8));
 
-		//expected
+		//when
 		mockMvc.perform(multipart(HttpMethod.POST, "/planets")
 					.file(request)
 					.file(imgFile)
 			)
 			.andExpect(status().isOk())
 			.andDo(print());
+
+		//then
+		assertEquals(1L, planetRepository.count());
+
+		Planet planet = planetRepository.findAll().get(0);
+		assertEquals("지구", planet.getPlanetName());
+		assertEquals(10000, planet.getPrice());
+		assertEquals(5000, planet.getPopulation());
+		assertEquals(1, planet.getSatellite());
+		assertEquals("구매 가능", planet.getPlanetStatus());
+		assertNotNull(planet.getImgName());
+		assertNotNull(planet.getImgPath());
 	}
 
 	@Test
@@ -87,6 +100,12 @@ class PlanetControllerTest {
 				.contentType(APPLICATION_JSON)
 			)
 			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.id").value(planet.getPlanetId()))
+			.andExpect(jsonPath("$.planetName").value(planet.getPlanetName()))
+			.andExpect(jsonPath("$.price").value(planet.getPrice()))
+			.andExpect(jsonPath("$.population").value(planet.getPopulation()))
+			.andExpect(jsonPath("$.satellite").value(planet.getSatellite()))
+			.andExpect(jsonPath("$.planetStatus").value(planet.getPlanetStatus()))
 			.andDo(print());
 	}
 
@@ -118,13 +137,25 @@ class PlanetControllerTest {
 		MockMultipartFile planetEdit = new MockMultipartFile("planetEdit", null,
 			"application/json", json.getBytes(StandardCharsets.UTF_8));
 
-		//expected
+		//when
 		mockMvc.perform(multipart(HttpMethod.PATCH, "/planets/{planetId}", planet.getPlanetId())
 				.file(planetEdit)
 				.file(imgFile)
 			)
 			.andExpect(status().isOk())
 			.andDo(print());
+
+		//then
+		Planet changedPlanet = planetRepository.findById(planet.getPlanetId())
+			.orElseThrow(() -> new IllegalArgumentException("잘못된 요청입니다."));
+
+		assertEquals("수정된 행성", changedPlanet.getPlanetName());
+		assertEquals(32432, changedPlanet.getPrice());
+		assertEquals(5321312, changedPlanet.getPopulation());
+		assertEquals(32312, changedPlanet.getSatellite());
+		assertEquals("구매 불가", changedPlanet.getPlanetStatus());
+		assertNotNull(changedPlanet.getImgName());
+		assertNotNull(changedPlanet.getImgPath());
 	}
 
 	@Test
