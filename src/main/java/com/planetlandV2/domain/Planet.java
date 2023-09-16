@@ -25,11 +25,11 @@ public class Planet {
 
 	private String planetName;
 
-	private Integer price;
+	private int price;
 
-	private Integer population;
+	private int population;
 
-	private Integer satellite;
+	private int satellite;
 
 	private String planetStatus;
 
@@ -38,7 +38,7 @@ public class Planet {
 	private String imgPath;
 
 	@Builder
-	public Planet(Long planetId, String planetName, Integer price, Integer population, Integer satellite, String planetStatus,
+	public Planet(Long planetId, String planetName, int price, int population, int satellite, String planetStatus,
 		String imgName, String imgPath) {
 		this.planetId = planetId;
 		this.planetName = planetName;

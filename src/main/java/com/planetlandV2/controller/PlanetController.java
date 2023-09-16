@@ -3,8 +3,6 @@ package com.planetlandV2.controller;
 import java.io.IOException;
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -30,7 +28,7 @@ public class PlanetController {
 	private final PlanetService planetService;
 
 	@PostMapping("/planets")
-	public void create(@RequestPart @Valid PlanetCreate request, @RequestPart MultipartFile imgFile) throws IOException {
+	public void create(@RequestPart PlanetCreate request, @RequestPart MultipartFile imgFile) throws IOException {
 		planetService.create(request, imgFile);
 	}
 

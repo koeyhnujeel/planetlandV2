@@ -162,8 +162,6 @@ class PlanetServiceTest {
 			.mapToObj(i -> Planet.builder()
 				.planetName("행성 " + i)
 				.price(1000 + i)
-				.population(10 + i)
-				.satellite(10 + i)
 				.build())
 			.collect(Collectors.toList());
 		planetRepository.saveAll(planets);
