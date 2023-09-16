@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.util.UUID;
 
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 public class CreateFile {
 	public static final String PATH = System.getProperty("user.dir") + "/src/main/resources/images/";
@@ -17,5 +18,11 @@ public class CreateFile {
 
 		imgFile.transferTo(new File(PATH + imgName));
 		return imgName;
+	}
+
+	public static void imgFileCheck(MultipartFile imgFile) throws MissingServletRequestPartException {
+		if (imgFile.isEmpty()) {
+			throw new MissingServletRequestPartException("imgFile");
+		}
 	}
 }

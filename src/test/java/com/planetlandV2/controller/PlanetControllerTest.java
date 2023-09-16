@@ -252,4 +252,32 @@ class PlanetControllerTest {
 			.andExpect(jsonPath("$.validation.price").value("행성 최소 가격은 1원입니다."))
 			.andDo(print());
 	}
+
+	@Test
+	@DisplayName("행성 생성 시 이미지 파일 업로드는 필수다.")
+	void test7() throws Exception {
+		//given
+		PlanetCreate planetCreate = PlanetCreate.builder()
+			.planetName("test")
+			.price(1)
+			.population(0)
+			.satellite(0)
+			.planetStatus("구매 가능")
+			.build();
+
+		String json = objectMapper.writeValueAsString(planetCreate);
+
+		MockMultipartFile request = new MockMultipartFile("request", null,
+			"application/json", json.getBytes(StandardCharsets.UTF_8));
+
+		//expected
+		mockMvc.perform(multipart(HttpMethod.POST, "/planets")
+				.file(request)
+			)
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.code").value("400"))
+			.andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
+			.andExpect(jsonPath("$.validation.imgFile").value("이미지 파일을 업로드 해주세요."))
+			.andDo(print());
+	}
 }
