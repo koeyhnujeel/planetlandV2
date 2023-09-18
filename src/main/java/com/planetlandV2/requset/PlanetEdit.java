@@ -4,6 +4,8 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.planetlandV2.exception.InvalidRequest;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,5 +39,11 @@ public class PlanetEdit {
 		this.population = population;
 		this.satellite = satellite;
 		this.planetStatus = planetStatus;
+	}
+
+	public void validate() {
+		if (this.planetName.contains("바보")) {
+			throw new InvalidRequest("planetName", "행성 이름에 비속어는 포함할 수 없습니다.");
+		}
 	}
 }

@@ -19,10 +19,4 @@ public class CreateFile {
 		imgFile.transferTo(new File(PATH + imgName));
 		return imgName;
 	}
-
-	public static void imgFileCheck(MultipartFile imgFile) throws MissingServletRequestPartException {
-		if (imgFile.isEmpty()) {
-			throw new MissingServletRequestPartException("imgFile");
-		}
-	}
 }

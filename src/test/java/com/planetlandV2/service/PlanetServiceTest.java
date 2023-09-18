@@ -16,6 +16,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.planetlandV2.domain.Planet;
+import com.planetlandV2.exception.PlanetNotFound;
 import com.planetlandV2.repository.PlanetRepository;
 import com.planetlandV2.requset.PlanetCreate;
 import com.planetlandV2.requset.PlanetEdit;
@@ -177,5 +178,77 @@ class PlanetServiceTest {
 
 		assertEquals(10L, list.size());
 		assertEquals("행성 0", list.get(9).getPlanetName());
+	}
+
+	@Test
+	@DisplayName("행성 1개 조회 - 존재하지 않는 행성")
+	void test6() throws Exception{
+		// given
+		Planet planet = Planet.builder()
+			.planetName("테스트 행성1")
+			.price(1000)
+			.population(100)
+			.satellite(1)
+			.planetStatus("구매 가능")
+			.imgName("test.png")
+			.imgPath("/testPath")
+			.build();
+		planetRepository.save(planet);
+
+		//expected
+		assertThrows(PlanetNotFound.class, () -> {
+			planetService.get(planet.getPlanetId() + 1);
+		});
+	}
+
+	@Test
+	@DisplayName("행성 수정하기 - 존재하지 않는 행성")
+	void test7() throws IOException {
+		//given
+		Planet planet = Planet.builder()
+			.planetName("테스트 행성1")
+			.price(1000)
+			.population(100)
+			.satellite(1)
+			.planetStatus("구매 가능")
+			.imgName("origin.png")
+			.imgPath("/originPath")
+			.build();
+		planetRepository.save(planet);
+
+		PlanetEdit planetEdit = PlanetEdit.builder()
+			.planetName("수정된 행성")
+			.price(2000)
+			.population(200)
+			.satellite(3)
+			.planetStatus("구매 가능")
+			.build();
+
+		MultipartFile imgFile = new MockMultipartFile("files", "imgFile.jpeg", "image/jpeg",
+			"<<jpeg data>>".getBytes());
+
+		//expected
+		assertThrows(PlanetNotFound.class, () -> {
+			planetService.edit(planet.getPlanetId() + 1, planetEdit, imgFile);
+		});
+	}
+
+	@Test
+	@DisplayName("행성 삭제하기 - 존재하지 않는 행성")
+	void test8() {
+		//given
+		Planet planet = Planet.builder()
+			.planetName("테스트 행성1")
+			.price(1000)
+			.population(100)
+			.satellite(1)
+			.planetStatus("구매 가능")
+			.build();
+		planetRepository.save(planet);
+
+		//expected
+		assertThrows(PlanetNotFound.class, () -> {
+			planetService.delete(planet.getPlanetId() + 1);
+		});
 	}
 }

@@ -14,9 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
-import com.planetlandV2.image.CreateFile;
 import com.planetlandV2.requset.PlanetCreate;
 import com.planetlandV2.requset.PlanetEdit;
 import com.planetlandV2.requset.PlanetPage;
@@ -34,10 +32,8 @@ public class PlanetController {
 	private final PlanetService planetService;
 
 	@PostMapping("/planets")
-	public void create(@RequestPart @Valid PlanetCreate request, @RequestPart MultipartFile imgFile) throws
-		IOException, MissingServletRequestPartException {
-
-		CreateFile.imgFileCheck(imgFile);
+	public void create(@RequestPart @Valid PlanetCreate request, @RequestPart MultipartFile imgFile) throws IOException {
+		request.validate();
 		planetService.create(request, imgFile);
 	}
 
@@ -51,6 +47,7 @@ public class PlanetController {
 		@RequestPart(required = false) MultipartFile imgFile)
 		throws IOException {
 
+		planetEdit.validate();
 		planetService.edit(planetId, planetEdit, imgFile);
 	}
 

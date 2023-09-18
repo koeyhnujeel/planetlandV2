@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.planetlandV2.exception.PlanetNotFound;
 import com.planetlandV2.image.CreateFile;
 import com.planetlandV2.domain.Planet;
 import com.planetlandV2.repository.PlanetRepository;
@@ -43,7 +44,7 @@ public class PlanetService {
 
 	public PlanetResponse get(Long planetId) {
 		Planet planet = planetRepository.findById(planetId)
-			.orElseThrow(() -> new IllegalArgumentException("잘못된 요청입니다."));
+			.orElseThrow(() -> new PlanetNotFound());
 
 		return PlanetResponse.builder()
 			.id(planet.getPlanetId())
@@ -60,7 +61,7 @@ public class PlanetService {
 	@Transactional
 	public void edit(Long planetId, PlanetEdit planetEdit, MultipartFile imgFile) throws IOException {
 		Planet planet = planetRepository.findById(planetId)
-			.orElseThrow(() -> new IllegalArgumentException("잘못된 요청입니다."));
+			.orElseThrow(() -> new PlanetNotFound());
 
 		if (imgFile != null) {
 			String imgName = CreateFile.getImgName(imgFile);
@@ -74,7 +75,7 @@ public class PlanetService {
 
 	public void delete(Long planetId) {
 		Planet planet = planetRepository.findById(planetId)
-			.orElseThrow(() -> new IllegalArgumentException("잘못된 요청입니다."));
+			.orElseThrow(() -> new PlanetNotFound());
 
 		planetRepository.deleteById(planet.getPlanetId());
 	}
