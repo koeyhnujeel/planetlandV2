@@ -181,8 +181,116 @@ class PlanetServiceTest {
 	}
 
 	@Test
+	@DisplayName("행성 목록 조회 - 과거순")
+	void test6() {
+		// given
+		List<Planet> planets = IntStream.range(0, 20)
+			.mapToObj(i -> Planet.builder()
+				.planetName("행성 " + i)
+				.price(1000 + i)
+				.build())
+			.collect(Collectors.toList());
+		planetRepository.saveAll(planets);
+
+		// when
+		PlanetPage planetPage = PlanetPage.builder()
+			.page(1)
+			.size(10)
+			.keyword("과거순")
+			.build();
+
+		// then
+		List<PlanetResponse> list = planetService.getList(planetPage);
+
+		assertEquals(10L, list.size());
+		assertEquals("행성 0", list.get(0).getPlanetName());
+	}
+
+	@Test
+	@DisplayName("행성 목록 조회 - 높은 가치순")
+	void test7() {
+		// given
+		List<Planet> planets1 = IntStream.range(0, 10)
+			.mapToObj(i -> Planet.builder()
+				.planetName("행성 " + i)
+				.price(1000 - i)
+				.build())
+			.collect(Collectors.toList());
+		planetRepository.saveAll(planets1);
+
+		planetRepository.save(Planet.builder()
+			.planetName("제일 비싼 행성")
+			.price(100000)
+			.build());
+
+		List<Planet> planets2 = IntStream.range(11, 20)
+			.mapToObj(i -> Planet.builder()
+				.planetName("행성 " + i)
+				.price(1000 + i)
+				.build())
+			.collect(Collectors.toList());
+		planetRepository.saveAll(planets2);
+
+		// when
+		PlanetPage planetPage = PlanetPage.builder()
+			.page(1)
+			.size(10)
+			.keyword("높은 가치순")
+			.build();
+
+		// then
+		List<PlanetResponse> list = planetService.getList(planetPage);
+
+		assertEquals(10L, list.size());
+		assertEquals("제일 비싼 행성", list.get(0).getPlanetName());
+		assertEquals(100000, list.get(0).getPrice());
+		assertEquals(11L, list.get(0).getId());
+	}
+
+	@Test
+	@DisplayName("행성 목록 조회 - 낮은 가치순")
+	void test8() {
+		// given
+		List<Planet> planets1 = IntStream.range(0, 10)
+			.mapToObj(i -> Planet.builder()
+				.planetName("행성 " + i)
+				.price(1000 - i)
+				.build())
+			.collect(Collectors.toList());
+		planetRepository.saveAll(planets1);
+
+		planetRepository.save(Planet.builder()
+			.planetName("제일 싼 행성")
+			.price(1)
+			.build());
+
+		List<Planet> planets2 = IntStream.range(11, 20)
+			.mapToObj(i -> Planet.builder()
+				.planetName("행성 " + i)
+				.price(1000 + i)
+				.build())
+			.collect(Collectors.toList());
+		planetRepository.saveAll(planets2);
+
+		// when
+		PlanetPage planetPage = PlanetPage.builder()
+			.page(1)
+			.size(10)
+			.keyword("낮은 가치순")
+			.build();
+
+		// then
+		List<PlanetResponse> list = planetService.getList(planetPage);
+
+		assertEquals(10L, list.size());
+		assertEquals("제일 싼 행성", list.get(0).getPlanetName());
+		assertEquals(1, list.get(0).getPrice());
+		assertEquals(11L, list.get(0).getId());
+	}
+
+	@Test
 	@DisplayName("행성 1개 조회 - 존재하지 않는 행성")
-	void test6() throws Exception{
+	void test9() throws Exception{
 		// given
 		Planet planet = Planet.builder()
 			.planetName("테스트 행성1")
@@ -203,7 +311,7 @@ class PlanetServiceTest {
 
 	@Test
 	@DisplayName("행성 수정하기 - 존재하지 않는 행성")
-	void test7() throws IOException {
+	void test10() throws IOException {
 		//given
 		Planet planet = Planet.builder()
 			.planetName("테스트 행성1")
@@ -235,7 +343,7 @@ class PlanetServiceTest {
 
 	@Test
 	@DisplayName("행성 삭제하기 - 존재하지 않는 행성")
-	void test8() {
+	void test11() {
 		//given
 		Planet planet = Planet.builder()
 			.planetName("테스트 행성1")

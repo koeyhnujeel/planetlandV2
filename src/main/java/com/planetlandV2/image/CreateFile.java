@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.UUID;
 
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 public class CreateFile {
 	public static final String PATH = System.getProperty("user.dir") + "/src/main/resources/images/";

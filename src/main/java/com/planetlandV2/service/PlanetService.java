@@ -24,7 +24,6 @@ import lombok.RequiredArgsConstructor;
 public class PlanetService {
 
 	private final PlanetRepository planetRepository;
-
 	public void create(PlanetCreate request, MultipartFile imgFile) throws IOException {
 
 		String imgName = CreateFile.getImgName(imgFile);
