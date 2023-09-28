@@ -25,10 +25,7 @@ public class PlanetPage {
 	}
 
 	public boolean isAscending() {
-		if (keyword.equals("최신순") || keyword.equals("높은 가치순")) {
-			return false;
-		}
-		return true;
+		return !keyword.equals("최신순") && !keyword.equals("높은 가치순");
 	}
 
 	public String getProperty() {

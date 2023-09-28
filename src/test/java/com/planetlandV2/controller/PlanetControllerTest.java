@@ -7,7 +7,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
+import org.hamcrest.Matcher;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -116,8 +121,122 @@ class PlanetControllerTest {
 	}
 
 	@Test
-	@DisplayName("행성 수정")
+	@DisplayName("행성 리스트 조회 - 최신순")
 	void test3() throws Exception {
+		// expected
+		List<Planet> planets  = IntStream.range(0, 20)
+			.mapToObj(i -> Planet.builder()
+				.planetName("행성" + i)
+				.price(1 + i)
+				.build())
+			.collect(Collectors.toList());
+		planetRepository.saveAll(planets);
+
+		mockMvc.perform(get("/planets?page=1&size=10&keyword=최신순")
+				.contentType(APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.length()", Matchers.is(10)))
+			.andExpect(jsonPath("$[0].id").value(planets.get(19).getPlanetId()))
+			.andExpect(jsonPath("$[0].planetName").value("행성19"))
+			.andExpect(jsonPath("$[0].price").value(20))
+			.andDo(print());
+	}
+
+	@Test
+	@DisplayName("행성 리스트 조회 - 과거순")
+	void test4() throws Exception {
+		// expected
+		List<Planet> planets  = IntStream.range(0, 20)
+			.mapToObj(i -> Planet.builder()
+				.planetName("행성" + i)
+				.price(1 + i)
+				.build())
+			.collect(Collectors.toList());
+		planetRepository.saveAll(planets);
+
+		mockMvc.perform(get("/planets?page=1&size=10&keyword=과거순")
+				.contentType(APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.length()", Matchers.is(10)))
+			.andExpect(jsonPath("$[0].id").value(planets.get(0).getPlanetId()))
+			.andExpect(jsonPath("$[0].planetName").value("행성0"))
+			.andExpect(jsonPath("$[0].price").value(1))
+			.andDo(print());
+	}
+
+	@Test
+	@DisplayName("행성 리스트 조회 - 높은 가치순")
+	void test5() throws Exception {
+		// expected
+		List<Planet> planets1 = IntStream.range(0, 10)
+			.mapToObj(i -> Planet.builder()
+				.planetName("행성 " + i)
+				.price(1000 - i)
+				.build())
+			.collect(Collectors.toList());
+		planetRepository.saveAll(planets1);
+
+		Planet target = planetRepository.save(Planet.builder()
+			.planetName("제일 비싼 행성")
+			.price(100000)
+			.build());
+
+		List<Planet> planets2 = IntStream.range(11, 20)
+			.mapToObj(i -> Planet.builder()
+				.planetName("행성 " + i)
+				.price(1000 + i)
+				.build())
+			.collect(Collectors.toList());
+		planetRepository.saveAll(planets2);
+
+		mockMvc.perform(get("/planets?page=1&size=10&keyword=높은 가치순")
+				.contentType(APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.length()", Matchers.is(10)))
+			.andExpect(jsonPath("$[0].id").value(target.getPlanetId()))
+			.andExpect(jsonPath("$[0].planetName").value("제일 비싼 행성"))
+			.andExpect(jsonPath("$[0].price").value(100000))
+			.andDo(print());
+	}
+
+	@Test
+	@DisplayName("행성 리스트 조회 - 낮은 가치순")
+	void test6() throws Exception {
+		// expected
+		List<Planet> planets1 = IntStream.range(0, 10)
+			.mapToObj(i -> Planet.builder()
+				.planetName("행성 " + i)
+				.price(1000 - i)
+				.build())
+			.collect(Collectors.toList());
+		planetRepository.saveAll(planets1);
+
+		Planet target = planetRepository.save(Planet.builder()
+			.planetName("제일 싼 행성")
+			.price(1)
+			.build());
+
+		List<Planet> planets2 = IntStream.range(11, 20)
+			.mapToObj(i -> Planet.builder()
+				.planetName("행성 " + i)
+				.price(1000 + i)
+				.build())
+			.collect(Collectors.toList());
+		planetRepository.saveAll(planets2);
+
+		mockMvc.perform(get("/planets?page=1&size=10&keyword=낮은 가치순")
+				.contentType(APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.length()", Matchers.is(10)))
+			.andExpect(jsonPath("$[0].id").value(target.getPlanetId()))
+			.andExpect(jsonPath("$[0].planetName").value("제일 싼 행성"))
+			.andExpect(jsonPath("$[0].price").value(1))
+			.andDo(print());
+	}
+
+	@Test
+	@DisplayName("행성 수정")
+	void test7() throws Exception {
 		//given
 		Planet planet = Planet.builder()
 			.planetName("지구")
@@ -166,7 +285,7 @@ class PlanetControllerTest {
 
 	@Test
 	@DisplayName("행성 삭제")
-	void test4() throws Exception {
+	void test8() throws Exception {
 		//given
 		Planet planet = Planet.builder()
 			.planetName("지구")
@@ -189,7 +308,7 @@ class PlanetControllerTest {
 
 	@Test
 	@DisplayName("행성 생성 시 행성 이름, 가격, 인구수, 위성수, 구매가능 여부값은 필수다.")
-	void test5() throws Exception {
+	void test9() throws Exception {
 		//given
 		PlanetCreate planetCreate = PlanetCreate.builder()
 			.planetName("")
@@ -224,7 +343,7 @@ class PlanetControllerTest {
 
 	@Test
 	@DisplayName("행성 생성 시 행성 최소 가격은 1원이다.")
-	void test6() throws Exception {
+	void test10() throws Exception {
 		//given
 		PlanetCreate planetCreate = PlanetCreate.builder()
 			.planetName("test")
@@ -255,7 +374,7 @@ class PlanetControllerTest {
 
 	@Test
 	@DisplayName("행성 생성 시 이미지 파일 업로드는 필수다.")
-	void test7() throws Exception {
+	void test11() throws Exception {
 		//given
 		PlanetCreate planetCreate = PlanetCreate.builder()
 			.planetName("test")
@@ -283,7 +402,7 @@ class PlanetControllerTest {
 
 	@Test
 	@DisplayName("존재하지 않는 행성 조회")
-	void test8() throws Exception {
+	void test12() throws Exception {
 		// expected
 		mockMvc.perform(get("/planets/{planetId}", 909)
 				.contentType(APPLICATION_JSON)
@@ -294,7 +413,7 @@ class PlanetControllerTest {
 
 	@Test
 	@DisplayName("존재하지 않는 행성 수정")
-	void test9() throws Exception {
+	void test13() throws Exception {
 		//given
 		PlanetEdit edit = PlanetEdit.builder()
 			.planetName("수정된 행성")
@@ -322,7 +441,7 @@ class PlanetControllerTest {
 
 	@Test
 	@DisplayName("존재하지 않는 행성 삭제")
-	void test10() throws Exception {
+	void test14() throws Exception {
 		// expected
 		mockMvc.perform(delete("/planets/{planetId}", 10L)
 				.contentType(APPLICATION_JSON)
@@ -333,7 +452,7 @@ class PlanetControllerTest {
 
 	@Test
 	@DisplayName("행성 생성 시 행성 이름에 비속어는 포함될 수 없다.")
-	void test11() throws Exception {
+	void test15() throws Exception {
 		//given
 		PlanetCreate planetCreate = PlanetCreate.builder()
 			.planetName("바보")
@@ -361,7 +480,7 @@ class PlanetControllerTest {
 
 	@Test
 	@DisplayName("행성 수정 시 행성 이름에 비속어는 포함될 수 없다.")
-	void test12() throws Exception {
+	void test16() throws Exception {
 		//given
 		Planet planet = Planet.builder()
 			.planetName("지구")

@@ -244,7 +244,6 @@ class PlanetServiceTest {
 		assertEquals(10L, list.size());
 		assertEquals("제일 비싼 행성", list.get(0).getPlanetName());
 		assertEquals(100000, list.get(0).getPrice());
-		assertEquals(11L, list.get(0).getId());
 	}
 
 	@Test
@@ -285,7 +284,6 @@ class PlanetServiceTest {
 		assertEquals(10L, list.size());
 		assertEquals("제일 싼 행성", list.get(0).getPlanetName());
 		assertEquals(1, list.get(0).getPrice());
-		assertEquals(11L, list.get(0).getId());
 	}
 
 	@Test
