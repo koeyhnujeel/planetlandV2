@@ -72,8 +72,8 @@ class PlanetControllerTest {
 
 		//when
 		mockMvc.perform(multipart(HttpMethod.POST, "/planets")
-					.file(request)
-					.file(imgFile)
+				.file(request)
+				.file(imgFile)
 			)
 			.andExpect(status().isOk())
 			.andDo(print());
@@ -124,7 +124,7 @@ class PlanetControllerTest {
 	@DisplayName("행성 리스트 조회 - 최신순")
 	void test3() throws Exception {
 		// expected
-		List<Planet> planets  = IntStream.range(0, 20)
+		List<Planet> planets = IntStream.range(0, 20)
 			.mapToObj(i -> Planet.builder()
 				.planetName("행성" + i)
 				.price(1 + i)
@@ -146,7 +146,7 @@ class PlanetControllerTest {
 	@DisplayName("행성 리스트 조회 - 과거순")
 	void test4() throws Exception {
 		// expected
-		List<Planet> planets  = IntStream.range(0, 20)
+		List<Planet> planets = IntStream.range(0, 20)
 			.mapToObj(i -> Planet.builder()
 				.planetName("행성" + i)
 				.price(1 + i)
@@ -469,12 +469,15 @@ class PlanetControllerTest {
 		MockMultipartFile request = new MockMultipartFile("request", null,
 			"application/json", json.getBytes(StandardCharsets.UTF_8));
 
-		//when
+		//expected
 		mockMvc.perform(multipart(HttpMethod.POST, "/planets")
 				.file(request)
 				.file(imgFile)
 			)
 			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.code").value("400"))
+			.andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
+			.andExpect(jsonPath("$.validation.planetName").value("행성 이름에 비속어는 포함할 수 없습니다."))
 			.andDo(print());
 	}
 
@@ -506,12 +509,59 @@ class PlanetControllerTest {
 		MockMultipartFile request = new MockMultipartFile("planetEdit", null,
 			"application/json", json.getBytes(StandardCharsets.UTF_8));
 
-		//when
+		//expected
 		mockMvc.perform(multipart(HttpMethod.PATCH, "/planets/{planetId}", planet.getPlanetId())
 				.file(request)
 				.file(imgFile)
 			)
 			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.code").value("400"))
+			.andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
+			.andExpect(jsonPath("$.validation.planetName").value("행성 이름에 비속어는 포함할 수 없습니다."))
+			.andDo(print());
+	}
+
+	@Test
+	@DisplayName("행성이름은 중복 될 수 없다 - 중복 일 때)")
+	void test17() throws Exception {
+		//given
+		Planet planet = Planet.builder()
+			.planetName("지구")
+			.price(10000)
+			.population(5000)
+			.satellite(1)
+			.planetStatus("구매 가능")
+			.build();
+		planetRepository.save(planet);
+
+		//expected
+		mockMvc.perform(get("/planets/exists/{planetName}", "지구")
+				.contentType(APPLICATION_JSON))
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.code").value("400"))
+			.andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
+			.andExpect(jsonPath("$.validation.planetName").value("이미 존재하는 행성입니다."))
+			.andDo(print());
+	}
+
+	@Test
+	@DisplayName("행성이름은 중복 될 수 없다 - 중복 아닐 때)")
+	void test18() throws Exception {
+		//given
+		Planet planet = Planet.builder()
+			.planetName("지구")
+			.price(10000)
+			.population(5000)
+			.satellite(1)
+			.planetStatus("구매 가능")
+			.build();
+		planetRepository.save(planet);
+
+		//expected
+		mockMvc.perform(get("/planets/exists/{planetName}", "화성")
+				.contentType(APPLICATION_JSON))
+			.andExpect(status().isOk())
+			.andExpect(content().string("사용 가능한 행성 이름입니다."))
 			.andDo(print());
 	}
 }

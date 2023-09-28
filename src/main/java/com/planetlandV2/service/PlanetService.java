@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.planetlandV2.exception.InvalidRequest;
 import com.planetlandV2.exception.PlanetNotFound;
 import com.planetlandV2.image.CreateFile;
 import com.planetlandV2.domain.Planet;
@@ -24,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class PlanetService {
 
 	private final PlanetRepository planetRepository;
+
 	public void create(PlanetCreate request, MultipartFile imgFile) throws IOException {
 
 		String imgName = CreateFile.getImgName(imgFile);
@@ -83,5 +85,13 @@ public class PlanetService {
 		return planetRepository.getList(planetPage).stream()
 			.map(planet -> new PlanetResponse(planet))
 			.collect(Collectors.toList());
+	}
+
+	public String checkDuplicate(String planetName) {
+		boolean exists = planetRepository.existsByPlanetName(planetName);
+		if (exists){
+			throw new InvalidRequest("planetName", "이미 존재하는 행성입니다.");
+		}
+		return "사용 가능한 행성 이름입니다.";
 	}
 }

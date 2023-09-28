@@ -60,4 +60,9 @@ public class PlanetController {
 	public List<PlanetResponse> getList(@ModelAttribute PlanetPage planetPage) {
 		return planetService.getList(planetPage);
 	}
+
+	@GetMapping("/planets/exists/{planetName}")
+	public String planetNameCheckDuplicate(@PathVariable String planetName) {
+		return planetService.checkDuplicate(planetName);
+	}
 }

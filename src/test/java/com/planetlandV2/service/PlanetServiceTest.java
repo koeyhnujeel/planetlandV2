@@ -13,9 +13,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.orm.jpa.JpaOptimisticLockingFailureException;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.planetlandV2.domain.Planet;
+import com.planetlandV2.exception.InvalidRequest;
 import com.planetlandV2.exception.PlanetNotFound;
 import com.planetlandV2.repository.PlanetRepository;
 import com.planetlandV2.requset.PlanetCreate;
@@ -355,6 +357,42 @@ class PlanetServiceTest {
 		//expected
 		assertThrows(PlanetNotFound.class, () -> {
 			planetService.delete(planet.getPlanetId() + 1);
+		});
+	}
+
+	@Test
+	@DisplayName("행성 이름 중복 체크 - 중복 아닐 때")
+	void test12() {
+		//given
+		Planet planet = Planet.builder()
+			.planetName("테스트 행성1")
+			.price(1000)
+			.population(100)
+			.satellite(1)
+			.planetStatus("구매 가능")
+			.build();
+		planetRepository.save(planet);
+
+		//expected
+		assertEquals("사용 가능한 행성 이름입니다.", planetService.checkDuplicate("테스트 행성2"));
+	}
+
+	@Test
+	@DisplayName("행성 이름 중복 체크 - 중복 일 때")
+	void test13() {
+		//given
+		Planet planet = Planet.builder()
+			.planetName("테스트 행성1")
+			.price(1000)
+			.population(100)
+			.satellite(1)
+			.planetStatus("구매 가능")
+			.build();
+		planetRepository.save(planet);
+
+		//expected
+		assertThrows(InvalidRequest.class, () -> {
+			planetService.checkDuplicate("테스트 행성1");
 		});
 	}
 }
