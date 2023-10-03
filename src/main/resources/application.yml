@@ -8,14 +8,8 @@ spring:
       enabled: true
       path: /h2-console
 
-  ## 페이징 처리할 때 1부터 시작하게
-  data:
-    web:
-      pageable:
-        one-indexed-parameters: true
-
   datasource:
-    url: jdbc:h2:mem:zunlog
+    url: jdbc:h2:mem:planetland2;NON_KEYWORDS=USER
     username: sa
     password:
     driver-class-name: org.h2.Driver
@@ -26,3 +20,4 @@ spring:
   sql:
     init:
       mode: always
+
