@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,6 +32,16 @@ import lombok.extern.slf4j.Slf4j;
 public class PlanetController {
 
 	private final PlanetService planetService;
+
+	@GetMapping("/test")
+	public String test() {
+		return "test";
+	}
+
+	@GetMapping("/foo")
+	public String foo() {
+		return "foo";
+	}
 
 	@PostMapping("/planets")
 	public void create(@RequestPart @Valid PlanetCreate request, @RequestPart MultipartFile imgFile) throws IOException {

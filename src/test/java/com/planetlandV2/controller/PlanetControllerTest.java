@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -71,7 +70,7 @@ class PlanetControllerTest {
 			"application/json", json.getBytes(StandardCharsets.UTF_8));
 
 		//when
-		mockMvc.perform(multipart(HttpMethod.POST, "/planets")
+		mockMvc.perform(multipart(HttpMethod.POST, "/planets?accessToken=zunza")
 				.file(request)
 				.file(imgFile)
 			)

@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.multipart.support.MissingServletRequestPartException;
 
 import com.planetlandV2.exception.CustomException;
-import com.planetlandV2.exception.InvalidRequest;
 import com.planetlandV2.response.ErrorResponse;
 
 @RestControllerAdvice
