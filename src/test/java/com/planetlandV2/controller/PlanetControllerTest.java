@@ -70,7 +70,7 @@ class PlanetControllerTest {
 			"application/json", json.getBytes(StandardCharsets.UTF_8));
 
 		//when
-		mockMvc.perform(multipart(HttpMethod.POST, "/planets?accessToken=zunza")
+		mockMvc.perform(multipart(HttpMethod.POST, "/planets")
 				.file(request)
 				.file(imgFile)
 			)
