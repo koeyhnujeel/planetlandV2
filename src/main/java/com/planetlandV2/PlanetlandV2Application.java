@@ -9,5 +9,4 @@ public class PlanetlandV2Application {
 	public static void main(String[] args) {
 		SpringApplication.run(PlanetlandV2Application.class, args);
 	}
-
 }

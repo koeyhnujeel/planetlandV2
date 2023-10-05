@@ -34,9 +34,6 @@ import com.planetlandV2.service.PlanetService;
 class PlanetControllerTest {
 
 	@Autowired
-	private PlanetService planetService;
-
-	@Autowired
 	private PlanetRepository planetRepository;
 
 	@Autowired
