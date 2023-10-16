@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.planetlandV2.requset.Signup;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;

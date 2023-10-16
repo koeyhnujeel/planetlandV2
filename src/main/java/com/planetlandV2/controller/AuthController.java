@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.planetlandV2.requset.Login;
+import com.planetlandV2.requset.Signup;
 import com.planetlandV2.service.AuthService;
 
 import lombok.RequiredArgsConstructor;
@@ -34,10 +35,13 @@ public class AuthController {
 			.sameSite("Strict")
 			.build();
 
-		log.info(">>>>>>>>>>>> cookie={}", cookie.toString());
-
 		return ResponseEntity.ok()
 			.header(HttpHeaders.SET_COOKIE, cookie.toString())
 			.build();
+	}
+
+	@PostMapping("/auth/signup")
+	public void signup(@RequestBody Signup signup) {
+		authService.signup(signup);
 	}
 }

@@ -8,5 +8,9 @@ import com.planetlandV2.domain.User;
 
 public interface UserRepository extends CrudRepository<User, Long> {
 
-	Optional<User> findByEmailAndPassword(String email, String password);
+	Optional<User> findByEmail(String email);
+
+	boolean existsByEmail(String email);
+
+	boolean existsByNickname(String nickname);
 }

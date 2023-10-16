@@ -4,8 +4,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.time.Duration;
-
 import javax.servlet.http.Cookie;
 
 import org.junit.jupiter.api.Assertions;
@@ -16,17 +14,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseCookie;
 import org.springframework.mock.web.MockCookie;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.planetlandV2.crypto.PasswordEncoder;
 import com.planetlandV2.domain.Session;
 import com.planetlandV2.domain.User;
 import com.planetlandV2.repository.SessionRepository;
 import com.planetlandV2.repository.UserRepository;
 import com.planetlandV2.requset.Login;
+import com.planetlandV2.requset.Signup;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -44,6 +43,9 @@ class AuthControllerTest {
 	@Autowired
 	private ObjectMapper objectMapper;
 
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
 	@BeforeEach
 	void clean() {
 		userRepository.deleteAll();
@@ -53,9 +55,11 @@ class AuthControllerTest {
 	@DisplayName("로그인 성공")
 	void test1() throws Exception{
 		// given
+		String encryptPassword = passwordEncoder.encrypt("1234");
+
 		userRepository.save((User.builder()
 			.email("test@email.com")
-			.password("1234")
+			.password(encryptPassword)
 			.nickname("zunza")
 			.build()));
 
@@ -78,9 +82,11 @@ class AuthControllerTest {
 	@DisplayName("로그인 성공 후 세션 1개 생성")
 	void test2() throws Exception{
 		// given
+		String encryptPassword = passwordEncoder.encrypt("1234");
+
 		User user = userRepository.save((User.builder()
 			.email("test@email.com")
-			.password("1234")
+			.password(encryptPassword)
 			.nickname("zunza")
 			.build()));
 
@@ -105,9 +111,11 @@ class AuthControllerTest {
 	@DisplayName("로그인 성공 후 세션 응답")
 	void test3() throws Exception {
 		// given
+		String encryptPassword = passwordEncoder.encrypt("1234");
+
 		User user = userRepository.save((User.builder()
 			.email("test@email.com")
-			.password("1234")
+			.password(encryptPassword)
 			.nickname("zunza")
 			.build()));
 
@@ -169,6 +177,26 @@ class AuthControllerTest {
 				.cookie(cookie)
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isUnauthorized())
+			.andDo(print());
+	}
+
+	@Test
+	@DisplayName("회원가입")
+	void test6() throws Exception {
+		// given
+		Signup signup = Signup.builder()
+			.email("test@email.com")
+			.password("1111")
+			.nickname("test")
+			.build();
+
+		String json = objectMapper.writeValueAsString(signup);
+
+		// expected
+		mockMvc.perform(post("/auth/signup")
+				.content(json)
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isOk())
 			.andDo(print());
 	}
 }
