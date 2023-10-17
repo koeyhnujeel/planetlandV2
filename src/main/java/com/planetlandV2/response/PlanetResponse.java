@@ -1,7 +1,5 @@
 package com.planetlandV2.response;
 
-import com.planetlandV2.domain.Planet;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,16 +26,6 @@ public class PlanetResponse {
 
 	private String imgPath;
 
-	public PlanetResponse(Planet planet) {
-		this.id = planet.getPlanetId();
-		this.planetName = planet.getPlanetName();
-		this.price = planet.getPrice();
-		this.population = planet.getPopulation();
-		this.satellite = planet.getSatellite();
-		this.planetStatus = planet.getPlanetStatus();
-		this.imgName = planet.getImgName();
-		this.imgPath = planet.getImgPath();
-	}
 
 	@Builder
 	public PlanetResponse(Long id, String planetName, Integer price, Integer population, Integer satellite,

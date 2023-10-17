@@ -16,6 +16,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.planetlandV2.domain.Planet;
+import com.planetlandV2.exception.ExistsPlanetNameException;
 import com.planetlandV2.exception.InvalidRequest;
 import com.planetlandV2.exception.PlanetNotFound;
 import com.planetlandV2.repository.PlanetRepository;
@@ -360,24 +361,7 @@ class PlanetServiceTest {
 	}
 
 	@Test
-	@DisplayName("행성 이름 중복 체크 - 중복 아닐 때")
-	void test12() {
-		//given
-		Planet planet = Planet.builder()
-			.planetName("테스트 행성1")
-			.price(1000)
-			.population(100)
-			.satellite(1)
-			.planetStatus("구매 가능")
-			.build();
-		planetRepository.save(planet);
-
-		//expected
-		assertEquals("사용 가능한 행성 이름입니다.", planetService.checkDuplicate("테스트 행성2"));
-	}
-
-	@Test
-	@DisplayName("행성 이름 중복 체크 - 중복 일 때")
+	@DisplayName("행성시 행성이름 중복 일 때")
 	void test13() {
 		//given
 		Planet planet = Planet.builder()
@@ -389,9 +373,50 @@ class PlanetServiceTest {
 			.build();
 		planetRepository.save(planet);
 
+		PlanetCreate planetCreate = PlanetCreate.builder()
+			.planetName("테스트 행성1")
+			.price(1000)
+			.population(100)
+			.satellite(1)
+			.planetStatus("구매 가능")
+			.build();
+
+		MultipartFile imgFile = new MockMultipartFile("files", "imgFile.jpeg", "image/jpeg",
+			"<<jpeg data>>".getBytes());
+
 		//expected
-		assertThrows(InvalidRequest.class, () -> {
-			planetService.checkDuplicate("테스트 행성1");
-		});
+		assertThrows(ExistsPlanetNameException.class, () ->
+			planetService.create(planetCreate, imgFile)
+		);
+	}
+
+	@Test
+	@DisplayName("행성 수정 시 행성이름 중복 일 때")
+	void test14() {
+		//given
+		Planet planet = Planet.builder()
+			.planetName("테스트 행성1")
+			.price(1000)
+			.population(100)
+			.satellite(1)
+			.planetStatus("구매 가능")
+			.build();
+		planetRepository.save(planet);
+
+		PlanetEdit planetEdit = PlanetEdit.builder()
+			.planetName("테스트 행성1")
+			.price(1000)
+			.population(100)
+			.satellite(1)
+			.planetStatus("구매 가능")
+			.build();
+
+		MultipartFile imgFile = new MockMultipartFile("files", "imgFile.jpeg", "image/jpeg",
+			"<<jpeg data>>".getBytes());
+
+		//expected
+		assertThrows(ExistsPlanetNameException.class, () ->
+			planetService.edit(planet.getPlanetId(), planetEdit, imgFile)
+		);
 	}
 }

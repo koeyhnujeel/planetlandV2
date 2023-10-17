@@ -43,9 +43,9 @@ public class PlanetController {
 	}
 
 	@PostMapping("/planets")
-	public void create(@RequestPart @Valid PlanetCreate request, @RequestPart MultipartFile imgFile) throws IOException {
-		request.validate();
-		planetService.create(request, imgFile);
+	public void create(@RequestPart @Valid PlanetCreate planetCreate, @RequestPart MultipartFile imgFile) throws IOException {
+		planetCreate.validate();
+		planetService.create(planetCreate, imgFile);
 	}
 
 	@GetMapping("/planets/{planetId}")
@@ -70,10 +70,5 @@ public class PlanetController {
 	@GetMapping("/planets")
 	public List<PlanetResponse> getList(@ModelAttribute PlanetPage planetPage) {
 		return planetService.getList(planetPage);
-	}
-
-	@GetMapping("/planets/exists/{planetName}")
-	public String planetNameCheckDuplicate(@PathVariable String planetName) {
-		return planetService.checkDuplicate(planetName);
 	}
 }

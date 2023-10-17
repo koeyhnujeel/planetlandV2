@@ -6,6 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import com.planetlandV2.requset.PlanetEdit;
+import com.planetlandV2.response.PlanetResponse;
 
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -48,6 +49,19 @@ public class Planet {
 		this.planetStatus = planetStatus;
 		this.imgName = imgName;
 		this.imgPath = imgPath;
+	}
+
+	public PlanetResponse toResponse() {
+		return PlanetResponse.builder()
+			.id(this.planetId)
+			.planetName(this.planetName)
+			.price(this.price)
+			.population(this.population)
+			.satellite(this.satellite)
+			.planetStatus(this.planetStatus)
+			.imgName(this.imgName)
+			.imgPath(this.imgPath)
+			.build();
 	}
 
 	public void edit(PlanetEdit planetEdit) {

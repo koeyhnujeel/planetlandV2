@@ -1,9 +1,12 @@
 package com.planetlandV2.requset;
 
+import static com.planetlandV2.Constants.*;
+
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.planetlandV2.domain.Planet;
 import com.planetlandV2.exception.InvalidRequest;
 
 import lombok.Builder;
@@ -41,6 +44,18 @@ public class PlanetCreate {
 		this.population = population;
 		this.satellite = satellite;
 		this.planetStatus = planetStatus;
+	}
+
+	public Planet toEntity(String imgName) {
+		return Planet.builder()
+			.planetName(this.planetName)
+			.price(this.price)
+			.population(this.population)
+			.satellite(this.satellite)
+			.planetStatus(this.planetStatus)
+			.imgName(imgName)
+			.imgPath(PATH + imgName)
+			.build();
 	}
 
 	public void validate() {

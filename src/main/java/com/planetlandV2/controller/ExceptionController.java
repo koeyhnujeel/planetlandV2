@@ -37,7 +37,13 @@ public class ExceptionController {
 			.message("잘못된 요청입니다.")
 			.build();
 
-		response.addValidation(e.getRequestPartName(), "이미지 파일을 업로드 해주세요.");
+		if (e.getRequestPartName().equals("planetCreate")) {
+			response.addValidation(e.getRequestPartName(), "행성 생성 오류");
+		} else if (e.getRequestPartName().equals("planetEdit")) {
+			response.addValidation(e.getRequestPartName(), "행성 수정 오류");
+		} else {
+			response.addValidation(e.getRequestPartName(), "이미지 파일을 업로드 해주세요.");
+		}
 		return response;
 	}
 

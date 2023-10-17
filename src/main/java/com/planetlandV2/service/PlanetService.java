@@ -9,10 +9,9 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.planetlandV2.exception.InvalidRequest;
+import com.planetlandV2.exception.ExistsPlanetNameException;
 import com.planetlandV2.exception.PlanetNotFound;
 import com.planetlandV2.domain.Planet;
 import com.planetlandV2.repository.PlanetRepository;
@@ -29,41 +28,22 @@ public class PlanetService {
 
 	private final PlanetRepository planetRepository;
 
-	public void create(PlanetCreate request, MultipartFile imgFile) throws IOException {
-
+	public void create(PlanetCreate planetCreate, MultipartFile imgFile) throws IOException {
+		checkPlanetName(planetCreate.getPlanetName());
 		String imgName = getImgName(imgFile);
-
-		Planet planet = Planet.builder()
-			.planetName(request.getPlanetName())
-			.price(request.getPrice())
-			.population(request.getPopulation())
-			.satellite(request.getSatellite())
-			.planetStatus(request.getPlanetStatus())
-			.imgName(imgName)
-			.imgPath(PATH + imgName)
-			.build();
-
+		Planet planet = planetCreate.toEntity(imgName);
 		planetRepository.save(planet);
 	}
 
 	public PlanetResponse get(Long planetId) {
+
 		Planet planet = planetRepository.findById(planetId)
 			.orElseThrow(() -> new PlanetNotFound());
-
-		return PlanetResponse.builder()
-			.id(planet.getPlanetId())
-			.planetName(planet.getPlanetName())
-			.price(planet.getPrice())
-			.population(planet.getPopulation())
-			.satellite(planet.getSatellite())
-			.planetStatus(planet.getPlanetStatus())
-			.imgName(planet.getImgName())
-			.imgPath(planet.getImgPath())
-			.build();
+		return planet.toResponse();
 	}
 
-	@Transactional
 	public void edit(Long planetId, PlanetEdit planetEdit, MultipartFile imgFile) throws IOException {
+		checkPlanetName(planetEdit.getPlanetName());
 		Planet planet = planetRepository.findById(planetId)
 			.orElseThrow(() -> new PlanetNotFound());
 
@@ -73,8 +53,8 @@ public class PlanetService {
 
 			planet.imgEdit(imgName, imgPath);
 		}
-
 		planet.edit(planetEdit);
+		planetRepository.save(planet);
 	}
 
 	public void delete(Long planetId) {
@@ -86,16 +66,15 @@ public class PlanetService {
 
 	public List<PlanetResponse> getList(PlanetPage planetPage) {
 		return planetRepository.getList(planetPage).stream()
-			.map(planet -> new PlanetResponse(planet))
+			.map(planet -> planet.toResponse())
 			.collect(Collectors.toList());
 	}
 
-	public String checkDuplicate(String planetName) {
+	public void checkPlanetName(String planetName) {
 		boolean exists = planetRepository.existsByPlanetName(planetName);
 		if (exists){
-			throw new InvalidRequest("planetName", "이미 존재하는 행성입니다.");
+			throw new ExistsPlanetNameException();
 		}
-		return "사용 가능한 행성 이름입니다.";
 	}
 
 	private String getImgName(MultipartFile imgFile) throws IOException {

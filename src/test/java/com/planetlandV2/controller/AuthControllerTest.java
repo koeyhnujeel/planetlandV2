@@ -199,4 +199,60 @@ class AuthControllerTest {
 			.andExpect(status().isOk())
 			.andDo(print());
 	}
+
+	@Test
+	@DisplayName("회원가입 시 이메일 중복불가")
+	void test7() throws Exception {
+		// given
+		userRepository.save(User.builder()
+			.email("test@email.com")
+			.password("1234")
+			.nickname("zunza")
+			.build());
+
+		Signup signup = Signup.builder()
+			.email("test@email.com")
+			.password("1111")
+			.nickname("test")
+			.build();
+
+		String json = objectMapper.writeValueAsString(signup);
+
+		// expected
+		mockMvc.perform(post("/auth/signup")
+				.content(json)
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.code").value("400"))
+			.andExpect(jsonPath("$.message").value("이미 가입된 이메일입니다."))
+			.andDo(print());
+	}
+
+	@Test
+	@DisplayName("회원가입 시 닉네임 중복불가")
+	void test8() throws Exception {
+		// given
+		userRepository.save(User.builder()
+			.email("test@email.com")
+			.password("1234")
+			.nickname("zunza")
+			.build());
+
+		Signup signup = Signup.builder()
+			.email("test11@email.com")
+			.password("1111")
+			.nickname("zunza")
+			.build();
+
+		String json = objectMapper.writeValueAsString(signup);
+
+		// expected
+		mockMvc.perform(post("/auth/signup")
+				.content(json)
+				.contentType(MediaType.APPLICATION_JSON))
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.code").value("400"))
+			.andExpect(jsonPath("$.message").value("사용중인 닉네임 입니다."))
+			.andDo(print());
+	}
 }

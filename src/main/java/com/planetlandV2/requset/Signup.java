@@ -2,6 +2,8 @@ package com.planetlandV2.requset;
 
 import javax.validation.constraints.Email;
 
+import com.planetlandV2.domain.User;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,5 +23,13 @@ public class Signup {
 		this.email = email;
 		this.password = password;
 		this.nickname = nickname;
+	}
+
+	public User toEntity(String encryptedPassword) {
+		return User.builder()
+			.email(this.email)
+			.password(encryptedPassword)
+			.nickname(this.nickname)
+			.build();
 	}
 }

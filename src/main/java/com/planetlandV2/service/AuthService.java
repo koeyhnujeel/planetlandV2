@@ -47,11 +47,7 @@ public class AuthService {
 
 		String encryptedPassword = passwordEncoder.encrypt(signup.getPassword());
 
-		User user = User.builder()
-			.email(signup.getEmail())
-			.password(encryptedPassword)
-			.nickname(signup.getNickname())
-			.build();
+		User user = signup.toEntity(encryptedPassword);
 		userRepository.save(user);
 	}
 }

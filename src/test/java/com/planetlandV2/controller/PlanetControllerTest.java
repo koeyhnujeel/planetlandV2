@@ -27,7 +27,6 @@ import com.planetlandV2.domain.Planet;
 import com.planetlandV2.repository.PlanetRepository;
 import com.planetlandV2.requset.PlanetCreate;
 import com.planetlandV2.requset.PlanetEdit;
-import com.planetlandV2.service.PlanetService;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -63,7 +62,7 @@ class PlanetControllerTest {
 
 		MockMultipartFile imgFile = new MockMultipartFile("imgFile", "test.png", "image/png", "png".getBytes());
 
-		MockMultipartFile request = new MockMultipartFile("request", null,
+		MockMultipartFile request = new MockMultipartFile("planetCreate", null,
 			"application/json", json.getBytes(StandardCharsets.UTF_8));
 
 		//when
@@ -318,7 +317,7 @@ class PlanetControllerTest {
 
 		MockMultipartFile imgFile = new MockMultipartFile("imgFile", "test.png", "image/png", "png".getBytes());
 
-		MockMultipartFile request = new MockMultipartFile("request", null,
+		MockMultipartFile request = new MockMultipartFile("planetCreate", null,
 			"application/json", json.getBytes(StandardCharsets.UTF_8));
 
 		//expected
@@ -353,7 +352,7 @@ class PlanetControllerTest {
 
 		MockMultipartFile imgFile = new MockMultipartFile("imgFile", "test.png", "image/png", "png".getBytes());
 
-		MockMultipartFile request = new MockMultipartFile("request", null,
+		MockMultipartFile request = new MockMultipartFile("planetCreate", null,
 			"application/json", json.getBytes(StandardCharsets.UTF_8));
 
 		//expected
@@ -382,7 +381,7 @@ class PlanetControllerTest {
 
 		String json = objectMapper.writeValueAsString(planetCreate);
 
-		MockMultipartFile request = new MockMultipartFile("request", null,
+		MockMultipartFile request = new MockMultipartFile("planetCreate", null,
 			"application/json", json.getBytes(StandardCharsets.UTF_8));
 
 		//expected
@@ -462,7 +461,7 @@ class PlanetControllerTest {
 
 		MockMultipartFile imgFile = new MockMultipartFile("imgFile", "test.png", "image/png", "png".getBytes());
 
-		MockMultipartFile request = new MockMultipartFile("request", null,
+		MockMultipartFile request = new MockMultipartFile("planetCreate", null,
 			"application/json", json.getBytes(StandardCharsets.UTF_8));
 
 		//expected
@@ -518,7 +517,7 @@ class PlanetControllerTest {
 	}
 
 	@Test
-	@DisplayName("행성이름은 중복 될 수 없다 - 중복 일 때)")
+	@DisplayName("행성 생성 시 행성 이름은 중복 될 수 없다")
 	void test17() throws Exception {
 		//given
 		Planet planet = Planet.builder()
@@ -530,18 +529,34 @@ class PlanetControllerTest {
 			.build();
 		planetRepository.save(planet);
 
-		//expected
-		mockMvc.perform(get("/planets/exists/{planetName}", "지구")
-				.contentType(APPLICATION_JSON))
+		PlanetCreate planetCreate = PlanetCreate.builder()
+			.planetName("지구")
+			.price(10000)
+			.population(5000)
+			.satellite(1)
+			.planetStatus("구매 가능")
+			.build();
+
+		String json = objectMapper.writeValueAsString(planetCreate);
+
+		MockMultipartFile imgFile = new MockMultipartFile("imgFile", "test.png", "image/png", "png".getBytes());
+
+		MockMultipartFile request = new MockMultipartFile("planetCreate", null,
+			"application/json", json.getBytes(StandardCharsets.UTF_8));
+
+		//when
+		mockMvc.perform(multipart(HttpMethod.POST, "/planets")
+				.file(request)
+				.file(imgFile)
+			)
 			.andExpect(status().isBadRequest())
 			.andExpect(jsonPath("$.code").value("400"))
-			.andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
-			.andExpect(jsonPath("$.validation.planetName").value("이미 존재하는 행성입니다."))
+			.andExpect(jsonPath("$.message").value("이미 존재하는 행성입니다."))
 			.andDo(print());
 	}
 
 	@Test
-	@DisplayName("행성이름은 중복 될 수 없다 - 중복 아닐 때)")
+	@DisplayName("행성 수정 시 행성 이름은 중복 될 수 없다")
 	void test18() throws Exception {
 		//given
 		Planet planet = Planet.builder()
@@ -553,11 +568,29 @@ class PlanetControllerTest {
 			.build();
 		planetRepository.save(planet);
 
-		//expected
-		mockMvc.perform(get("/planets/exists/{planetName}", "화성")
-				.contentType(APPLICATION_JSON))
-			.andExpect(status().isOk())
-			.andExpect(content().string("사용 가능한 행성 이름입니다."))
+		PlanetCreate planetCreate = PlanetCreate.builder()
+			.planetName("지구")
+			.price(10000)
+			.population(5000)
+			.satellite(1)
+			.planetStatus("구매 가능")
+			.build();
+
+		String json = objectMapper.writeValueAsString(planetCreate);
+
+		MockMultipartFile imgFile = new MockMultipartFile("imgFile", "test.png", "image/png", "png".getBytes());
+
+		MockMultipartFile request = new MockMultipartFile("planetEdit", null,
+			"application/json", json.getBytes(StandardCharsets.UTF_8));
+
+		//when
+		mockMvc.perform(multipart(HttpMethod.PATCH, "/planets/{planetId}", planet.getPlanetId())
+				.file(request)
+				.file(imgFile)
+			)
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.code").value("400"))
+			.andExpect(jsonPath("$.message").value("이미 존재하는 행성입니다."))
 			.andDo(print());
 	}
 }

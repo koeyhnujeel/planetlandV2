@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.planetlandV2.crypto.PasswordEncoder;
 import com.planetlandV2.domain.User;
 import com.planetlandV2.exception.ExistsEmailException;
+import com.planetlandV2.exception.ExistsNicknameException;
 import com.planetlandV2.exception.InvalidSignInInformation;
 import com.planetlandV2.repository.UserRepository;
 import com.planetlandV2.requset.Login;
@@ -78,8 +79,29 @@ class AuthServiceTest {
 	}
 
 	@Test
-	@DisplayName("로그인 성공")
+	@DisplayName("회원가입시 중복된 닉네임")
 	void test3() {
+		//given
+		userRepository.save(User.builder()
+			.email("test@email.com")
+			.password("1234")
+			.nickname("zunza")
+			.build());
+
+		Signup signup = Signup.builder()
+			.email("test123@email.com")
+			.password("1111")
+			.nickname("zunza")
+			.build();
+
+		//expected
+		assertThrows(ExistsNicknameException.class, () ->
+			authService.signup(signup));
+	}
+
+	@Test
+	@DisplayName("로그인 성공")
+	void test4() {
 		//given
 		String encryptedPassword = passwordEncoder.encrypt("1234");
 
@@ -103,7 +125,7 @@ class AuthServiceTest {
 
 	@Test
 	@DisplayName("로그인 비밀번호 틀림")
-	void test4() {
+	void test5() {
 		//given
 		String encryptedPassword = passwordEncoder.encrypt("1234");
 
