@@ -70,7 +70,7 @@ public class PlanetService {
 			.collect(Collectors.toList());
 	}
 
-	public void checkPlanetName(String planetName) {
+	private void checkPlanetName(String planetName) {
 		boolean exists = planetRepository.existsByPlanetName(planetName);
 		if (exists){
 			throw new ExistsPlanetNameException();
