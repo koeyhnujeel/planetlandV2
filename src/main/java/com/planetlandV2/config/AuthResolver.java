@@ -39,11 +39,10 @@ public class AuthResolver implements HandlerMethodArgumentResolver {
 		}
 
 		Cookie[] cookies = servletRequest.getCookies();
-		if (cookies.length == 0) {
+		if (cookies == null) {
 			log.error("cookie null");
 			throw new Unauthorized();
 		}
-
 		String accessToken = cookies[0].getValue();
 
 		Session session = sessionRepository.findByAccessToken(accessToken)

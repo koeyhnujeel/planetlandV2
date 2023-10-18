@@ -60,7 +60,7 @@ class PlanetControllerTest {
 
 		String json = objectMapper.writeValueAsString(planetCreate);
 
-		MockMultipartFile imgFile = new MockMultipartFile("imgFile", "test.png", "image/png", "png".getBytes());
+		MockMultipartFile imgFile = new MockMultipartFile("imgFile", "test.png", "multipart/form-data", "png".getBytes());
 
 		MockMultipartFile request = new MockMultipartFile("planetCreate", null,
 			"application/json", json.getBytes(StandardCharsets.UTF_8));
@@ -252,7 +252,7 @@ class PlanetControllerTest {
 
 		String json = objectMapper.writeValueAsString(edit);
 
-		MockMultipartFile imgFile = new MockMultipartFile("imgFile", "test.png", "image/png", "png".getBytes());
+		MockMultipartFile imgFile = new MockMultipartFile("imgFile", "test.png", "multipart/form-data", "png".getBytes());
 
 		MockMultipartFile planetEdit = new MockMultipartFile("planetEdit", null,
 			"application/json", json.getBytes(StandardCharsets.UTF_8));
@@ -315,7 +315,7 @@ class PlanetControllerTest {
 
 		String json = objectMapper.writeValueAsString(planetCreate);
 
-		MockMultipartFile imgFile = new MockMultipartFile("imgFile", "test.png", "image/png", "png".getBytes());
+		MockMultipartFile imgFile = new MockMultipartFile("imgFile", "test.png", "multipart/form-data", "png".getBytes());
 
 		MockMultipartFile request = new MockMultipartFile("planetCreate", null,
 			"application/json", json.getBytes(StandardCharsets.UTF_8));
@@ -350,7 +350,7 @@ class PlanetControllerTest {
 
 		String json = objectMapper.writeValueAsString(planetCreate);
 
-		MockMultipartFile imgFile = new MockMultipartFile("imgFile", "test.png", "image/png", "png".getBytes());
+		MockMultipartFile imgFile = new MockMultipartFile("imgFile", "test.png", "multipart/form-data", "png".getBytes());
 
 		MockMultipartFile request = new MockMultipartFile("planetCreate", null,
 			"application/json", json.getBytes(StandardCharsets.UTF_8));
@@ -381,17 +381,22 @@ class PlanetControllerTest {
 
 		String json = objectMapper.writeValueAsString(planetCreate);
 
+		byte[] bytes = new byte[0];
+
 		MockMultipartFile request = new MockMultipartFile("planetCreate", null,
 			"application/json", json.getBytes(StandardCharsets.UTF_8));
+
+		MockMultipartFile imgFile = new MockMultipartFile("imgFile", "test.png",
+			"multipart/form-data",bytes);
 
 		//expected
 		mockMvc.perform(multipart(HttpMethod.POST, "/planets")
 				.file(request)
+				.file(imgFile)
 			)
-			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.code").value("400"))
-			.andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
-			.andExpect(jsonPath("$.validation.imgFile").value("이미지 파일을 업로드 해주세요."))
+			.andExpect(status().isNotFound())
+			.andExpect(jsonPath("$.code").value("404"))
+			.andExpect(jsonPath("$.message").value("이미지 파일을 업로드 해주세요."))
 			.andDo(print());
 	}
 
@@ -420,7 +425,7 @@ class PlanetControllerTest {
 
 		String json = objectMapper.writeValueAsString(edit);
 
-		MockMultipartFile imgFile = new MockMultipartFile("imgFile", "test.png", "image/png", "png".getBytes());
+		MockMultipartFile imgFile = new MockMultipartFile("imgFile", "test.png", "multipart/form-data", "png".getBytes());
 
 		MockMultipartFile planetEdit = new MockMultipartFile("planetEdit", null,
 			"application/json", json.getBytes(StandardCharsets.UTF_8));
@@ -459,7 +464,7 @@ class PlanetControllerTest {
 
 		String json = objectMapper.writeValueAsString(planetCreate);
 
-		MockMultipartFile imgFile = new MockMultipartFile("imgFile", "test.png", "image/png", "png".getBytes());
+		MockMultipartFile imgFile = new MockMultipartFile("imgFile", "test.png", "multipart/form-data", "png".getBytes());
 
 		MockMultipartFile request = new MockMultipartFile("planetCreate", null,
 			"application/json", json.getBytes(StandardCharsets.UTF_8));
@@ -499,7 +504,7 @@ class PlanetControllerTest {
 
 		String json = objectMapper.writeValueAsString(planetEdit);
 
-		MockMultipartFile imgFile = new MockMultipartFile("imgFile", "test.png", "image/png", "png".getBytes());
+		MockMultipartFile imgFile = new MockMultipartFile("imgFile", "test.png", "multipart/form-data", "png".getBytes());
 
 		MockMultipartFile request = new MockMultipartFile("planetEdit", null,
 			"application/json", json.getBytes(StandardCharsets.UTF_8));
@@ -539,7 +544,7 @@ class PlanetControllerTest {
 
 		String json = objectMapper.writeValueAsString(planetCreate);
 
-		MockMultipartFile imgFile = new MockMultipartFile("imgFile", "test.png", "image/png", "png".getBytes());
+		MockMultipartFile imgFile = new MockMultipartFile("imgFile", "test.png", "multipart/form-data", "png".getBytes());
 
 		MockMultipartFile request = new MockMultipartFile("planetCreate", null,
 			"application/json", json.getBytes(StandardCharsets.UTF_8));
@@ -578,7 +583,7 @@ class PlanetControllerTest {
 
 		String json = objectMapper.writeValueAsString(planetCreate);
 
-		MockMultipartFile imgFile = new MockMultipartFile("imgFile", "test.png", "image/png", "png".getBytes());
+		MockMultipartFile imgFile = new MockMultipartFile("imgFile", "test.png", "multipart/form-data", "png".getBytes());
 
 		MockMultipartFile request = new MockMultipartFile("planetEdit", null,
 			"application/json", json.getBytes(StandardCharsets.UTF_8));

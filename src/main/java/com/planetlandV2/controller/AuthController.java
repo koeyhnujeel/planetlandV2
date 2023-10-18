@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.planetlandV2.config.data.UserSession;
 import com.planetlandV2.requset.Login;
 import com.planetlandV2.requset.Signup;
 import com.planetlandV2.service.AuthService;
@@ -22,6 +23,11 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthController {
 
 	private final AuthService authService;
+
+	@PostMapping("/auth/signup")
+	public void signup(@RequestBody Signup signup) {
+		authService.signup(signup);
+	}
 
 	@PostMapping("/auth/login")
 	public ResponseEntity<Object> login(@RequestBody Login login) {
@@ -40,8 +46,15 @@ public class AuthController {
 			.build();
 	}
 
-	@PostMapping("/auth/signup")
-	public void signup(@RequestBody Signup signup) {
-		authService.signup(signup);
+	@PostMapping("/auth/logout")
+	public ResponseEntity<Object> logout(UserSession userSession) {
+		ResponseCookie cookie = ResponseCookie.from("SESSION", "")
+			.path("/")
+			.maxAge(0)
+			.build();
+
+		return ResponseEntity.ok()
+			.header(HttpHeaders.SET_COOKIE, cookie.toString())
+			.build();
 	}
 }

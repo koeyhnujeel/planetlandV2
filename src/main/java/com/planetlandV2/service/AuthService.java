@@ -9,6 +9,7 @@ import com.planetlandV2.domain.User;
 import com.planetlandV2.exception.ExistsEmailException;
 import com.planetlandV2.exception.ExistsNicknameException;
 import com.planetlandV2.exception.InvalidSignInInformation;
+import com.planetlandV2.exception.UserNotFound;
 import com.planetlandV2.repository.UserRepository;
 import com.planetlandV2.requset.Login;
 import com.planetlandV2.requset.Signup;
@@ -21,20 +22,6 @@ public class AuthService {
 
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
-
-	@Transactional
-	public String signIn(Login login) {
-		User user = userRepository.findByEmail(login.getEmail())
-			.orElseThrow(() -> new InvalidSignInInformation());
-
-		boolean matches = passwordEncoder.matches(login.getPassword(), user.getPassword());
-		if (!matches) {
-			throw new InvalidSignInInformation();
-		}
-		Session session = user.addSession();
-
-		return session.getAccessToken();
-	}
 
 	public void signup(Signup signup) {
 		boolean existsEmail = userRepository.existsByEmail(signup.getEmail());
@@ -50,4 +37,25 @@ public class AuthService {
 		User user = signup.toEntity(encryptedPassword);
 		userRepository.save(user);
 	}
+
+	@Transactional
+	public String signIn(Login login) {
+
+		User user = userRepository.findByEmail(login.getEmail())
+			.orElseThrow(() -> new InvalidSignInInformation());
+
+		boolean matches = passwordEncoder.matches(login.getPassword(), user.getPassword());
+		if (!matches) {
+			throw new InvalidSignInInformation();
+		}
+		Session session = user.addSession();
+		return session.getAccessToken();
+	}
+
+	// public String signOut(Long userId) {
+	// 	User user = userRepository.findById(userId)
+	// 		.orElseThrow(() -> new UserNotFound());
+	//
+	// 	user.getSessions().get(0);
+	// }
 }

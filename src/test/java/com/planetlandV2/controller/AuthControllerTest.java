@@ -182,7 +182,7 @@ class AuthControllerTest {
 
 	@Test
 	@DisplayName("회원가입")
-	void test6() throws Exception {
+	void test7() throws Exception {
 		// given
 		Signup signup = Signup.builder()
 			.email("test@email.com")
@@ -202,7 +202,7 @@ class AuthControllerTest {
 
 	@Test
 	@DisplayName("회원가입 시 이메일 중복불가")
-	void test7() throws Exception {
+	void test8() throws Exception {
 		// given
 		userRepository.save(User.builder()
 			.email("test@email.com")
@@ -230,7 +230,7 @@ class AuthControllerTest {
 
 	@Test
 	@DisplayName("회원가입 시 닉네임 중복불가")
-	void test8() throws Exception {
+	void test9() throws Exception {
 		// given
 		userRepository.save(User.builder()
 			.email("test@email.com")

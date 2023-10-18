@@ -1,5 +1,6 @@
 package com.planetlandV2.controller;
 
+import org.apache.tomcat.util.http.fileupload.impl.FileSizeLimitExceededException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -44,6 +45,18 @@ public class ExceptionController {
 		} else {
 			response.addValidation(e.getRequestPartName(), "이미지 파일을 업로드 해주세요.");
 		}
+		return response;
+	}
+
+	@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+	@ExceptionHandler(FileSizeLimitExceededException.class)
+	public ErrorResponse invalidRequest(FileSizeLimitExceededException e) {
+		ErrorResponse response = ErrorResponse.builder()
+			.code("400")
+			.message("잘못된 요청입니다.")
+			.build();
+
+		response.addValidation(e.getFieldName(), "이미지파일 최대 용량은 10MB 입니다.");
 		return response;
 	}
 

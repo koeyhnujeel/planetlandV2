@@ -17,4 +17,7 @@ spring:
   jpa:
     defer-datasource-initialization: true
 
+  servlet:
+    multipart:
+      max-file-size: 10MB
 
