@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.planetlandV2.config.data.UserSession;
 import com.planetlandV2.exception.ImageFileNotFound;
+import com.planetlandV2.image.ImageProcess;
 import com.planetlandV2.requset.PlanetCreate;
 import com.planetlandV2.requset.PlanetEdit;
 import com.planetlandV2.requset.PlanetPage;
@@ -32,6 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 public class PlanetController {
 
 	private final PlanetService planetService;
+	private final ImageProcess imageProcess;
 
 	@GetMapping("/foo")
 	public Long foo(UserSession userSession) {
@@ -42,6 +44,7 @@ public class PlanetController {
 	@PostMapping("/planets")
 	public void create(@RequestPart @Valid PlanetCreate planetCreate, @RequestPart MultipartFile imgFile) throws IOException {
 		if (imgFile.isEmpty()) throw new ImageFileNotFound();
+		imageProcess.CheckExtension(imgFile);
 		planetCreate.validate();
 		planetService.create(planetCreate, imgFile);
 	}
@@ -52,10 +55,7 @@ public class PlanetController {
 	}
 
 	@PatchMapping("/planets/{planetId}")
-	public void edit(@PathVariable Long planetId, @RequestPart PlanetEdit planetEdit,
-		@RequestPart(required = false) MultipartFile imgFile)
-		throws IOException {
-
+	public void edit(@PathVariable Long planetId, @RequestPart PlanetEdit planetEdit, @RequestPart(required = false) MultipartFile imgFile) throws IOException {
 		planetEdit.validate();
 		planetService.edit(planetId, planetEdit, imgFile);
 	}

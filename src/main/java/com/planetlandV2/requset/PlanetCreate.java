@@ -1,6 +1,6 @@
 package com.planetlandV2.requset;
 
-import static com.planetlandV2.Constants.*;
+import static com.planetlandV2.image.ImageProcess.*;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;

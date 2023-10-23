@@ -598,4 +598,75 @@ class PlanetControllerTest {
 			.andExpect(jsonPath("$.message").value("이미 존재하는 행성입니다."))
 			.andDo(print());
 	}
+
+	@Test
+	@DisplayName("행성 생성 시 지원하지 않는 이미지 파일 형식")
+	void test19() throws Exception {
+		//given
+		PlanetCreate planetCreate = PlanetCreate.builder()
+			.planetName("지구")
+			.price(10000)
+			.population(5000)
+			.satellite(1)
+			.planetStatus("구매 가능")
+			.build();
+
+		String json = objectMapper.writeValueAsString(planetCreate);
+
+		MockMultipartFile imgFile = new MockMultipartFile("imgFile", "test.gif", "multipart/form-data",
+			"gif".getBytes());
+
+		MockMultipartFile request = new MockMultipartFile("planetCreate", null,
+			"application/json", json.getBytes(StandardCharsets.UTF_8));
+
+		//when
+		mockMvc.perform(multipart(HttpMethod.POST, "/planets")
+				.file(request)
+				.file(imgFile)
+			)
+			.andExpect(status().isUnsupportedMediaType())
+			.andExpect(jsonPath("$.code").value("415"))
+			.andExpect(jsonPath("$.message").value("지원하지 않는 파일 형식입니다."))
+			.andDo(print());
+	}
+
+	@Test
+	@DisplayName("행성 수정 시 지원하지 않는 이미지 파일 형식")
+	void test20() throws Exception {
+		//given
+		//given
+		Planet planet = Planet.builder()
+			.planetName("지구")
+			.price(10000)
+			.population(5000)
+			.satellite(1)
+			.planetStatus("구매 가능")
+			.build();
+		planetRepository.save(planet);
+
+		PlanetEdit planetEdit = PlanetEdit.builder()
+			.planetName("태양")
+			.price(10000)
+			.population(5000)
+			.satellite(1)
+			.planetStatus("구매 가능")
+			.build();
+
+		String json = objectMapper.writeValueAsString(planetEdit);
+
+		MockMultipartFile imgFile = new MockMultipartFile("imgFile", "test.gif", "multipart/form-data", "gif".getBytes());
+
+		MockMultipartFile request = new MockMultipartFile("planetEdit", null,
+			"application/json", json.getBytes(StandardCharsets.UTF_8));
+
+		//when
+		mockMvc.perform(multipart(HttpMethod.PATCH, "/planets/{planetId}", planet.getPlanetId())
+				.file(request)
+				.file(imgFile)
+			)
+			.andExpect(status().isUnsupportedMediaType())
+			.andExpect(jsonPath("$.code").value("415"))
+			.andExpect(jsonPath("$.message").value("지원하지 않는 파일 형식입니다."))
+			.andDo(print());
+	}
 }

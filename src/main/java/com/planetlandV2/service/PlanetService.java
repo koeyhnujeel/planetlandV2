@@ -1,11 +1,9 @@
 package com.planetlandV2.service;
 
-import static com.planetlandV2.Constants.*;
+import static com.planetlandV2.image.ImageProcess.*;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -14,6 +12,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.planetlandV2.exception.ExistsPlanetNameException;
 import com.planetlandV2.exception.PlanetNotFound;
 import com.planetlandV2.domain.Planet;
+import com.planetlandV2.image.ImageProcess;
 import com.planetlandV2.repository.PlanetRepository;
 import com.planetlandV2.requset.PlanetCreate;
 import com.planetlandV2.requset.PlanetEdit;
@@ -27,10 +26,11 @@ import lombok.RequiredArgsConstructor;
 public class PlanetService {
 
 	private final PlanetRepository planetRepository;
+	private final ImageProcess imageProcess;
 
 	public void create(PlanetCreate planetCreate, MultipartFile imgFile) throws IOException {
 		checkPlanetName(planetCreate.getPlanetName());
-		String imgName = getImgName(imgFile);
+		String imgName = imageProcess.getImageNameAndSave(imgFile);
 		Planet planet = planetCreate.toEntity(imgName);
 		planetRepository.save(planet);
 	}
@@ -47,10 +47,10 @@ public class PlanetService {
 		Planet planet = planetRepository.findById(planetId)
 			.orElseThrow(() -> new PlanetNotFound());
 
-		if (imgFile != null) {
-			String imgName = getImgName(imgFile);
+		if (!imgFile.isEmpty()) {
+			imageProcess.CheckExtension(imgFile);
+			String imgName = imageProcess.getImageNameAndSave(imgFile);
 			String imgPath = PATH + imgName;
-
 			planet.imgEdit(imgName, imgPath);
 		}
 		planet.edit(planetEdit);
@@ -75,15 +75,5 @@ public class PlanetService {
 		if (exists){
 			throw new ExistsPlanetNameException();
 		}
-	}
-
-	private String getImgName(MultipartFile imgFile) throws IOException {
-		String originName = imgFile.getOriginalFilename();
-
-		UUID uuid = UUID.randomUUID();
-		String imgName = uuid + "_" + originName;
-
-		imgFile.transferTo(new File(PATH + imgName));
-		return imgName;
 	}
 }

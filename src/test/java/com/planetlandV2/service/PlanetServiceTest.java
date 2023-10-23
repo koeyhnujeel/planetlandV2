@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.planetlandV2.domain.Planet;
 import com.planetlandV2.exception.ExistsPlanetNameException;
-import com.planetlandV2.exception.InvalidRequest;
+import com.planetlandV2.exception.NotSupportedExtension;
 import com.planetlandV2.exception.PlanetNotFound;
 import com.planetlandV2.repository.PlanetRepository;
 import com.planetlandV2.requset.PlanetCreate;
@@ -418,5 +418,34 @@ class PlanetServiceTest {
 		assertThrows(ExistsPlanetNameException.class, () ->
 			planetService.edit(planet.getPlanetId(), planetEdit, imgFile)
 		);
+	}
+
+	@Test
+	@DisplayName("행성 수정 시 지원하지 않는 이미지 파일 형식")
+	void test15() throws IOException {
+		//given
+		Planet planet = Planet.builder()
+			.planetName("테스트 행성1")
+			.price(1000)
+			.population(100)
+			.satellite(1)
+			.planetStatus("구매 가능")
+			.build();
+		planetRepository.save(planet);
+
+		PlanetEdit planetEdit = PlanetEdit.builder()
+			.planetName("테스트 행성2")
+			.price(1000)
+			.population(100)
+			.satellite(1)
+			.planetStatus("구매 가능")
+			.build();
+
+		MultipartFile imgFile = new MockMultipartFile("files", "imgFile.gif", "multipart/form-data",
+			"gif".getBytes());
+
+		//expected
+		assertThrows(NotSupportedExtension.class, () ->
+			planetService.edit(planet.getPlanetId(), planetEdit, imgFile));
 	}
 }
