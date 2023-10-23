@@ -12,9 +12,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.planetlandV2.exception.NotSupportedExtension;
 
-import lombok.Getter;
-
-@Getter
 @Component
 public class ImageProcess {
 	public static final String PATH = System.getProperty("user.dir") + "/src/main/resources/images/";
