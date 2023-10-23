@@ -564,24 +564,33 @@ class PlanetControllerTest {
 	@DisplayName("행성 수정 시 행성 이름은 중복 될 수 없다")
 	void test18() throws Exception {
 		//given
-		Planet planet = Planet.builder()
+		Planet planet1 = Planet.builder()
 			.planetName("지구")
 			.price(10000)
 			.population(5000)
 			.satellite(1)
 			.planetStatus("구매 가능")
 			.build();
-		planetRepository.save(planet);
+		planetRepository.save(planet1);
 
-		PlanetCreate planetCreate = PlanetCreate.builder()
-			.planetName("지구")
+		Planet planet2 = Planet.builder()
+			.planetName("태양")
+			.price(10000)
+			.population(5000)
+			.satellite(1)
+			.planetStatus("구매 가능")
+			.build();
+		planetRepository.save(planet2);
+
+		PlanetEdit planetEdit = PlanetEdit.builder()
+			.planetName("태양")
 			.price(10000)
 			.population(5000)
 			.satellite(1)
 			.planetStatus("구매 가능")
 			.build();
 
-		String json = objectMapper.writeValueAsString(planetCreate);
+		String json = objectMapper.writeValueAsString(planetEdit);
 
 		MockMultipartFile imgFile = new MockMultipartFile("imgFile", "test.png", "multipart/form-data", "png".getBytes());
 
@@ -589,7 +598,7 @@ class PlanetControllerTest {
 			"application/json", json.getBytes(StandardCharsets.UTF_8));
 
 		//when
-		mockMvc.perform(multipart(HttpMethod.PATCH, "/planets/{planetId}", planet.getPlanetId())
+		mockMvc.perform(multipart(HttpMethod.PATCH, "/planets/{planetId}", planet1.getPlanetId())
 				.file(request)
 				.file(imgFile)
 			)

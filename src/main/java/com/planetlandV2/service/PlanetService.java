@@ -43,9 +43,12 @@ public class PlanetService {
 	}
 
 	public void edit(Long planetId, PlanetEdit planetEdit, MultipartFile imgFile) throws IOException {
-		checkPlanetName(planetEdit.getPlanetName());
 		Planet planet = planetRepository.findById(planetId)
 			.orElseThrow(() -> new PlanetNotFound());
+
+		if (!planet.getPlanetName().equals(planetEdit.getPlanetName())) {
+			checkPlanetName(planetEdit.getPlanetName());
+		}
 
 		if (!imgFile.isEmpty()) {
 			imageProcess.CheckExtension(imgFile);

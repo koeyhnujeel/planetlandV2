@@ -361,7 +361,7 @@ class PlanetServiceTest {
 	}
 
 	@Test
-	@DisplayName("행성시 행성이름 중복 일 때")
+	@DisplayName("행성 생성 시 행성이름 중복 일 때")
 	void test13() {
 		//given
 		Planet planet = Planet.builder()
@@ -394,29 +394,38 @@ class PlanetServiceTest {
 	@DisplayName("행성 수정 시 행성이름 중복 일 때")
 	void test14() {
 		//given
-		Planet planet = Planet.builder()
+		Planet planet1 = Planet.builder()
 			.planetName("테스트 행성1")
 			.price(1000)
 			.population(100)
 			.satellite(1)
 			.planetStatus("구매 가능")
 			.build();
-		planetRepository.save(planet);
+		planetRepository.save(planet1);
+
+		Planet planet2 = Planet.builder()
+			.planetName("테스트 행성2")
+			.price(1000)
+			.population(100)
+			.satellite(1)
+			.planetStatus("구매 가능")
+			.build();
+		planetRepository.save(planet2);
 
 		PlanetEdit planetEdit = PlanetEdit.builder()
-			.planetName("테스트 행성1")
+			.planetName("테스트 행성2")
 			.price(1000)
 			.population(100)
 			.satellite(1)
 			.planetStatus("구매 가능")
 			.build();
 
-		MultipartFile imgFile = new MockMultipartFile("files", "imgFile.jpeg", "image/jpeg",
-			"<<jpeg data>>".getBytes());
+		MultipartFile imgFile = new MockMultipartFile("imgFile", "imgFile.jpeg", "multipart/form-data",
+			"jpeg".getBytes());
 
 		//expected
 		assertThrows(ExistsPlanetNameException.class, () ->
-			planetService.edit(planet.getPlanetId(), planetEdit, imgFile)
+			planetService.edit(planet1.getPlanetId(), planetEdit, imgFile)
 		);
 	}
 
