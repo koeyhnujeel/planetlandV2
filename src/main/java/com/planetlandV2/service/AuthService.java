@@ -1,5 +1,7 @@
 package com.planetlandV2.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -9,19 +11,24 @@ import com.planetlandV2.domain.User;
 import com.planetlandV2.exception.ExistsEmailException;
 import com.planetlandV2.exception.ExistsNicknameException;
 import com.planetlandV2.exception.InvalidSignInInformation;
+import com.planetlandV2.exception.SessionNotFound;
 import com.planetlandV2.exception.UserNotFound;
+import com.planetlandV2.repository.SessionRepository;
 import com.planetlandV2.repository.UserRepository;
 import com.planetlandV2.requset.Login;
 import com.planetlandV2.requset.Signup;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
 	private final UserRepository userRepository;
 	private final PasswordEncoder passwordEncoder;
+	private final SessionRepository sessionRepository;
 
 	public void signup(Signup signup) {
 		boolean existsEmail = userRepository.existsByEmail(signup.getEmail());
@@ -52,10 +59,15 @@ public class AuthService {
 		return session.getAccessToken();
 	}
 
-	// public String signOut(Long userId) {
-	// 	User user = userRepository.findById(userId)
-	// 		.orElseThrow(() -> new UserNotFound());
-	//
-	// 	user.getSessions().get(0);
-	// }
+	@Transactional
+	public void signOut(Long userId) {
+		User user = userRepository.findById(userId)
+			.orElseThrow(() -> new UserNotFound());
+		List<Session> sessions = user.getSessions();
+		sessions.clear();
+
+		Session session = sessionRepository.findByUser(user)
+			.orElseThrow(() -> new SessionNotFound());
+		sessionRepository.delete(session);
+	}
 }

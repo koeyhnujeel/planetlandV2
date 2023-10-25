@@ -48,6 +48,7 @@ public class AuthController {
 
 	@PostMapping("/auth/logout")
 	public ResponseEntity<Object> logout(UserSession userSession) {
+		authService.signOut(userSession.id);
 		ResponseCookie cookie = ResponseCookie.from("SESSION", "")
 			.path("/")
 			.maxAge(0)

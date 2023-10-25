@@ -9,4 +9,6 @@ import com.planetlandV2.domain.User;
 
 public interface SessionRepository extends CrudRepository<Session, Long> {
 	Optional<Session> findByAccessToken(String accessToken);
+
+	Optional<Session> findByUser(User user);
 }
