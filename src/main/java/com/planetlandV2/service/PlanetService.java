@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.planetlandV2.exception.ExistsPlanetNameException;
@@ -36,12 +37,12 @@ public class PlanetService {
 	}
 
 	public PlanetResponse get(Long planetId) {
-
 		Planet planet = planetRepository.findById(planetId)
 			.orElseThrow(() -> new PlanetNotFound());
 		return planet.toResponse();
 	}
 
+	@Transactional
 	public void edit(Long planetId, PlanetEdit planetEdit, MultipartFile imgFile) throws IOException {
 		Planet planet = planetRepository.findById(planetId)
 			.orElseThrow(() -> new PlanetNotFound());
@@ -57,7 +58,6 @@ public class PlanetService {
 			planet.imgEdit(imgName, imgPath);
 		}
 		planet.edit(planetEdit);
-		planetRepository.save(planet);
 	}
 
 	public void delete(Long planetId) {
