@@ -22,6 +22,8 @@ public class PlanetResponse {
 
 	private String planetStatus;
 
+	private String owner;
+
 	private String imgName;
 
 	private String imgPath;
@@ -29,14 +31,14 @@ public class PlanetResponse {
 
 	@Builder
 	public PlanetResponse(Long id, String planetName, Integer price, Integer population, Integer satellite,
-		String planetStatus,
-		String imgName, String imgPath) {
+		String planetStatus, String owner, String imgName, String imgPath) {
 		this.id = id;
 		this.planetName = planetName;
 		this.price = price;
 		this.population = population;
 		this.satellite = satellite;
 		this.planetStatus = planetStatus;
+		this.owner = owner;
 		this.imgName = imgName;
 		this.imgPath = imgPath;
 	}

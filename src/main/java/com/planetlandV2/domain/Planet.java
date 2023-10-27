@@ -4,8 +4,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
 import com.planetlandV2.requset.PlanetEdit;
+import com.planetlandV2.requset.PlanetSell;
 import com.planetlandV2.response.PlanetResponse;
 
 import lombok.AccessLevel;
@@ -34,19 +36,25 @@ public class Planet {
 
 	private String planetStatus;
 
+	private String owner;
+
 	private String imgName;
 
 	private String imgPath;
 
+	@ManyToOne
+	private User user;
+
 	@Builder
 	public Planet(Long planetId, String planetName, Integer price, Integer population, Integer satellite, String planetStatus,
-		String imgName, String imgPath) {
+		String owner, String imgName, String imgPath) {
 		this.planetId = planetId;
 		this.planetName = planetName;
 		this.price = price;
 		this.population = population;
 		this.satellite = satellite;
 		this.planetStatus = planetStatus;
+		this.owner = owner;
 		this.imgName = imgName;
 		this.imgPath = imgPath;
 	}
@@ -75,5 +83,16 @@ public class Planet {
 	public void imgEdit(String imgName, String imgPath) {
 		this.imgName = imgName;
 		this.imgPath = imgPath;
+	}
+
+	public void editPriceAndStatus(PlanetSell planetSell) {
+		this.price = planetSell.getSellPrice();
+		this.planetStatus = "구매 가능";
+	}
+
+	public void changeOwnerAndStatus(User buyer) {
+		this.owner = buyer.getNickname();
+		this.planetStatus = "구매 불가";
+		this.user = buyer;
 	}
 }

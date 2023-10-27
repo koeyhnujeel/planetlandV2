@@ -31,16 +31,25 @@ public class User {
 
 	private String nickname;
 
+	private Integer balance;
+
 	private LocalDateTime createdAt;
 
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private List<Session> sessions = new ArrayList<>();
 
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	private List<Planet> planets = new ArrayList<>();
+
+	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
+	private List<TradeHistory> tradeHistoryList = new ArrayList<>();
+
 	@Builder
-	public User(String email, String password, String nickname) {
+	public User(String email, String password, String nickname, Integer balance) {
 		this.email = email;
 		this.password = password;
 		this.nickname = nickname;
+		this.balance = balance;
 		this.createdAt = LocalDateTime.now();
 	}
 
@@ -51,5 +60,25 @@ public class User {
 		sessions.add(session);
 
 		return session;
+	}
+
+	public void addPlanetAndBalanceDecrease(Planet planet) {
+		this.planets.add(planet);
+		this.balance -= planet.getPrice();
+	}
+
+	public void deletePlanetAndBalanceIncrease(Planet planet) {
+		this.planets.remove(planet);
+		this.balance += planet.getPrice();
+	}
+
+	public void addTradeHistory(Planet planet, String tradeType) {
+		TradeHistory tradeHistory = TradeHistory.builder()
+			.planetName(planet.getPlanetName())
+			.tradeType(tradeType)
+			.price(planet.getPrice())
+			.user(this)
+			.build();
+		this.tradeHistoryList.add(tradeHistory);
 	}
 }
