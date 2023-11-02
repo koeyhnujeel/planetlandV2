@@ -23,6 +23,7 @@ import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.planetlandV2.Enum.PlanetStatus;
 import com.planetlandV2.domain.Planet;
 import com.planetlandV2.repository.PlanetRepository;
 import com.planetlandV2.requset.PlanetCreate;
@@ -55,7 +56,7 @@ class PlanetControllerTest {
 			.price(10000)
 			.population(5000)
 			.satellite(1)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.FORSALE)
 			.build();
 
 		String json = objectMapper.writeValueAsString(planetCreate);
@@ -81,7 +82,7 @@ class PlanetControllerTest {
 		assertEquals(10000, planet.getPrice());
 		assertEquals(5000, planet.getPopulation());
 		assertEquals(1, planet.getSatellite());
-		assertEquals("구매 가능", planet.getPlanetStatus());
+		assertEquals(PlanetStatus.FORSALE, planet.getPlanetStatus());
 		assertNotNull(planet.getImgName());
 		assertNotNull(planet.getImgPath());
 	}
@@ -95,7 +96,7 @@ class PlanetControllerTest {
 			.price(10000)
 			.population(5000)
 			.satellite(1)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.FORSALE)
 			.imgName("testImg")
 			.imgPath("/testPath")
 			.build();
@@ -111,7 +112,7 @@ class PlanetControllerTest {
 			.andExpect(jsonPath("$.price").value(planet.getPrice()))
 			.andExpect(jsonPath("$.population").value(planet.getPopulation()))
 			.andExpect(jsonPath("$.satellite").value(planet.getSatellite()))
-			.andExpect(jsonPath("$.planetStatus").value(planet.getPlanetStatus()))
+			.andExpect(jsonPath("$.planetStatus").value(planet.getPlanetStatus().getValue()))
 			.andDo(print());
 	}
 
@@ -238,7 +239,7 @@ class PlanetControllerTest {
 			.price(10000)
 			.population(5000)
 			.satellite(1)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.FORSALE)
 			.build();
 		planetRepository.save(planet);
 
@@ -247,7 +248,7 @@ class PlanetControllerTest {
 			.price(32432)
 			.population(5321312)
 			.satellite(32312)
-			.planetStatus("구매 불가")
+			.planetStatus(PlanetStatus.NOTFORSALE)
 			.build();
 
 		String json = objectMapper.writeValueAsString(edit);
@@ -273,7 +274,7 @@ class PlanetControllerTest {
 		assertEquals(32432, changedPlanet.getPrice());
 		assertEquals(5321312, changedPlanet.getPopulation());
 		assertEquals(32312, changedPlanet.getSatellite());
-		assertEquals("구매 불가", changedPlanet.getPlanetStatus());
+		assertEquals(PlanetStatus.NOTFORSALE, changedPlanet.getPlanetStatus());
 		assertNotNull(changedPlanet.getImgName());
 		assertNotNull(changedPlanet.getImgPath());
 	}
@@ -287,7 +288,7 @@ class PlanetControllerTest {
 			.price(10000)
 			.population(5000)
 			.satellite(1)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.NOTFORSALE)
 			.imgName("testImg")
 			.imgPath("/testPath")
 			.build();
@@ -310,7 +311,7 @@ class PlanetControllerTest {
 			.price(null)
 			.population(null)
 			.satellite(null)
-			.planetStatus("")
+			.planetStatus(null)
 			.build();
 
 		String json = objectMapper.writeValueAsString(planetCreate);
@@ -332,7 +333,7 @@ class PlanetControllerTest {
 			.andExpect(jsonPath("$.validation.price").value("행성 가격을 입력해주세요."))
 			.andExpect(jsonPath("$.validation.population").value("행성 인구수를 입력해주세요."))
 			.andExpect(jsonPath("$.validation.satellite").value("위성수를 입력해주세요."))
-			.andExpect(jsonPath("$.validation.planetStatus").value("구매가능 여부를 입력해주세요."))
+			.andExpect(jsonPath("$.validation.planetStatus").value("판매 여부를 입력해주세요."))
 			.andDo(print());
 	}
 
@@ -345,7 +346,7 @@ class PlanetControllerTest {
 			.price(0)
 			.population(0)
 			.satellite(0)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.FORSALE)
 			.build();
 
 		String json = objectMapper.writeValueAsString(planetCreate);
@@ -376,7 +377,7 @@ class PlanetControllerTest {
 			.price(1)
 			.population(0)
 			.satellite(0)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.FORSALE)
 			.build();
 
 		String json = objectMapper.writeValueAsString(planetCreate);
@@ -420,7 +421,7 @@ class PlanetControllerTest {
 			.price(32432)
 			.population(5321312)
 			.satellite(32312)
-			.planetStatus("구매 불가")
+			.planetStatus(PlanetStatus.FORSALE)
 			.build();
 
 		String json = objectMapper.writeValueAsString(edit);
@@ -459,7 +460,7 @@ class PlanetControllerTest {
 			.price(10000)
 			.population(5000)
 			.satellite(1)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.FORSALE)
 			.build();
 
 		String json = objectMapper.writeValueAsString(planetCreate);
@@ -490,7 +491,7 @@ class PlanetControllerTest {
 			.price(10000)
 			.population(5000)
 			.satellite(1)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.FORSALE)
 			.build();
 		planetRepository.save(planet);
 
@@ -499,7 +500,7 @@ class PlanetControllerTest {
 			.price(10000)
 			.population(5000)
 			.satellite(1)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.NOTFORSALE)
 			.build();
 
 		String json = objectMapper.writeValueAsString(planetEdit);
@@ -530,7 +531,7 @@ class PlanetControllerTest {
 			.price(10000)
 			.population(5000)
 			.satellite(1)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.FORSALE)
 			.build();
 		planetRepository.save(planet);
 
@@ -539,7 +540,7 @@ class PlanetControllerTest {
 			.price(10000)
 			.population(5000)
 			.satellite(1)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.FORSALE)
 			.build();
 
 		String json = objectMapper.writeValueAsString(planetCreate);
@@ -569,7 +570,7 @@ class PlanetControllerTest {
 			.price(10000)
 			.population(5000)
 			.satellite(1)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.FORSALE)
 			.build();
 		planetRepository.save(planet1);
 
@@ -578,7 +579,7 @@ class PlanetControllerTest {
 			.price(10000)
 			.population(5000)
 			.satellite(1)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.FORSALE)
 			.build();
 		planetRepository.save(planet2);
 
@@ -587,7 +588,7 @@ class PlanetControllerTest {
 			.price(10000)
 			.population(5000)
 			.satellite(1)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.FORSALE)
 			.build();
 
 		String json = objectMapper.writeValueAsString(planetEdit);
@@ -617,7 +618,7 @@ class PlanetControllerTest {
 			.price(10000)
 			.population(5000)
 			.satellite(1)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.FORSALE)
 			.build();
 
 		String json = objectMapper.writeValueAsString(planetCreate);
@@ -649,7 +650,7 @@ class PlanetControllerTest {
 			.price(10000)
 			.population(5000)
 			.satellite(1)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.FORSALE)
 			.build();
 		planetRepository.save(planet);
 
@@ -658,7 +659,7 @@ class PlanetControllerTest {
 			.price(10000)
 			.population(5000)
 			.satellite(1)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.FORSALE)
 			.build();
 
 		String json = objectMapper.writeValueAsString(planetEdit);

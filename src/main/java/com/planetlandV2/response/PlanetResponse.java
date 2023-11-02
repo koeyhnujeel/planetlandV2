@@ -1,5 +1,7 @@
 package com.planetlandV2.response;
 
+import com.planetlandV2.Enum.PlanetStatus;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,7 +22,7 @@ public class PlanetResponse {
 
 	private Integer satellite;
 
-	private String planetStatus;
+	private PlanetStatus planetStatus;
 
 	private String owner;
 
@@ -31,7 +33,7 @@ public class PlanetResponse {
 
 	@Builder
 	public PlanetResponse(Long id, String planetName, Integer price, Integer population, Integer satellite,
-		String planetStatus, String owner, String imgName, String imgPath) {
+		PlanetStatus planetStatus, String owner, String imgName, String imgPath) {
 		this.id = id;
 		this.planetName = planetName;
 		this.price = price;

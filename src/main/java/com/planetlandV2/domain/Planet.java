@@ -6,6 +6,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.planetlandV2.Enum.PlanetStatus;
 import com.planetlandV2.requset.PlanetEdit;
 import com.planetlandV2.requset.PlanetSell;
 import com.planetlandV2.response.PlanetResponse;
@@ -34,7 +35,7 @@ public class Planet {
 
 	private Integer satellite;
 
-	private String planetStatus;
+	private PlanetStatus planetStatus;
 
 	private String owner;
 
@@ -46,7 +47,7 @@ public class Planet {
 	private User user;
 
 	@Builder
-	public Planet(Long planetId, String planetName, Integer price, Integer population, Integer satellite, String planetStatus,
+	public Planet(Long planetId, String planetName, Integer price, Integer population, Integer satellite, PlanetStatus planetStatus,
 		String owner, String imgName, String imgPath) {
 		this.planetId = planetId;
 		this.planetName = planetName;
@@ -87,12 +88,12 @@ public class Planet {
 
 	public void editPriceAndStatus(PlanetSell planetSell) {
 		this.price = planetSell.getSellPrice();
-		this.planetStatus = "구매 가능";
+		this.planetStatus = PlanetStatus.FORSALE;
 	}
 
 	public void changeOwnerAndStatus(User buyer) {
 		this.owner = buyer.getNickname();
-		this.planetStatus = "구매 불가";
+		this.planetStatus = PlanetStatus.NOTFORSALE;
 		this.user = buyer;
 	}
 }

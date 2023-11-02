@@ -6,6 +6,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+import com.planetlandV2.Enum.PlanetStatus;
 import com.planetlandV2.domain.Planet;
 import com.planetlandV2.exception.InvalidRequest;
 
@@ -34,11 +35,11 @@ public class PlanetCreate {
 	@NotNull(message = "위성수를 입력해주세요.")
 	private Integer satellite;
 
-	@NotBlank(message = "구매가능 여부를 입력해주세요.")
-	private String planetStatus;
+	@NotNull(message = "판매 여부를 입력해주세요.")
+	private PlanetStatus planetStatus;
 
 	@Builder
-	public PlanetCreate(String planetName, Integer price, Integer population, Integer satellite, String planetStatus) {
+	public PlanetCreate(String planetName, Integer price, Integer population, Integer satellite, PlanetStatus planetStatus) {
 		this.planetName = planetName;
 		this.price = price;
 		this.population = population;

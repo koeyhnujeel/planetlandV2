@@ -15,6 +15,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.planetlandV2.Enum.PlanetStatus;
 import com.planetlandV2.domain.Planet;
 import com.planetlandV2.exception.ExistsPlanetNameException;
 import com.planetlandV2.exception.NotSupportedExtension;
@@ -48,7 +49,7 @@ class PlanetServiceTest {
 			.price(1000)
 			.population(100)
 			.satellite(1)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.FORSALE)
 			.build();
 
 		MultipartFile imgFile = new MockMultipartFile("files", "imgFile.jpeg", "image/jpeg",
@@ -64,7 +65,7 @@ class PlanetServiceTest {
 		assertEquals(1000, planet.getPrice());
 		assertEquals(100, planet.getPopulation());
 		assertEquals(1, planet.getSatellite());
-		assertEquals("구매 가능", planet.getPlanetStatus());
+		assertEquals(PlanetStatus.FORSALE, planet.getPlanetStatus());
 		System.out.println(planet.getImgName());
 		System.out.println(planet.getImgPath());
 		assertNotNull(planet.getImgName());
@@ -80,7 +81,7 @@ class PlanetServiceTest {
 			.price(1000)
 			.population(100)
 			.satellite(1)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.FORSALE)
 			.build();
 		planetRepository.save(planet);
 
@@ -93,7 +94,7 @@ class PlanetServiceTest {
 		assertEquals(1000, planetResponse.getPrice());
 		assertEquals(100, planetResponse.getPopulation());
 		assertEquals(1, planetResponse.getSatellite());
-		assertEquals("구매 가능", planetResponse.getPlanetStatus());
+		assertEquals(PlanetStatus.FORSALE, planetResponse.getPlanetStatus());
 	}
 
 	@Test
@@ -105,7 +106,7 @@ class PlanetServiceTest {
 			.price(1000)
 			.population(100)
 			.satellite(1)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.FORSALE)
 			.build();
 		planetRepository.save(planet);
 
@@ -114,7 +115,7 @@ class PlanetServiceTest {
 			.price(2000)
 			.population(200)
 			.satellite(3)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.FORSALE)
 			.build();
 
 		MultipartFile imgFile = new MockMultipartFile("files", "imgFile.jpeg", "image/jpeg",
@@ -131,7 +132,7 @@ class PlanetServiceTest {
 		assertEquals(2000, changedPlanet.getPrice());
 		assertEquals(200, changedPlanet.getPopulation());
 		assertEquals(3, changedPlanet.getSatellite());
-		assertEquals("구매 가능", changedPlanet.getPlanetStatus());
+		assertEquals(PlanetStatus.FORSALE, changedPlanet.getPlanetStatus());
 		System.out.println(changedPlanet.getImgName());
 		System.out.println(changedPlanet.getImgPath());
 		assertNotNull(changedPlanet.getImgName());
@@ -147,7 +148,7 @@ class PlanetServiceTest {
 			.price(1000)
 			.population(100)
 			.satellite(1)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.FORSALE)
 			.build();
 		planetRepository.save(planet);
 
@@ -297,7 +298,7 @@ class PlanetServiceTest {
 			.price(1000)
 			.population(100)
 			.satellite(1)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.FORSALE)
 			.imgName("test.png")
 			.imgPath("/testPath")
 			.build();
@@ -318,7 +319,7 @@ class PlanetServiceTest {
 			.price(1000)
 			.population(100)
 			.satellite(1)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.FORSALE)
 			.imgName("origin.png")
 			.imgPath("/originPath")
 			.build();
@@ -329,7 +330,7 @@ class PlanetServiceTest {
 			.price(2000)
 			.population(200)
 			.satellite(3)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.FORSALE)
 			.build();
 
 		MultipartFile imgFile = new MockMultipartFile("files", "imgFile.jpeg", "image/jpeg",
@@ -350,7 +351,7 @@ class PlanetServiceTest {
 			.price(1000)
 			.population(100)
 			.satellite(1)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.FORSALE)
 			.build();
 		planetRepository.save(planet);
 
@@ -369,7 +370,7 @@ class PlanetServiceTest {
 			.price(1000)
 			.population(100)
 			.satellite(1)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.FORSALE)
 			.build();
 		planetRepository.save(planet);
 
@@ -378,7 +379,7 @@ class PlanetServiceTest {
 			.price(1000)
 			.population(100)
 			.satellite(1)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.FORSALE)
 			.build();
 
 		MultipartFile imgFile = new MockMultipartFile("files", "imgFile.jpeg", "image/jpeg",
@@ -399,7 +400,7 @@ class PlanetServiceTest {
 			.price(1000)
 			.population(100)
 			.satellite(1)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.FORSALE)
 			.build();
 		planetRepository.save(planet1);
 
@@ -408,7 +409,7 @@ class PlanetServiceTest {
 			.price(1000)
 			.population(100)
 			.satellite(1)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.FORSALE)
 			.build();
 		planetRepository.save(planet2);
 
@@ -417,7 +418,7 @@ class PlanetServiceTest {
 			.price(1000)
 			.population(100)
 			.satellite(1)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.FORSALE)
 			.build();
 
 		MultipartFile imgFile = new MockMultipartFile("imgFile", "imgFile.jpeg", "multipart/form-data",
@@ -438,7 +439,7 @@ class PlanetServiceTest {
 			.price(1000)
 			.population(100)
 			.satellite(1)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.FORSALE)
 			.build();
 		planetRepository.save(planet);
 
@@ -447,7 +448,7 @@ class PlanetServiceTest {
 			.price(1000)
 			.population(100)
 			.satellite(1)
-			.planetStatus("구매 가능")
+			.planetStatus(PlanetStatus.FORSALE)
 			.build();
 
 		MultipartFile imgFile = new MockMultipartFile("files", "imgFile.gif", "multipart/form-data",
