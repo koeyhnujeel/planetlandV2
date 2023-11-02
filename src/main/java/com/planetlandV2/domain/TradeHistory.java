@@ -8,6 +8,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import com.planetlandV2.Enum.TradeType;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,7 +25,7 @@ public class TradeHistory {
 	private Long id;
 
 	private String planetName;
-	private String tradeType;
+	private TradeType tradeType;
 	private Integer price;
 	private LocalDateTime createdAt;
 
@@ -31,7 +33,7 @@ public class TradeHistory {
 	private User user;
 
 	@Builder
-	public TradeHistory(String planetName, String tradeType, Integer price, User user) {
+	public TradeHistory(String planetName, TradeType tradeType, Integer price, User user) {
 		this.planetName = planetName;
 		this.tradeType = tradeType;
 		this.price = price;

@@ -3,6 +3,7 @@ package com.planetlandV2.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.planetlandV2.Enum.TradeType;
 import com.planetlandV2.config.data.UserSession;
 import com.planetlandV2.domain.Planet;
 import com.planetlandV2.domain.User;
@@ -57,8 +58,8 @@ public class TradeService {
 		seller.deletePlanetAndBalanceIncrease(planet);
 		planet.changeOwnerAndStatus(buyer);
 
-		buyer.addTradeHistory(planet, "구매");
-		seller.addTradeHistory(planet, "판매");
+		buyer.addTradeHistory(planet, TradeType.BUY);
+		seller.addTradeHistory(planet, TradeType.SELL);
 
 		return TradeResponse.builder()
 			.planetName(planet.getPlanetName())

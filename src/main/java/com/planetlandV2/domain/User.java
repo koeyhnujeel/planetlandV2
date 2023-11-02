@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.planetlandV2.Enum.TradeType;
+
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -72,7 +74,7 @@ public class User {
 		this.balance += planet.getPrice();
 	}
 
-	public void addTradeHistory(Planet planet, String tradeType) {
+	public void addTradeHistory(Planet planet, TradeType tradeType) {
 		TradeHistory tradeHistory = TradeHistory.builder()
 			.planetName(planet.getPlanetName())
 			.tradeType(tradeType)
