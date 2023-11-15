@@ -7,7 +7,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.planetlandV2.Enum.PlanetStatus;
 import com.planetlandV2.config.data.UserSession;
@@ -15,6 +14,7 @@ import com.planetlandV2.domain.Planet;
 import com.planetlandV2.domain.Session;
 import com.planetlandV2.domain.User;
 import com.planetlandV2.exception.NotOwnerException;
+import com.planetlandV2.exception.PlanetNotFound;
 import com.planetlandV2.repository.PlanetRepository;
 import com.planetlandV2.repository.TradeHistoryRepository;
 import com.planetlandV2.repository.UserRepository;
@@ -45,7 +45,6 @@ class TradeServiceTest {
 
 	@Test
 	@DisplayName("판매등록 성공")
-	@Transactional
 	void test1() {
 		// given
 		User user = User.builder()
@@ -76,8 +75,11 @@ class TradeServiceTest {
 		tradeService.sell(userSession, planet.getPlanetId(), planetSell);
 
 		// then
-		assertEquals(6000, planet.getPrice());
-		assertEquals(PlanetStatus.FORSALE, planet.getPlanetStatus());
+		Planet targetPlanet = planetRepository.findById(planet.getPlanetId())
+			.orElseThrow(() -> new PlanetNotFound());
+
+		assertEquals(6000, targetPlanet.getPrice());
+		assertEquals(PlanetStatus.FORSALE, targetPlanet.getPlanetStatus());
 	}
 
 	@Test
