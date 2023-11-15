@@ -33,13 +33,17 @@ public class PlanetEdit {
 	@NotBlank(message = "구매가능 여부를 입력해주세요.")
 	private PlanetStatus planetStatus;
 
+	@NotBlank(message = "소유주를 입력해주세요.")
+	private String owner;
+
 	@Builder
-	public PlanetEdit(String planetName, Integer price, Integer population, Integer satellite, PlanetStatus planetStatus) {
+	public PlanetEdit(String planetName, Integer price, Integer population, Integer satellite, PlanetStatus planetStatus, String owner) {
 		this.planetName = planetName;
 		this.price = price;
 		this.population = population;
 		this.satellite = satellite;
 		this.planetStatus = planetStatus;
+		this.owner = owner;
 	}
 
 	public void validate() {

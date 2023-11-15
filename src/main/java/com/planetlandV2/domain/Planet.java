@@ -68,6 +68,7 @@ public class Planet {
 			.population(this.population)
 			.satellite(this.satellite)
 			.planetStatus(this.planetStatus)
+			.owner(this.owner)
 			.imgName(this.imgName)
 			.imgPath(this.imgPath)
 			.build();
@@ -79,6 +80,7 @@ public class Planet {
 		this.population = planetEdit.getPopulation();
 		this.satellite = planetEdit.getSatellite();
 		this.planetStatus = planetEdit.getPlanetStatus();
+		this.owner = planetEdit.getOwner();
 	}
 
 	public void imgEdit(String imgName, String imgPath) {
