@@ -30,7 +30,7 @@ public class QTradeHistory extends EntityPathBase<TradeHistory> {
 
     public final NumberPath<Integer> price = createNumber("price", Integer.class);
 
-    public final StringPath tradeType = createString("tradeType");
+    public final EnumPath<com.planetlandV2.Enum.TradeType> tradeType = createEnum("tradeType", com.planetlandV2.Enum.TradeType.class);
 
     public final QUser user;
 
