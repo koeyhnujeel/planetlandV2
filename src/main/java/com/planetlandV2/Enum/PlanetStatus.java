@@ -3,14 +3,10 @@ package com.planetlandV2.Enum;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
-import lombok.Getter;
-
-
 public enum PlanetStatus { //todo @JsonCreator, @JsonValue 정리
 	FORSALE("판매"),
 	NOTFORSALE("미판매");
 
-	@Getter
 	private final String value;
 
 	PlanetStatus(String value) {

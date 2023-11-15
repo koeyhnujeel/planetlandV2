@@ -9,7 +9,6 @@ public enum TradeType {
 	BUY("구매"),
 	SELL("판매");
 
-	@Getter
 	private final String value;
 
 	TradeType(String value) {
