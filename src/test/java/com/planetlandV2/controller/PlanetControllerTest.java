@@ -550,7 +550,7 @@ class PlanetControllerTest {
 		MockMultipartFile request = new MockMultipartFile("planetCreate", null,
 			"application/json", json.getBytes(StandardCharsets.UTF_8));
 
-		//when
+		//expected
 		mockMvc.perform(multipart(HttpMethod.POST, "/planets")
 				.file(request)
 				.file(imgFile)
@@ -598,7 +598,7 @@ class PlanetControllerTest {
 		MockMultipartFile request = new MockMultipartFile("planetEdit", null,
 			"application/json", json.getBytes(StandardCharsets.UTF_8));
 
-		//when
+		//expected
 		mockMvc.perform(multipart(HttpMethod.PATCH, "/planets/{planetId}", planet1.getPlanetId())
 				.file(request)
 				.file(imgFile)
@@ -629,7 +629,7 @@ class PlanetControllerTest {
 		MockMultipartFile request = new MockMultipartFile("planetCreate", null,
 			"application/json", json.getBytes(StandardCharsets.UTF_8));
 
-		//when
+		//expected
 		mockMvc.perform(multipart(HttpMethod.POST, "/planets")
 				.file(request)
 				.file(imgFile)
@@ -643,7 +643,6 @@ class PlanetControllerTest {
 	@Test
 	@DisplayName("행성 수정 시 지원하지 않는 이미지 파일 형식")
 	void test20() throws Exception {
-		//given
 		//given
 		Planet planet = Planet.builder()
 			.planetName("지구")
@@ -669,7 +668,7 @@ class PlanetControllerTest {
 		MockMultipartFile request = new MockMultipartFile("planetEdit", null,
 			"application/json", json.getBytes(StandardCharsets.UTF_8));
 
-		//when
+		// expected
 		mockMvc.perform(multipart(HttpMethod.PATCH, "/planets/{planetId}", planet.getPlanetId())
 				.file(request)
 				.file(imgFile)
