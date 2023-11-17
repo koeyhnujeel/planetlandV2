@@ -3,6 +3,7 @@ package com.planetlandV2.service;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.planetlandV2.Enum.PlanetStatus;
 import com.planetlandV2.Enum.TradeType;
 import com.planetlandV2.config.data.UserSession;
 import com.planetlandV2.domain.Planet;
@@ -63,6 +64,18 @@ public class TradeService {
 			.planetName(planet.getPlanetName())
 			.price(planet.getPrice())
 			.build();
+	}
+
+	@Transactional
+	public void cancel(UserSession userSession, Long planetId) {
+		User user = userRepository.findById(userSession.id)
+			.orElseThrow(() -> new UserNotFound());
+
+		Planet planet = planetRepository.findById(planetId)
+			.orElseThrow(() -> new UserNotFound());
+
+		checkOwner(user, planet);
+		planet.changeStatus(PlanetStatus.NOTFORSALE);
 	}
 
 	private void checkOwner(User user, Planet planet) {

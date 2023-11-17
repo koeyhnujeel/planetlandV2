@@ -27,4 +27,9 @@ public class TradeController {
 	public TradeResponse buy(UserSession userSession, @PathVariable Long planetId) {
 		return tradeService.buy(userSession, planetId);
 	}
+
+	@PatchMapping("/planets/{planetId}/sellCancel")
+	public void sellCancel(UserSession userSession, @PathVariable Long planetId) {
+		tradeService.cancel(userSession, planetId);
+	}
 }
