@@ -136,4 +136,89 @@ class TradeControllerTest {
 			.andExpect(jsonPath("$.message").value("로그인이 필요한 서비스입니다."))
 			.andDo(print());
 	}
+
+	@Test
+	@DisplayName("행성구매 성공")
+	void test3() throws Exception {
+		// given
+		User buyer = User.builder()
+			.email("test1@email.com")
+			.password("1234")
+			.nickname("buyer")
+			.balance(10000)
+			.build();
+		userRepository.save(buyer);
+
+		User seller = User.builder()
+			.email("test2@email.com")
+			.password("1234")
+			.nickname("seller")
+			.balance(10000)
+			.build();
+		userRepository.save(seller);
+
+		Planet planet = Planet.builder()
+			.planetName("test")
+			.price(5000)
+			.owner(seller.getNickname())
+			.planetStatus(PlanetStatus.FORSALE)
+			.build();
+		planetRepository.save(planet);
+
+		seller.getPlanets().add(planet);
+		Session session = buyer.addSession();
+		sessionRepository.save(session);
+
+		Cookie cookie = new MockCookie("SESSION", session.getAccessToken());
+
+		//expected
+		mockMvc.perform(patch("/planets/{planetId}/buy", planet.getPlanetId())
+				.cookie(cookie)
+				.contentType(MediaType.APPLICATION_JSON)
+				)
+			.andExpect(status().isOk())
+			.andExpect(jsonPath("$.planetName").value("test"))
+			.andExpect(jsonPath("$.price").value(5000))
+			.andExpect(jsonPath("$.message").value("구매가 완료되었습니다."))
+			.andDo(print());
+	}
+
+	@Test
+	@DisplayName("행성구매 실패 - 로그인 안했을 때")
+	void test4() throws Exception {
+		// given
+		User buyer = User.builder()
+			.email("test1@email.com")
+			.password("1234")
+			.nickname("buyer")
+			.balance(10000)
+			.build();
+		userRepository.save(buyer);
+
+		User seller = User.builder()
+			.email("test2@email.com")
+			.password("1234")
+			.nickname("seller")
+			.balance(10000)
+			.build();
+		userRepository.save(seller);
+
+		Planet planet = Planet.builder()
+			.planetName("test")
+			.price(5000)
+			.owner(seller.getNickname())
+			.planetStatus(PlanetStatus.FORSALE)
+			.build();
+		planetRepository.save(planet);
+
+		seller.getPlanets().add(planet);
+
+		//expected
+		mockMvc.perform(patch("/planets/{planetId}/buy", planet.getPlanetId())
+				.contentType(MediaType.APPLICATION_JSON)
+			)
+			.andExpect(status().isUnauthorized())
+			.andExpect(jsonPath("$.message").value("로그인이 필요한 서비스입니다."))
+			.andDo(print());
+	}
 }
