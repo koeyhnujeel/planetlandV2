@@ -221,4 +221,39 @@ class TradeControllerTest {
 			.andExpect(jsonPath("$.message").value("로그인이 필요한 서비스입니다."))
 			.andDo(print());
 	}
+
+	@Test
+	@DisplayName("행성 판매 취소 성공")
+	void test5() throws Exception {
+		// given
+		User seller = User.builder()
+			.email("test2@email.com")
+			.password("1234")
+			.nickname("seller")
+			.balance(10000)
+			.build();
+		userRepository.save(seller);
+
+		Planet planet = Planet.builder()
+			.planetName("test")
+			.price(5000)
+			.owner(seller.getNickname())
+			.planetStatus(PlanetStatus.FORSALE)
+			.build();
+		planetRepository.save(planet);
+
+		seller.getPlanets().add(planet);
+		Session session = seller.addSession();
+		sessionRepository.save(session);
+
+		Cookie cookie = new MockCookie("SESSION", session.getAccessToken());
+
+		//expected
+		mockMvc.perform(patch("/planets/{planetId}/sellCancel", planet.getPlanetId())
+				.cookie(cookie)
+				.contentType(MediaType.APPLICATION_JSON)
+			)
+			.andExpect(status().isOk())
+			.andDo(print());
+	}
 }

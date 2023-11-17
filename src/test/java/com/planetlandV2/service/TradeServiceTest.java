@@ -265,4 +265,75 @@ class TradeServiceTest {
 		assertThrows(NotEnoughBalance.class,
 			() -> tradeService.buy(userSession, planet.getPlanetId()));
 	}
+
+	@Test
+	@DisplayName("행성판매 취소 성공")
+	void test6() {
+		// given
+		User seller = User.builder()
+			.email("test2@email.com")
+			.password("1234")
+			.nickname("seller")
+			.balance(10000)
+			.build();
+		userRepository.save(seller);
+
+		Planet planet = Planet.builder()
+			.planetName("test")
+			.price(5000)
+			.owner(seller.getNickname())
+			.planetStatus(PlanetStatus.FORSALE)
+			.build();
+		planetRepository.save(planet);
+
+		seller.getPlanets().add(planet);
+		Session session = seller.addSession();
+		UserSession userSession = new UserSession(session.getUser().getId());
+
+		// when
+		tradeService.cancel(userSession, planet.getPlanetId());
+
+		// then
+		Planet targetPlanet = planetRepository.findById(planet.getPlanetId())
+			.orElseThrow(() -> new PlanetNotFound());
+
+		assertEquals(PlanetStatus.NOTFORSALE, targetPlanet.getPlanetStatus());
+	}
+
+	@Test
+	@DisplayName("행성판매 취소 실패 - 소유주가 아닐 때")
+	void test7() {
+		// given
+		User other = User.builder()
+			.email("test@email.com")
+			.password("1234")
+			.nickname("other")
+			.balance(10000)
+			.build();
+		userRepository.save(other);
+
+		User seller = User.builder()
+			.email("test2@email.com")
+			.password("1234")
+			.nickname("seller")
+			.balance(10000)
+			.build();
+		userRepository.save(seller);
+
+		Planet planet = Planet.builder()
+			.planetName("test")
+			.price(5000)
+			.owner(seller.getNickname())
+			.planetStatus(PlanetStatus.FORSALE)
+			.build();
+		planetRepository.save(planet);
+
+		seller.getPlanets().add(planet);
+		Session session = other.addSession();
+		UserSession userSession = new UserSession(session.getUser().getId());
+
+		// expected
+		assertThrows(NotOwnerException.class,
+			() -> tradeService.cancel(userSession, planet.getPlanetId()));
+	}
 }
