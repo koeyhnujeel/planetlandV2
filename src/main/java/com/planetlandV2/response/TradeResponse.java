@@ -15,6 +15,6 @@ public class TradeResponse {
 	public TradeResponse(String planetName, Integer price) {
 		this.planetName = planetName;
 		this.price = price;
-		this.message = "구매가 완료되엇습니다.";
+		this.message = "구매가 완료되었습니다.";
 	}
 }
