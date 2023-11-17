@@ -99,4 +99,41 @@ class TradeControllerTest {
 		assertEquals(5000, targetPlanet.getPrice());
 		assertEquals(PlanetStatus.FORSALE, targetPlanet.getPlanetStatus());
 	}
+
+	@Test
+	@DisplayName("판매등록 실패 - 로그인 안했을 때")
+	void test2() throws Exception {
+		// given
+		User user = User.builder()
+			.email("test@email.com")
+			.password("1234")
+			.nickname("zunza")
+			.balance(10000)
+			.build();
+		userRepository.save(user);
+
+		Planet planet = Planet.builder()
+			.planetName("test")
+			.price(1)
+			.owner(user.getNickname())
+			.planetStatus(PlanetStatus.NOTFORSALE)
+			.build();
+		planetRepository.save(planet);
+
+		PlanetSell planetSell = PlanetSell.builder()
+			.sellPrice(5000)
+			.build();
+
+		user.getPlanets().add(planet);
+
+		String json = objectMapper.writeValueAsString(planetSell);
+
+		//expected
+		mockMvc.perform(patch("/planets/{planetId}/sell", planet.getPlanetId())
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(json))
+			.andExpect(status().isUnauthorized())
+			.andExpect(jsonPath("$.message").value("로그인이 필요한 서비스입니다."))
+			.andDo(print());
+	}
 }
