@@ -33,9 +33,7 @@ public class TradeService {
 		Planet planet = planetRepository.findById(planetId)
 			.orElseThrow(() -> new PlanetNotFound());
 
-		if (!user.getNickname().equals(planet.getOwner())) {
-			throw new NotOwnerException();
-		}
+		checkOwner(user, planet);
 		planet.editPriceAndStatus(planetSell);
 	}
 
@@ -65,5 +63,11 @@ public class TradeService {
 			.planetName(planet.getPlanetName())
 			.price(planet.getPrice())
 			.build();
+	}
+
+	private void checkOwner(User user, Planet planet) {
+		if (!user.getNickname().equals(planet.getOwner())) {
+			throw new NotOwnerException();
+		}
 	}
 }
