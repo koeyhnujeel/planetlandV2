@@ -98,4 +98,8 @@ public class Planet {
 		this.planetStatus = PlanetStatus.NOTFORSALE;
 		this.user = buyer;
 	}
+
+	public void changeStatus(PlanetStatus planetStatus) {
+		this.planetStatus = planetStatus;
+	}
 }
