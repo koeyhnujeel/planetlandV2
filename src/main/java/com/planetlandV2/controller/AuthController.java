@@ -2,6 +2,8 @@ package com.planetlandV2.controller;
 
 import java.time.Duration;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
@@ -25,12 +27,12 @@ public class AuthController {
 	private final AuthService authService;
 
 	@PostMapping("/auth/signup")
-	public void signup(@RequestBody Signup signup) {
+	public void signup(@RequestBody @Valid Signup signup) {
 		authService.signup(signup);
 	}
 
 	@PostMapping("/auth/login")
-	public ResponseEntity<Object> login(@RequestBody Login login) {
+	public ResponseEntity<Object> login(@RequestBody @Valid Login login) {
 		String accessToken = authService.signIn(login);
 		ResponseCookie cookie = ResponseCookie.from("SESSION", accessToken)
 			.domain("localhost") // todo 서버 환경에 따른 분리 필요

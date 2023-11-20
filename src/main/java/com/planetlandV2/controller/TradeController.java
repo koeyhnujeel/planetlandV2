@@ -1,5 +1,7 @@
 package com.planetlandV2.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +21,7 @@ public class TradeController {
 	private final TradeService tradeService;
 
 	@PatchMapping("/planets/{planetId}/sell")
-	public void salesRegistration(UserSession userSession, @PathVariable Long planetId, @RequestBody PlanetSell planetSell) {
+	public void salesRegistration(UserSession userSession, @PathVariable Long planetId, @RequestBody @Valid PlanetSell planetSell) {
 		tradeService.sell(userSession, planetId, planetSell);
 	}
 

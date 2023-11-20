@@ -55,7 +55,7 @@ public class PlanetController {
 	}
 
 	@PatchMapping("/planets/{planetId}")
-	public void edit(@PathVariable Long planetId, @RequestPart PlanetEdit planetEdit, @RequestPart(required = false) MultipartFile imgFile) throws IOException {
+	public void edit(@PathVariable Long planetId, @RequestPart @Valid PlanetEdit planetEdit, @RequestPart(required = false) MultipartFile imgFile) throws IOException {
 		planetEdit.validate();
 		planetService.edit(planetId, planetEdit, imgFile);
 	}
