@@ -14,8 +14,6 @@ public abstract class CustomException extends RuntimeException {
 		super(message);
 	}
 
-
-
 	public abstract int getStatusCode();
 
 	public void addValidation(String fieldName, String message) {
