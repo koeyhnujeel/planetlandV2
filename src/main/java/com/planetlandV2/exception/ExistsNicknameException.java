@@ -10,6 +10,6 @@ public class ExistsNicknameException extends CustomException {
 
 	@Override
 	public int getStatusCode() {
-		return 400;
+		return 409;
 	}
 }

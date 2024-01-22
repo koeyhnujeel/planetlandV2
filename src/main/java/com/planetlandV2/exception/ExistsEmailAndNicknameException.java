@@ -10,6 +10,6 @@ public class ExistsEmailException extends CustomException {
 
 	@Override
 	public int getStatusCode() {
-		return 409;
+		return 400;
 	}
 }
