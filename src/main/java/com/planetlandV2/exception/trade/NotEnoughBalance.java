@@ -1,4 +1,7 @@
-package com.planetlandV2.exception;
+package com.planetlandV2.exception.trade;
+
+import com.planetlandV2.constant.HttpStatusCode;
+import com.planetlandV2.exception.CustomException;
 
 public class NotEnoughBalance extends CustomException {
 
@@ -10,6 +13,6 @@ public class NotEnoughBalance extends CustomException {
 
 	@Override
 	public int getStatusCode() {
-		return 400;
+		return HttpStatusCode.BAD_REQUEST;
 	}
 }

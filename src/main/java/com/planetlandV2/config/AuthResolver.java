@@ -11,7 +11,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 
 import com.planetlandV2.config.data.UserSession;
 import com.planetlandV2.domain.Session;
-import com.planetlandV2.exception.Unauthorized;
+import com.planetlandV2.exception.login.Unauthorized;
 import com.planetlandV2.repository.SessionRepository;
 
 import lombok.RequiredArgsConstructor;

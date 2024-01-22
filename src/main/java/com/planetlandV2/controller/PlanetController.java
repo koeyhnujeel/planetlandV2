@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.planetlandV2.config.data.UserSession;
-import com.planetlandV2.exception.ImageFileNotFound;
+import com.planetlandV2.exception.planet.ImageFileNotFound;
 import com.planetlandV2.image.ImageProcess;
 import com.planetlandV2.requset.PlanetCreate;
 import com.planetlandV2.requset.PlanetEdit;

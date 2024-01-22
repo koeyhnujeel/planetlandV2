@@ -1,4 +1,7 @@
-package com.planetlandV2.exception;
+package com.planetlandV2.exception.signup;
+
+import com.planetlandV2.constant.HttpStatusCode;
+import com.planetlandV2.exception.CustomException;
 
 public class ExistsNicknameException extends CustomException {
 
@@ -10,6 +13,6 @@ public class ExistsNicknameException extends CustomException {
 
 	@Override
 	public int getStatusCode() {
-		return 409;
+		return HttpStatusCode.CONFLICT;
 	}
 }

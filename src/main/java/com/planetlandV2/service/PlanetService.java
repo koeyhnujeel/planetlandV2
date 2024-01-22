@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.planetlandV2.exception.ExistsPlanetNameException;
-import com.planetlandV2.exception.PlanetNotFound;
+import com.planetlandV2.exception.planet.ExistsPlanetNameException;
+import com.planetlandV2.exception.planet.PlanetNotFound;
 import com.planetlandV2.domain.Planet;
 import com.planetlandV2.image.ImageProcess;
 import com.planetlandV2.repository.PlanetRepository;

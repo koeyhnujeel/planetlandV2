@@ -1,4 +1,7 @@
-package com.planetlandV2.exception;
+package com.planetlandV2.exception.login;
+
+import com.planetlandV2.constant.HttpStatusCode;
+import com.planetlandV2.exception.CustomException;
 
 public class InvalidSignInInformation extends CustomException {
 
@@ -10,6 +13,6 @@ public class InvalidSignInInformation extends CustomException {
 
 	@Override
 	public int getStatusCode() {
-		return 400;
+		return HttpStatusCode.UNAUTHORIZED;
 	}
 }

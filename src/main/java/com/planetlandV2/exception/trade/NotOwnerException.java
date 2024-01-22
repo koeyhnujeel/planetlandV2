@@ -1,6 +1,9 @@
-package com.planetlandV2.exception;
+package com.planetlandV2.exception.trade;
 
-public class NotOwnerException extends CustomException{
+import com.planetlandV2.constant.HttpStatusCode;
+import com.planetlandV2.exception.CustomException;
+
+public class NotOwnerException extends CustomException {
 
 	private static final String MESSAGE = "본인 소유에 행성이 아닙니다.";
 
@@ -10,6 +13,6 @@ public class NotOwnerException extends CustomException{
 
 	@Override
 	public int getStatusCode() {
-		return 400;
+		return HttpStatusCode.BAD_REQUEST;
 	}
 }

@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.planetlandV2.exception.NotSupportedExtension;
+import com.planetlandV2.exception.planet.NotSupportedExtension;
 
 @Component
 public class ImageProcess {

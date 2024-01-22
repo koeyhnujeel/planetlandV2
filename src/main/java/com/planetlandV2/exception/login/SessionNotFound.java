@@ -1,4 +1,7 @@
-package com.planetlandV2.exception;
+package com.planetlandV2.exception.login;
+
+import com.planetlandV2.constant.HttpStatusCode;
+import com.planetlandV2.exception.CustomException;
 
 public class SessionNotFound extends CustomException {
 
@@ -10,6 +13,6 @@ public class SessionNotFound extends CustomException {
 
 	@Override
 	public int getStatusCode() {
-		return 404;
+		return HttpStatusCode.NOT_FOUND;
 	}
 }

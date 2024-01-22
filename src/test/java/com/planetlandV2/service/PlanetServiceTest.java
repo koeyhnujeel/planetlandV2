@@ -17,9 +17,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.planetlandV2.Enum.PlanetStatus;
 import com.planetlandV2.domain.Planet;
-import com.planetlandV2.exception.ExistsPlanetNameException;
-import com.planetlandV2.exception.NotSupportedExtension;
-import com.planetlandV2.exception.PlanetNotFound;
+import com.planetlandV2.exception.planet.ExistsPlanetNameException;
+import com.planetlandV2.exception.planet.NotSupportedExtension;
+import com.planetlandV2.exception.planet.PlanetNotFound;
 import com.planetlandV2.repository.PlanetRepository;
 import com.planetlandV2.requset.PlanetCreate;
 import com.planetlandV2.requset.PlanetEdit;

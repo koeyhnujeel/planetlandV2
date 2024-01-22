@@ -22,7 +22,7 @@ import com.planetlandV2.Enum.PlanetStatus;
 import com.planetlandV2.domain.Planet;
 import com.planetlandV2.domain.Session;
 import com.planetlandV2.domain.User;
-import com.planetlandV2.exception.PlanetNotFound;
+import com.planetlandV2.exception.planet.PlanetNotFound;
 import com.planetlandV2.repository.PlanetRepository;
 import com.planetlandV2.repository.SessionRepository;
 import com.planetlandV2.repository.UserRepository;

@@ -1,6 +1,9 @@
-package com.planetlandV2.exception;
+package com.planetlandV2.exception.planet;
 
-public class NotSupportedExtension extends CustomException{
+import com.planetlandV2.constant.HttpStatusCode;
+import com.planetlandV2.exception.CustomException;
+
+public class NotSupportedExtension extends CustomException {
 
 	private static final String MESSAGE = "지원하지 않는 파일 형식입니다.";
 
@@ -10,6 +13,6 @@ public class NotSupportedExtension extends CustomException{
 
 	@Override
 	public int getStatusCode() {
-		return 415;
+		return HttpStatusCode.UNSUPPORTED_MEDIA_TYPE;
 	}
 }

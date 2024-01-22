@@ -555,8 +555,8 @@ class PlanetControllerTest {
 				.file(request)
 				.file(imgFile)
 			)
-			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.code").value("400"))
+			.andExpect(status().isConflict())
+			.andExpect(jsonPath("$.code").value("409"))
 			.andExpect(jsonPath("$.message").value("이미 존재하는 행성입니다."))
 			.andDo(print());
 	}
@@ -603,8 +603,8 @@ class PlanetControllerTest {
 				.file(request)
 				.file(imgFile)
 			)
-			.andExpect(status().isBadRequest())
-			.andExpect(jsonPath("$.code").value("400"))
+			.andExpect(status().isConflict())
+			.andExpect(jsonPath("$.code").value("409"))
 			.andExpect(jsonPath("$.message").value("이미 존재하는 행성입니다."))
 			.andDo(print());
 	}

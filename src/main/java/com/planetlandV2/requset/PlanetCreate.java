@@ -8,7 +8,7 @@ import javax.validation.constraints.NotNull;
 
 import com.planetlandV2.Enum.PlanetStatus;
 import com.planetlandV2.domain.Planet;
-import com.planetlandV2.exception.InvalidRequest;
+import com.planetlandV2.exception.planet.InvalidRequest;
 
 import lombok.Builder;
 import lombok.Getter;

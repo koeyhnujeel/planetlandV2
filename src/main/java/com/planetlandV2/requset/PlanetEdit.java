@@ -5,7 +5,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 import com.planetlandV2.Enum.PlanetStatus;
-import com.planetlandV2.exception.InvalidRequest;
+import com.planetlandV2.exception.planet.InvalidRequest;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -30,10 +30,9 @@ public class PlanetEdit {
 	@NotNull(message = "위성수를 입력해주세요.")
 	private Integer satellite;
 
-	@NotBlank(message = "구매가능 여부를 입력해주세요.")
+	@NotNull(message = "구매가능 여부를 입력해주세요.")
 	private PlanetStatus planetStatus;
 
-	@NotBlank(message = "소유주를 입력해주세요.")
 	private String owner;
 
 	@Builder

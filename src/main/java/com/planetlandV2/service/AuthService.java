@@ -8,10 +8,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.planetlandV2.crypto.PasswordEncoder;
 import com.planetlandV2.domain.Session;
 import com.planetlandV2.domain.User;
-import com.planetlandV2.exception.ExistsEmailException;
-import com.planetlandV2.exception.ExistsNicknameException;
-import com.planetlandV2.exception.InvalidSignInInformation;
-import com.planetlandV2.exception.SessionNotFound;
+import com.planetlandV2.exception.signup.ExistsEmailAndNicknameException;
+import com.planetlandV2.exception.signup.ExistsEmailException;
+import com.planetlandV2.exception.signup.ExistsNicknameException;
+import com.planetlandV2.exception.login.InvalidSignInInformation;
+import com.planetlandV2.exception.login.SessionNotFound;
 import com.planetlandV2.exception.UserNotFound;
 import com.planetlandV2.repository.SessionRepository;
 import com.planetlandV2.repository.UserRepository;
@@ -31,14 +32,7 @@ public class AuthService {
 	private final SessionRepository sessionRepository;
 
 	public void signup(Signup signup) {
-		boolean existsEmail = userRepository.existsByEmail(signup.getEmail());
-		boolean existsNickname = userRepository.existsByNickname(signup.getNickname());
-		if (existsEmail) {
-			throw new ExistsEmailException();
-		} else if (existsNickname) {
-			throw new ExistsNicknameException(); //todo 다른 방법 생각해보기
-		}
-
+		checkDuplicate(signup);
 		String encryptedPassword = passwordEncoder.encrypt(signup.getPassword());
 
 		User user = signup.toEntity(encryptedPassword);
@@ -69,5 +63,14 @@ public class AuthService {
 		Session session = sessionRepository.findByUser(user)
 			.orElseThrow(() -> new SessionNotFound());
 		sessionRepository.delete(session);
+	}
+
+	private void checkDuplicate(Signup signup) {
+		boolean existsEmail = userRepository.existsByEmail(signup.getEmail());
+		boolean existsNickname = userRepository.existsByNickname(signup.getNickname());
+
+		if(existsEmail && existsNickname) throw new ExistsEmailAndNicknameException();
+		else if (existsEmail) throw new ExistsEmailException();
+		else if (existsNickname) throw new ExistsNicknameException();
 	}
 }

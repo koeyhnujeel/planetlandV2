@@ -1,5 +1,7 @@
 package com.planetlandV2.exception;
 
+import com.planetlandV2.constant.HttpStatusCode;
+
 public class UserNotFound extends CustomException {
 
 	private static final String MESSAGE = "존재하지 않는 유저입니다.";
@@ -10,6 +12,6 @@ public class UserNotFound extends CustomException {
 
 	@Override
 	public int getStatusCode() {
-		return 404;
+		return HttpStatusCode.NOT_FOUND;
 	}
 }
