@@ -8,6 +8,9 @@ spring:
       enabled: true
       path: /h2-console
 
+  session:
+    timeout: 86400
+
   datasource:
     url: jdbc:h2:mem:planetland2;NON_KEYWORDS=USER
     username: sa
@@ -21,3 +24,8 @@ spring:
     multipart:
       max-file-size: 10MB
 
+server:
+  servlet:
+    session:
+      cookie:
+        max-age: 172800
