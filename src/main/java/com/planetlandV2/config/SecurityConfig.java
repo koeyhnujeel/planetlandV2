@@ -4,17 +4,19 @@ import static org.springframework.boot.autoconfigure.security.servlet.PathReques
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.password.NoOpPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+
+import com.planetlandV2.domain.User;
+import com.planetlandV2.exception.UserNotFound;
+import com.planetlandV2.repository.UserRepository;
 
 @Configuration
 @EnableWebSecurity(debug = true)
@@ -35,7 +37,8 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		return http
 			.authorizeHttpRequests()
-				.requestMatchers("/auth/login").permitAll()
+				.requestMatchers(HttpMethod.POST,"/auth/login").permitAll()
+				.requestMatchers(HttpMethod.POST,"/auth/signup").permitAll()
 				.anyRequest().authenticated()
 			.and()
 			.formLogin()
@@ -49,7 +52,6 @@ public class SecurityConfig {
 				.alwaysRemember(false)
 				.tokenValiditySeconds(2592000)
 			)
-			.userDetailsService(userDetailsService())
 			.csrf(AbstractHttpConfigurer::disable)
 			.build();
 	}
@@ -57,22 +59,23 @@ public class SecurityConfig {
 	로그인 할 때, 사용자 조회, 비밀번호 일치 여부 확인
 	*/
 	@Bean
-	public UserDetailsService userDetailsService() {
-		// 서버 띄울때만(테스트용)
-		InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-		UserDetails user = User.withUsername("zunza")
-			.password("1234")
-			.roles("ADMIN")
-			.build();
-		manager.createUser(user);
-		return manager;
+	public UserDetailsService userDetailsService(UserRepository userRepository) {
+		return username -> {
+			User user = userRepository.findByEmail(username)
+				.orElseThrow(UserNotFound::new);
+			return new UserPrincipal(user);
+		};
 	}
-
 	/*
-	테스트 용
+	비밀번호 암호화
 	 */
 	@Bean
 	public PasswordEncoder passwordEncoder() {
-		return NoOpPasswordEncoder.getInstance();
+		return new SCryptPasswordEncoder(
+			16,
+			8,
+			1,
+			32,
+			64);
 	}
 }
