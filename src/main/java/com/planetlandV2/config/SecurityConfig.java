@@ -18,8 +18,15 @@ public class SecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		return http
 			.authorizeHttpRequests()
-			.requestMatchers("/auth/login").permitAll()
-			.anyRequest().authenticated()
+				.requestMatchers("/auth/login").permitAll()
+				.anyRequest().authenticated()
+			.and()
+			.formLogin()
+				.loginPage("/auth/login")
+				.loginProcessingUrl("/auth/login")
+				.usernameParameter("username")
+				.passwordParameter("password")
+				.defaultSuccessUrl("/")
 			.and()
 			.csrf(AbstractHttpConfigurer::disable)
 			.build();
