@@ -19,18 +19,18 @@ public class TradeController {
 
 	private final TradeService tradeService;
 
-	@PatchMapping("/planets/{planetId}/sell")
-	public void salesRegistration(UserSession userSession, @PathVariable Long planetId, @RequestBody @Valid PlanetSell planetSell) {
-		tradeService.sell(userSession, planetId, planetSell);
-	}
-
-	@PatchMapping("/planets/{planetId}/buy")
-	public TradeResponse buy(UserSession userSession, @PathVariable Long planetId) {
-		return tradeService.buy(userSession, planetId);
-	}
-
-	@PatchMapping("/planets/{planetId}/sellCancel")
-	public void sellCancel(UserSession userSession, @PathVariable Long planetId) {
-		tradeService.cancel(userSession, planetId);
-	}
+	// @PatchMapping("/planets/{planetId}/sell")
+	// public void salesRegistration(@PathVariable Long planetId, @RequestBody @Valid PlanetSell planetSell) {
+	// 	tradeService.sell(planetId, planetSell);
+	// }
+	//
+	// @PatchMapping("/planets/{planetId}/buy")
+	// public TradeResponse buy(@PathVariable Long planetId) {
+	// 	return tradeService.buy(planetId);
+	// }
+	//
+	// @PatchMapping("/planets/{planetId}/sellCancel")
+	// public void sellCancel(@PathVariable Long planetId) {
+	// 	tradeService.cancel(planetId);
+	// }
 }

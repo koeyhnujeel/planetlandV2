@@ -25,10 +25,11 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthService {
 
 	private final UserRepository userRepository;
+	private final PasswordEncoder passwordEncoder = new PasswordEncoder();
 
 	public void signup(Signup signup) {
 		checkDuplicate(signup);
-		String encryptedPassword = passwordEncoder.encrypt(signup.getPassword());
+		String encryptedPassword = passwordEncoder.encrpyt(signup.getPassword());
 
 		User user = signup.toEntity(encryptedPassword);
 		userRepository.save(user);
