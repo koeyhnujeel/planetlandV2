@@ -7,13 +7,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-import com.planetlandV2.crypto.PasswordEncoder;
 import com.planetlandV2.domain.User;
 import com.planetlandV2.exception.signup.ExistsEmailException;
 import com.planetlandV2.exception.signup.ExistsNicknameException;
-import com.planetlandV2.exception.login.InvalidSignInInformation;
 import com.planetlandV2.repository.UserRepository;
 import com.planetlandV2.request.Signup;
 
@@ -25,6 +23,9 @@ class AuthServiceTest {
 
 	@Autowired
 	private AuthService authService;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
 
 	@BeforeEach
 	void clean() {
