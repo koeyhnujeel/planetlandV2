@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.planetlandV2.domain.Planet;
 import com.planetlandV2.domain.QPlanet;
-import com.planetlandV2.requset.PlanetPage;
+import com.planetlandV2.request.PlanetPage;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.PathBuilder;

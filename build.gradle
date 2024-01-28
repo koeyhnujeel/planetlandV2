@@ -2,6 +2,7 @@ plugins {
 	id 'java'
 	id 'org.springframework.boot' version '2.7.15'
 	id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+	id 'jacoco'
 }
 
 group = 'com.planetlandV2'
@@ -43,6 +44,60 @@ dependencies {
 	runtimeOnly 'com.h2database:h2'
 }
 
-tasks.named('test') {
-	useJUnitPlatform()
+//tasks.named('test') {
+//	useJUnitPlatform()
+//}
+
+jacoco {
+	toolVersion = "0.8.9"
+	reportsDirectory = layout.buildDirectory.dir('customJacocoReportDir')
 }
+
+test {
+	useJUnitPlatform()
+	finalizedBy jacocoTestReport
+}
+jacocoTestReport {
+	dependsOn test
+}
+
+jacocoTestReport {
+	reports {
+		xml.required = false
+		csv.required = false
+		html.outputLocation = layout.buildDirectory.dir('jacocoHtml')
+	}
+
+	getClassDirectories().setFrom(
+			files(classDirectories.files.collect {
+				fileTree(dir: it, exclude: [
+						'**/constant','**/domain','**/request','**/response','**/image',
+						'**/Enum','**/exception','**/config','**/repository','**/crypto','**/*Application*'// dto package 내부는 제외
+				])
+			})
+	)
+}
+
+jacocoTestCoverageVerification {
+	violationRules {
+		rule {
+			limit {
+				minimum = 0.5
+			}
+		}
+
+		rule {
+			enabled = false
+			element = 'CLASS'
+			includes = ['org.gradle.*']
+
+			limit {
+				counter = 'LINE'
+				value = 'COVEREDRATIO'
+				minimum = 0.90
+			}
+		}
+	}
+}
+
+

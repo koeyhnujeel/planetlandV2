@@ -16,8 +16,8 @@ import com.planetlandV2.exception.login.SessionNotFound;
 import com.planetlandV2.exception.UserNotFound;
 import com.planetlandV2.repository.SessionRepository;
 import com.planetlandV2.repository.UserRepository;
-import com.planetlandV2.requset.Login;
-import com.planetlandV2.requset.Signup;
+import com.planetlandV2.request.Login;
+import com.planetlandV2.request.Signup;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

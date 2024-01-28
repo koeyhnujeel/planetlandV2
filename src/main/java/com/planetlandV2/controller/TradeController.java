@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.planetlandV2.config.data.UserSession;
-import com.planetlandV2.requset.PlanetSell;
+import com.planetlandV2.request.PlanetSell;
 import com.planetlandV2.response.TradeResponse;
 import com.planetlandV2.service.TradeService;
 

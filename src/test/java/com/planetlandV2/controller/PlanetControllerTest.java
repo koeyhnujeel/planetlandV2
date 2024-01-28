@@ -26,8 +26,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.planetlandV2.Enum.PlanetStatus;
 import com.planetlandV2.domain.Planet;
 import com.planetlandV2.repository.PlanetRepository;
-import com.planetlandV2.requset.PlanetCreate;
-import com.planetlandV2.requset.PlanetEdit;
+import com.planetlandV2.request.PlanetCreate;
+import com.planetlandV2.request.PlanetEdit;
 
 @SpringBootTest
 @AutoConfigureMockMvc

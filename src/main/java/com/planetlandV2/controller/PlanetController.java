@@ -18,9 +18,9 @@ import org.springframework.web.multipart.MultipartFile;
 import com.planetlandV2.config.data.UserSession;
 import com.planetlandV2.exception.planet.ImageFileNotFound;
 import com.planetlandV2.image.ImageProcess;
-import com.planetlandV2.requset.PlanetCreate;
-import com.planetlandV2.requset.PlanetEdit;
-import com.planetlandV2.requset.PlanetPage;
+import com.planetlandV2.request.PlanetCreate;
+import com.planetlandV2.request.PlanetEdit;
+import com.planetlandV2.request.PlanetPage;
 import com.planetlandV2.response.PlanetResponse;
 import com.planetlandV2.service.PlanetService;
 

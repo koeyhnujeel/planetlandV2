@@ -17,8 +17,8 @@ import com.planetlandV2.exception.signup.ExistsNicknameException;
 import com.planetlandV2.exception.login.InvalidSignInInformation;
 import com.planetlandV2.repository.SessionRepository;
 import com.planetlandV2.repository.UserRepository;
-import com.planetlandV2.requset.Login;
-import com.planetlandV2.requset.Signup;
+import com.planetlandV2.request.Login;
+import com.planetlandV2.request.Signup;
 
 @SpringBootTest
 class AuthServiceTest {

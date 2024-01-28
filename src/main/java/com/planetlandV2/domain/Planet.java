@@ -7,8 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import com.planetlandV2.Enum.PlanetStatus;
-import com.planetlandV2.requset.PlanetEdit;
-import com.planetlandV2.requset.PlanetSell;
+import com.planetlandV2.request.PlanetEdit;
+import com.planetlandV2.request.PlanetSell;
 import com.planetlandV2.response.PlanetResponse;
 
 import lombok.AccessLevel;

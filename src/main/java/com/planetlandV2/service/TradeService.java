@@ -14,7 +14,7 @@ import com.planetlandV2.exception.planet.PlanetNotFound;
 import com.planetlandV2.exception.UserNotFound;
 import com.planetlandV2.repository.PlanetRepository;
 import com.planetlandV2.repository.UserRepository;
-import com.planetlandV2.requset.PlanetSell;
+import com.planetlandV2.request.PlanetSell;
 import com.planetlandV2.response.TradeResponse;
 
 import lombok.RequiredArgsConstructor;

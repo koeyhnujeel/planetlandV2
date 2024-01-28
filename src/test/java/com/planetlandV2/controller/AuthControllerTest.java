@@ -24,8 +24,8 @@ import com.planetlandV2.domain.Session;
 import com.planetlandV2.domain.User;
 import com.planetlandV2.repository.SessionRepository;
 import com.planetlandV2.repository.UserRepository;
-import com.planetlandV2.requset.Login;
-import com.planetlandV2.requset.Signup;
+import com.planetlandV2.request.Login;
+import com.planetlandV2.request.Signup;
 
 @SpringBootTest
 @AutoConfigureMockMvc

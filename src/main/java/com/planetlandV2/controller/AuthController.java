@@ -12,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.planetlandV2.config.data.UserSession;
-import com.planetlandV2.requset.Login;
-import com.planetlandV2.requset.Signup;
+import com.planetlandV2.request.Login;
+import com.planetlandV2.request.Signup;
 import com.planetlandV2.service.AuthService;
 
 import lombok.RequiredArgsConstructor;
@@ -25,7 +25,6 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthController {
 
 	private final AuthService authService;
-
 	@PostMapping("/auth/signup")
 	public void signup(@RequestBody @Valid Signup signup) {
 		authService.signup(signup);

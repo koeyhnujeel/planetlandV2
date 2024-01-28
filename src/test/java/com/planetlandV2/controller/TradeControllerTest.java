@@ -26,7 +26,7 @@ import com.planetlandV2.exception.planet.PlanetNotFound;
 import com.planetlandV2.repository.PlanetRepository;
 import com.planetlandV2.repository.SessionRepository;
 import com.planetlandV2.repository.UserRepository;
-import com.planetlandV2.requset.PlanetSell;
+import com.planetlandV2.request.PlanetSell;
 
 @SpringBootTest
 @AutoConfigureMockMvc

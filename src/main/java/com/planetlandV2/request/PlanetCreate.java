@@ -1,4 +1,4 @@
-package com.planetlandV2.requset;
+package com.planetlandV2.request;
 
 import static com.planetlandV2.image.ImageProcess.*;
 

@@ -1,4 +1,4 @@
-package com.planetlandV2.requset;
+package com.planetlandV2.request;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;

@@ -21,9 +21,9 @@ import com.planetlandV2.exception.planet.ExistsPlanetNameException;
 import com.planetlandV2.exception.planet.NotSupportedExtension;
 import com.planetlandV2.exception.planet.PlanetNotFound;
 import com.planetlandV2.repository.PlanetRepository;
-import com.planetlandV2.requset.PlanetCreate;
-import com.planetlandV2.requset.PlanetEdit;
-import com.planetlandV2.requset.PlanetPage;
+import com.planetlandV2.request.PlanetCreate;
+import com.planetlandV2.request.PlanetEdit;
+import com.planetlandV2.request.PlanetPage;
 import com.planetlandV2.response.PlanetResponse;
 
 @SpringBootTest
