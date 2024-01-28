@@ -1,23 +1,21 @@
 package com.planetlandV2.crypto;
 
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
-import org.springframework.stereotype.Component;
 
-@Component
 public class PasswordEncoder {
 
-	private static final SCryptPasswordEncoder passwordEncoder = new SCryptPasswordEncoder(
-		16,
-		8,
-		1,
-		32,
-		64);
+    private static final SCryptPasswordEncoder encoder = new SCryptPasswordEncoder(
+            16,
+            8,
+            1,
+            32,
+            64);
 
-	public String encrypt(String rawPassword) {
-		return passwordEncoder.encode(rawPassword);
-	}
+    public String encrpyt(String rawPassword) {
+        return encoder.encode(rawPassword);
+    }
 
-	public boolean matches(String rawPassword, String encryptedPassword) {
-		return passwordEncoder.matches(rawPassword, encryptedPassword);
-	}
+    public boolean matches(String rawPassword, String encrpytedPassword) {
+        return encoder.matches(rawPassword, encrpytedPassword);
+    }
 }

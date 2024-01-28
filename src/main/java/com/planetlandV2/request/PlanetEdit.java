@@ -1,8 +1,8 @@
 package com.planetlandV2.request;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import com.planetlandV2.Enum.PlanetStatus;
 import com.planetlandV2.exception.planet.InvalidRequest;

@@ -3,7 +3,7 @@ package com.planetlandV2.controller;
 import java.io.IOException;
 import java.util.List;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.planetlandV2.config.data.UserSession;
 import com.planetlandV2.exception.planet.ImageFileNotFound;
 import com.planetlandV2.image.ImageProcess;
 import com.planetlandV2.request.PlanetCreate;
@@ -34,12 +33,6 @@ public class PlanetController {
 
 	private final PlanetService planetService;
 	private final ImageProcess imageProcess;
-
-	@GetMapping("/foo")
-	public Long foo(UserSession userSession) {
-		log.info(">>>{}", userSession.id);
-		return userSession.id;
-	}
 
 	@PostMapping("/planets")
 	public void create(@RequestPart @Valid PlanetCreate planetCreate, @RequestPart MultipartFile imgFile) throws IOException {

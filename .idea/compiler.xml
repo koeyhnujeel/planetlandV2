@@ -6,10 +6,10 @@
       <profile name="Gradle Imported" enabled="true">
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="false">
-          <entry name="$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.28/a2ff5da8bcd8b1b26f36b806ced63213362c6dcc/lombok-1.18.28.jar" />
-          <entry name="$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/com.querydsl/querydsl-apt/5.0.0/3c212d03cc42b5297f62bd22e37b737812245085/querydsl-apt-5.0.0-jpa.jar" />
-          <entry name="$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/jakarta.annotation/jakarta.annotation-api/1.3.5/59eb84ee0d616332ff44aba065f3888cf002cd2d/jakarta.annotation-api-1.3.5.jar" />
-          <entry name="$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/jakarta.persistence/jakarta.persistence-api/2.2.3/8f6ea5daedc614f07a3654a455660145286f024e/jakarta.persistence-api-2.2.3.jar" />
+          <entry name="$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.26/8f8cf0372abf564913e9796623aac4c8ea44025a/lombok-1.18.26.jar" />
+          <entry name="$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/com.querydsl/querydsl-apt/5.0.0/d48657412f2b96d787bbe5ae393e33815c94b4d0/querydsl-apt-5.0.0-jakarta.jar" />
+          <entry name="$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/jakarta.persistence/jakarta.persistence-api/3.1.0/66901fa1c373c6aff65c13791cc11da72060a8d6/jakarta.persistence-api-3.1.0.jar" />
+          <entry name="$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/jakarta.annotation/jakarta.annotation-api/2.1.1/48b9bda22b091b1f48b13af03fe36db3be6e1ae3/jakarta.annotation-api-2.1.1.jar" />
           <entry name="$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/com.querydsl/querydsl-codegen/5.0.0/d690e92300f528e4161307b286f76aeaf348e2fb/querydsl-codegen-5.0.0.jar" />
           <entry name="$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/com.querydsl/querydsl-core/5.0.0/7a469f78b7a89bae429f17766fb92687d0ab9e5b/querydsl-core-5.0.0.jar" />
           <entry name="$PROJECT_DIR$/../.gradle/caches/modules-2/files-2.1/com.querydsl/codegen-utils/5.0.0/ff8a2ebbc3a317715de0ce2856c2024534d18a1a/codegen-utils-5.0.0.jar" />
@@ -21,6 +21,6 @@
         <module name="planetlandV2.main" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="11" />
+    <bytecodeTargetLevel target="17" />
   </component>
 </project>

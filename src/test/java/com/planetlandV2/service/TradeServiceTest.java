@@ -15,7 +15,6 @@ import com.planetlandV2.Enum.PlanetStatus;
 import com.planetlandV2.Enum.TradeType;
 import com.planetlandV2.config.data.UserSession;
 import com.planetlandV2.domain.Planet;
-import com.planetlandV2.domain.Session;
 import com.planetlandV2.domain.TradeHistory;
 import com.planetlandV2.domain.User;
 import com.planetlandV2.exception.trade.NotEnoughBalance;

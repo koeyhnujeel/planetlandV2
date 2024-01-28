@@ -20,11 +20,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.planetlandV2.Enum.PlanetStatus;
 import com.planetlandV2.domain.Planet;
-import com.planetlandV2.domain.Session;
 import com.planetlandV2.domain.User;
 import com.planetlandV2.exception.planet.PlanetNotFound;
 import com.planetlandV2.repository.PlanetRepository;
-import com.planetlandV2.repository.SessionRepository;
 import com.planetlandV2.repository.UserRepository;
 import com.planetlandV2.request.PlanetSell;
 

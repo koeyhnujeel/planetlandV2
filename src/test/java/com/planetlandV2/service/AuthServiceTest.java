@@ -10,14 +10,11 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.planetlandV2.crypto.PasswordEncoder;
-import com.planetlandV2.domain.Session;
 import com.planetlandV2.domain.User;
 import com.planetlandV2.exception.signup.ExistsEmailException;
 import com.planetlandV2.exception.signup.ExistsNicknameException;
 import com.planetlandV2.exception.login.InvalidSignInInformation;
-import com.planetlandV2.repository.SessionRepository;
 import com.planetlandV2.repository.UserRepository;
-import com.planetlandV2.request.Login;
 import com.planetlandV2.request.Signup;
 
 @SpringBootTest
@@ -27,18 +24,11 @@ class AuthServiceTest {
 	private UserRepository userRepository;
 
 	@Autowired
-	private SessionRepository sessionRepository;
-
-	@Autowired
 	private AuthService authService;
-
-	@Autowired
-	private PasswordEncoder passwordEncoder;
 
 	@BeforeEach
 	void clean() {
 		userRepository.deleteAll();
-		sessionRepository.deleteAll();
 	}
 
 	@Test
@@ -104,84 +94,5 @@ class AuthServiceTest {
 		//expected
 		assertThrows(ExistsNicknameException.class, () ->
 			authService.signup(signup));
-	}
-
-	@Test
-	@DisplayName("로그인 성공")
-	void test4() {
-		//given
-		String encryptedPassword = passwordEncoder.encrypt("1234");
-
-		userRepository.save(User.builder()
-			.email("test@email.com")
-			.password(encryptedPassword)
-			.nickname("zunza")
-			.build());
-
-		Login login = Login.builder()
-			.email("test@email.com")
-			.password("1234")
-			.build();
-
-		//when
-		String accessToken = authService.signIn(login);
-
-		//then
-		assertNotNull(accessToken);
-	}
-
-	@Test
-	@DisplayName("로그인 비밀번호 틀림")
-	void test5() {
-		//given
-		String encryptedPassword = passwordEncoder.encrypt("1234");
-
-		userRepository.save(User.builder()
-			.email("test@email.com")
-			.password(encryptedPassword)
-			.nickname("zunza")
-			.build());
-
-		Login login = Login.builder()
-			.email("test@email.com")
-			.password("1235")
-			.build();
-
-		//expected
-		assertThrows(InvalidSignInInformation.class, () -> {
-			authService.signIn(login);
-		});
-	}
-
-	@Test
-	@DisplayName("로그아웃 성공")
-	@Transactional
-	void test6() {
-		//given
-		String encryptedPassword = passwordEncoder.encrypt("1234");
-
-		User user = userRepository.save(User.builder()
-			.email("test@email.com")
-			.password(encryptedPassword)
-			.nickname("zunza")
-			.build());
-		Session session = user.addSession();
-		sessionRepository.save(session);
-
-		User user2 = userRepository.save(User.builder()
-			.email("test1@email.com")
-			.password(encryptedPassword)
-			.nickname("zunza1")
-			.build());
-		Session session1 = user2.addSession();
-		sessionRepository.save(session1);
-
-		//when
-		authService.signOut(user.getId());
-
-		//then
-		assertEquals(0, user.getSessions().size());
-		assertEquals(1, user2.getSessions().size());
-		assertEquals(1, sessionRepository.count());
 	}
 }
