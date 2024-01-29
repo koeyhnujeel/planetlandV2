@@ -38,14 +38,14 @@ public class PlanetService {
 
 	public PlanetResponse get(Long planetId) {
 		Planet planet = planetRepository.findById(planetId)
-			.orElseThrow(() -> new PlanetNotFound());
+			.orElseThrow(PlanetNotFound::new);
 		return planet.toResponse();
 	}
 
 	@Transactional
 	public void edit(Long planetId, PlanetEdit planetEdit, MultipartFile imgFile) throws IOException {
 		Planet planet = planetRepository.findById(planetId)
-			.orElseThrow(() -> new PlanetNotFound());
+			.orElseThrow(PlanetNotFound::new);
 
 		if (!planet.getPlanetName().equals(planetEdit.getPlanetName())) {
 			checkPlanetName(planetEdit.getPlanetName());
@@ -62,14 +62,14 @@ public class PlanetService {
 
 	public void delete(Long planetId) {
 		Planet planet = planetRepository.findById(planetId)
-			.orElseThrow(() -> new PlanetNotFound());
+			.orElseThrow(PlanetNotFound::new);
 
 		planetRepository.deleteById(planet.getPlanetId());
 	}
 
 	public List<PlanetResponse> getList(PlanetPage planetPage) {
 		return planetRepository.getList(planetPage).stream()
-			.map(planet -> planet.toResponse())
+			.map(Planet::toResponse)
 			.collect(Collectors.toList());
 	}
 
