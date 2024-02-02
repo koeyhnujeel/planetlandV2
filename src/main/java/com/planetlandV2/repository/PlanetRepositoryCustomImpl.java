@@ -29,7 +29,7 @@ public class PlanetRepositoryCustomImpl implements PlanetRepositoryCustom {
 	private OrderSpecifier<?> getOrderSpecifier(PlanetPage planetPage) {
 		Order direction = planetPage.isAscending() ? Order.ASC : Order.DESC;
 		String prop = planetPage.getProperty();
-		PathBuilder orderByExpression = new PathBuilder(Planet.class, "planet");
+		PathBuilder<Planet> orderByExpression = new PathBuilder<>(Planet.class, "planet");
 
 		return new OrderSpecifier(direction, orderByExpression.get(prop));
 	}
