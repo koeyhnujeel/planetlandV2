@@ -20,11 +20,6 @@ public class AuthController {
 
 	private final AuthService authService;
 
-	@GetMapping("/auth/login")
-	public String login() {
-		return "로그인 페이지입니다.";
-	}
-
 	@PostMapping("/auth/signup")
 	public void signup(@RequestBody @Valid Signup signup) {
 		authService.signup(signup);

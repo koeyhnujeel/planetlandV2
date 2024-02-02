@@ -5,6 +5,7 @@ import java.util.List;
 
 import jakarta.validation.Valid;
 
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -34,6 +35,7 @@ public class PlanetController {
 	private final PlanetService planetService;
 	private final ImageProcess imageProcess;
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping("/planets")
 	public void create(@RequestPart @Valid PlanetCreate planetCreate, @RequestPart MultipartFile imgFile) throws IOException {
 		if (imgFile.isEmpty()) throw new ImageFileNotFound();
@@ -47,12 +49,14 @@ public class PlanetController {
 		return planetService.get(planetId);
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PatchMapping("/planets/{planetId}")
 	public void edit(@PathVariable Long planetId, @RequestPart @Valid PlanetEdit planetEdit, @RequestPart(required = false) MultipartFile imgFile) throws IOException {
 		planetEdit.validate();
 		planetService.edit(planetId, planetEdit, imgFile);
 	}
 
+	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@DeleteMapping("/planets/{planetId}")
 	public void delete(@PathVariable Long planetId) {
 		planetService.delete(planetId);
