@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.planetlandV2.Enum.PlanetStatus;
 import com.planetlandV2.Enum.TradeType;
-import com.planetlandV2.config.data.UserSession;
+import com.planetlandV2.config.UserPrincipal;
 import com.planetlandV2.domain.Planet;
 import com.planetlandV2.domain.TradeHistory;
 import com.planetlandV2.domain.User;
@@ -70,15 +70,14 @@ class TradeServiceTest {
 		planetRepository.save(planet);
 
 		user.getPlanets().add(planet);
-		Session session = user.addSession();
-		UserSession userSession = new UserSession(session.getUser().getId());
 
 		PlanetSell planetSell = PlanetSell.builder()
 			.sellPrice(6000)
 			.build();
 
+		UserPrincipal userPrincipal = new UserPrincipal(user);
 		// when
-		tradeService.sell(userSession, planet.getPlanetId(), planetSell);
+		tradeService.sell(userPrincipal, planet.getPlanetId(), planetSell);
 
 		// then
 		Planet targetPlanet = planetRepository.findById(planet.getPlanetId())
@@ -109,16 +108,15 @@ class TradeServiceTest {
 		planetRepository.save(planet);
 
 		user.getPlanets().add(planet);
-		Session session = user.addSession();
-		UserSession userSession = new UserSession(session.getUser().getId());
 
 		PlanetSell planetSell = PlanetSell.builder()
 			.sellPrice(6000)
 			.build();
 
+		UserPrincipal userPrincipal = new UserPrincipal(user);
 		// expected
 		assertThrows(NotOwnerException.class,
-			() -> tradeService.sell(userSession, planet.getPlanetId(), planetSell));
+			() -> tradeService.sell(userPrincipal, planet.getPlanetId(), planetSell));
 	}
 
 	@Test
@@ -151,11 +149,10 @@ class TradeServiceTest {
 		planetRepository.save(planet);
 
 		seller.getPlanets().add(planet);
-		Session session = buyer.addSession();
-		UserSession userSession = new UserSession(session.getUser().getId());
 
+		UserPrincipal principal = new UserPrincipal(buyer);
 		// when
-		tradeService.buy(userSession, planet.getPlanetId());
+		tradeService.buy(principal, planet.getPlanetId());
 
 		// then
 		User targetBuyer = userRepository.findById(buyer.getId())
@@ -208,11 +205,10 @@ class TradeServiceTest {
 		planetRepository.save(planet);
 
 		seller.getPlanets().add(planet);
-		Session session = buyer.addSession();
-		UserSession userSession = new UserSession(session.getUser().getId());
+		UserPrincipal principal = new UserPrincipal(buyer);
 
 		// when
-		tradeService.buy(userSession, planet.getPlanetId());
+		tradeService.buy(principal, planet.getPlanetId());
 
 		// then
 		List<TradeHistory> bTradeHistory = tradeHistoryRepository.findByUserId(buyer.getId());
@@ -257,12 +253,11 @@ class TradeServiceTest {
 		planetRepository.save(planet);
 
 		seller.getPlanets().add(planet);
-		Session session = buyer.addSession();
-		UserSession userSession = new UserSession(session.getUser().getId());
+		UserPrincipal principal = new UserPrincipal(buyer);
 
 		// expected
 		assertThrows(NotEnoughBalance.class,
-			() -> tradeService.buy(userSession, planet.getPlanetId()));
+			() -> tradeService.buy(principal, planet.getPlanetId()));
 	}
 
 	@Test
@@ -286,11 +281,11 @@ class TradeServiceTest {
 		planetRepository.save(planet);
 
 		seller.getPlanets().add(planet);
-		Session session = seller.addSession();
-		UserSession userSession = new UserSession(session.getUser().getId());
+		UserPrincipal principal = new UserPrincipal(seller);
+
 
 		// when
-		tradeService.cancel(userSession, planet.getPlanetId());
+		tradeService.cancel(principal, planet.getPlanetId());
 
 		// then
 		Planet targetPlanet = planetRepository.findById(planet.getPlanetId())
@@ -328,11 +323,10 @@ class TradeServiceTest {
 		planetRepository.save(planet);
 
 		seller.getPlanets().add(planet);
-		Session session = other.addSession();
-		UserSession userSession = new UserSession(session.getUser().getId());
+		UserPrincipal principal = new UserPrincipal(other);
 
 		// expected
 		assertThrows(NotOwnerException.class,
-			() -> tradeService.cancel(userSession, planet.getPlanetId()));
+			() -> tradeService.cancel(principal, planet.getPlanetId()));
 	}
 }

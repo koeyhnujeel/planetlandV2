@@ -20,6 +20,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpMethod;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,7 +49,8 @@ class PlanetControllerTest {
 	}
 
 	@Test
-	@DisplayName("행성 생성 요청 시 DB에 저장된다.")
+	@WithMockUser(username = "test@email.com", roles = {"ADMIN"})
+	@DisplayName("행성 생성")
 	void test1() throws Exception {
 		//given
 		PlanetCreate planetCreate = PlanetCreate.builder()
@@ -231,6 +233,7 @@ class PlanetControllerTest {
 	}
 
 	@Test
+	@WithMockUser(username = "test@email.com", roles = {"ADMIN"})
 	@DisplayName("행성 수정")
 	void test7() throws Exception {
 		//given
@@ -280,6 +283,7 @@ class PlanetControllerTest {
 	}
 
 	@Test
+	@WithMockUser(username = "test@email.com", roles = {"ADMIN"})
 	@DisplayName("행성 삭제")
 	void test8() throws Exception {
 		//given
@@ -303,6 +307,7 @@ class PlanetControllerTest {
 	}
 
 	@Test
+	@WithMockUser(username = "test@email.com", roles = {"ADMIN"})
 	@DisplayName("행성 생성 시 행성 이름, 가격, 인구수, 위성수, 구매가능 여부값은 필수다.")
 	void test9() throws Exception {
 		//given
@@ -338,6 +343,7 @@ class PlanetControllerTest {
 	}
 
 	@Test
+	@WithMockUser(username = "test@email.com", roles = {"ADMIN"})
 	@DisplayName("행성 생성 시 행성 최소 가격은 1원이다.")
 	void test10() throws Exception {
 		//given
@@ -369,6 +375,7 @@ class PlanetControllerTest {
 	}
 
 	@Test
+	@WithMockUser(username = "test@email.com", roles = {"ADMIN"})
 	@DisplayName("행성 생성 시 이미지 파일 업로드는 필수다.")
 	void test11() throws Exception {
 		//given
@@ -413,6 +420,7 @@ class PlanetControllerTest {
 	}
 
 	@Test
+	@WithMockUser(username = "test@email.com", roles = {"ADMIN"})
 	@DisplayName("존재하지 않는 행성 수정")
 	void test13() throws Exception {
 		//given
@@ -441,6 +449,7 @@ class PlanetControllerTest {
 	}
 
 	@Test
+	@WithMockUser(username = "test@email.com", roles = {"ADMIN"})
 	@DisplayName("존재하지 않는 행성 삭제")
 	void test14() throws Exception {
 		// expected
@@ -452,6 +461,7 @@ class PlanetControllerTest {
 	}
 
 	@Test
+	@WithMockUser(username = "test@email.com", roles = {"ADMIN"})
 	@DisplayName("행성 생성 시 행성 이름에 비속어는 포함될 수 없다.")
 	void test15() throws Exception {
 		//given
@@ -483,6 +493,7 @@ class PlanetControllerTest {
 	}
 
 	@Test
+	@WithMockUser(username = "test@email.com", roles = {"ADMIN"})
 	@DisplayName("행성 수정 시 행성 이름에 비속어는 포함될 수 없다.")
 	void test16() throws Exception {
 		//given
@@ -523,6 +534,7 @@ class PlanetControllerTest {
 	}
 
 	@Test
+	@WithMockUser(username = "test@email.com", roles = {"ADMIN"})
 	@DisplayName("행성 생성 시 행성 이름은 중복 될 수 없다")
 	void test17() throws Exception {
 		//given
@@ -562,6 +574,7 @@ class PlanetControllerTest {
 	}
 
 	@Test
+	@WithMockUser(username = "test@email.com", roles = {"ADMIN"})
 	@DisplayName("행성 수정 시 행성 이름은 중복 될 수 없다")
 	void test18() throws Exception {
 		//given
@@ -610,6 +623,7 @@ class PlanetControllerTest {
 	}
 
 	@Test
+	@WithMockUser(username = "test@email.com", roles = {"ADMIN"})
 	@DisplayName("행성 생성 시 지원하지 않는 이미지 파일 형식")
 	void test19() throws Exception {
 		//given
@@ -641,6 +655,7 @@ class PlanetControllerTest {
 	}
 
 	@Test
+	@WithMockUser(username = "test@email.com", roles = {"ADMIN"})
 	@DisplayName("행성 수정 시 지원하지 않는 이미지 파일 형식")
 	void test20() throws Exception {
 		//given

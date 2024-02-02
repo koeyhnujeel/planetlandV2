@@ -5,8 +5,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import javax.servlet.http.Cookie;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -14,11 +12,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockCookie;
+import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.planetlandV2.Enum.PlanetStatus;
+import com.planetlandV2.config.UserPrincipal;
 import com.planetlandV2.domain.Planet;
 import com.planetlandV2.domain.User;
 import com.planetlandV2.exception.planet.PlanetNotFound;
@@ -37,9 +36,6 @@ class TradeControllerTest {
 	private UserRepository userRepository;
 
 	@Autowired
-	private SessionRepository sessionRepository;
-
-	@Autowired
 	private PlanetRepository planetRepository;
 
 	@Autowired
@@ -49,7 +45,6 @@ class TradeControllerTest {
 	void clean() {
 		userRepository.deleteAll();
 		planetRepository.deleteAll();
-		sessionRepository.deleteAll();
 	}
 
 	@Test
@@ -77,15 +72,14 @@ class TradeControllerTest {
 			.build();
 
 		user.getPlanets().add(planet);
-		Session session = user.addSession();
-		sessionRepository.save(session);
 
 		String json = objectMapper.writeValueAsString(planetSell);
-		Cookie cookie = new MockCookie("SESSION", session.getAccessToken());
+
+		UserPrincipal principal = new UserPrincipal(user);
 
 		//expected
 		mockMvc.perform(patch("/planets/{planetId}/sell", planet.getPlanetId())
-				.cookie(cookie)
+				.with(SecurityMockMvcRequestPostProcessors.user(principal))
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(json))
 			.andExpect(status().isOk())
@@ -131,7 +125,7 @@ class TradeControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(json))
 			.andExpect(status().isUnauthorized())
-			.andExpect(jsonPath("$.message").value("로그인이 필요한 서비스입니다."))
+			.andExpect(jsonPath("$.message").value("로그인이 필요한 서비스 입니다."))
 			.andDo(print());
 	}
 
@@ -164,14 +158,11 @@ class TradeControllerTest {
 		planetRepository.save(planet);
 
 		seller.getPlanets().add(planet);
-		Session session = buyer.addSession();
-		sessionRepository.save(session);
-
-		Cookie cookie = new MockCookie("SESSION", session.getAccessToken());
+		UserPrincipal principal = new UserPrincipal(buyer);
 
 		//expected
 		mockMvc.perform(patch("/planets/{planetId}/buy", planet.getPlanetId())
-				.cookie(cookie)
+				.with(SecurityMockMvcRequestPostProcessors.user(principal))
 				.contentType(MediaType.APPLICATION_JSON)
 				)
 			.andExpect(status().isOk())
@@ -216,7 +207,7 @@ class TradeControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 			)
 			.andExpect(status().isUnauthorized())
-			.andExpect(jsonPath("$.message").value("로그인이 필요한 서비스입니다."))
+			.andExpect(jsonPath("$.message").value("로그인이 필요한 서비스 입니다."))
 			.andDo(print());
 	}
 
@@ -241,14 +232,12 @@ class TradeControllerTest {
 		planetRepository.save(planet);
 
 		seller.getPlanets().add(planet);
-		Session session = seller.addSession();
-		sessionRepository.save(session);
 
-		Cookie cookie = new MockCookie("SESSION", session.getAccessToken());
+		UserPrincipal principal = new UserPrincipal(seller);
 
 		//expected
 		mockMvc.perform(patch("/planets/{planetId}/sellCancel", planet.getPlanetId())
-				.cookie(cookie)
+				.with(SecurityMockMvcRequestPostProcessors.user(principal))
 				.contentType(MediaType.APPLICATION_JSON)
 			)
 			.andExpect(status().isOk())
