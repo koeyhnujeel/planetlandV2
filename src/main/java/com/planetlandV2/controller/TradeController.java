@@ -15,26 +15,28 @@ import com.planetlandV2.response.TradeResponse;
 import com.planetlandV2.service.TradeService;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @RequiredArgsConstructor
 public class TradeController {
 
 	private final TradeService tradeService;
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
 	@PatchMapping("/planets/{planetId}/sell")
 	public void salesRegistration(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long planetId, @RequestBody @Valid PlanetSell planetSell) {
 		tradeService.sell(userPrincipal, planetId, planetSell);
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
 	@PatchMapping("/planets/{planetId}/buy")
 	public TradeResponse buy(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long planetId) {
 		return tradeService.buy(userPrincipal, planetId);
 	}
 
-	@PreAuthorize("hasRole('ROLE_USER')")
+	@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
 	@PatchMapping("/planets/{planetId}/sellCancel")
 	public void sellCancel(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long planetId) {
 		tradeService.cancel(userPrincipal, planetId);

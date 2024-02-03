@@ -34,8 +34,6 @@ public class QUser extends EntityPathBase<User> {
 
     public final ListPath<Planet, QPlanet> planets = this.<Planet, QPlanet>createList("planets", Planet.class, QPlanet.class, PathInits.DIRECT2);
 
-    public final ListPath<Session, QSession> sessions = this.<Session, QSession>createList("sessions", Session.class, QSession.class, PathInits.DIRECT2);
-
     public final ListPath<TradeHistory, QTradeHistory> tradeHistoryList = this.<TradeHistory, QTradeHistory>createList("tradeHistoryList", TradeHistory.class, QTradeHistory.class, PathInits.DIRECT2);
 
     public QUser(String variable) {

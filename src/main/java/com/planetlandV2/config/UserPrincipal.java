@@ -16,7 +16,7 @@ public class UserPrincipal extends User {
 	public UserPrincipal(com.planetlandV2.domain.User user) {
 		super(user.getEmail(), user.getPassword(),
 			List.of(
-				new SimpleGrantedAuthority("ROLE_USER")
+				new SimpleGrantedAuthority("ROLE_ADMIN")
 			));
 		this.userId = user.getId();
 	}
