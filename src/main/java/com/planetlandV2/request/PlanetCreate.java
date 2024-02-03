@@ -54,6 +54,7 @@ public class PlanetCreate {
 			.population(this.population)
 			.satellite(this.satellite)
 			.planetStatus(this.planetStatus)
+			.owner("ADMIN")
 			.imgName(imgName)
 			.imgPath(PATH + imgName)
 			.build();
