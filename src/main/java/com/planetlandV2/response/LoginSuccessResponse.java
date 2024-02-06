@@ -4,11 +4,11 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class LoginResponse {
+public class LoginSuccessResponse {
 	private String nickname;
 
 	@Builder
-	public LoginResponse(String nickname) {
+	public LoginSuccessResponse(String nickname) {
 		this.nickname = nickname;
 	}
 }

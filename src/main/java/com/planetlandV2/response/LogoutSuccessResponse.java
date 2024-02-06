@@ -4,11 +4,11 @@ import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-public class LogoutResponse {
+public class LogoutSuccessResponse {
 	private String message;
 
 	@Builder
-	public LogoutResponse(String message) {
+	public LogoutSuccessResponse(String message) {
 		this.message = message;
 	}
 }
