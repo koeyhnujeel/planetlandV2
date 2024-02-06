@@ -7,17 +7,21 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
+import org.springframework.security.config.annotation.web.configurers.CsrfConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.crypto.scrypt.SCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.session.security.web.authentication.SpringSessionRememberMeServices;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -27,6 +31,7 @@ import com.planetlandV2.config.handler.Http401Handler;
 import com.planetlandV2.config.handler.Http403Handler;
 import com.planetlandV2.config.handler.LoginFailHandler;
 import com.planetlandV2.config.handler.LoginSuccessHandler;
+import com.planetlandV2.config.handler.LogoutSuccessHandler;
 import com.planetlandV2.domain.User;
 import com.planetlandV2.exception.UserNotFound;
 import com.planetlandV2.repository.UserRepository;
@@ -59,7 +64,16 @@ public class SecurityConfig {
 			.authorizeHttpRequests()
 				.anyRequest().permitAll()
 			.and()
+			.cors()
+			.and()
 			.addFilterBefore(usernamePasswordAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+			.logout()
+				.logoutUrl("/logout")
+				.logoutSuccessHandler(new LogoutSuccessHandler(objectMapper))
+				.invalidateHttpSession(true)
+				.deleteCookies("SESSION")
+				.permitAll()
+			.and()
 			// .formLogin()
 			// 	.loginPage("/auth/login")
 			// 	.loginProcessingUrl("/auth/login")
@@ -84,14 +98,14 @@ public class SecurityConfig {
 	public EmailPasswordAuthFilter usernamePasswordAuthenticationFilter() {
 		EmailPasswordAuthFilter filter = new EmailPasswordAuthFilter("/auth/login", objectMapper);
 		filter.setAuthenticationManager(authenticationManager());
-		filter.setAuthenticationSuccessHandler(new LoginSuccessHandler());
+		filter.setAuthenticationSuccessHandler(new LoginSuccessHandler(objectMapper));
 		filter.setAuthenticationFailureHandler(new LoginFailHandler(objectMapper));
 		filter.setSecurityContextRepository(new HttpSessionSecurityContextRepository());
 
-		SpringSessionRememberMeServices rememberMeServices = new SpringSessionRememberMeServices();
-		rememberMeServices.setAlwaysRemember(true);
-		rememberMeServices.setValiditySeconds(3600 * 24 * 30);
-		filter.setRememberMeServices(rememberMeServices);
+		// SpringSessionRememberMeServices rememberMeServices = new SpringSessionRememberMeServices();
+		// rememberMeServices.setAlwaysRemember(true);
+		// rememberMeServices.setValiditySeconds(3600 * 24 * 30);
+		// filter.setRememberMeServices(rememberMeServices);
 		return filter;
 	}
 
