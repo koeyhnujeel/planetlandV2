@@ -5,10 +5,11 @@ import com.planetlandV2.exception.CustomException;
 
 public class ExistsNicknameException extends CustomException {
 
-	private static final String MESSAGE = "사용중인 닉네임 입니다.";
+	private static final String MESSAGE = "This nickname is already registered.";
 
 	public ExistsNicknameException() {
 		super(MESSAGE);
+		addValidation("nickname", "사용중인 닉네임 입니다.");
 	}
 
 	@Override
