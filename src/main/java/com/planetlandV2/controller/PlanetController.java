@@ -21,6 +21,7 @@ import com.planetlandV2.image.ImageProcess;
 import com.planetlandV2.request.PlanetCreate;
 import com.planetlandV2.request.PlanetEdit;
 import com.planetlandV2.request.PlanetPage;
+import com.planetlandV2.response.PlanetDetailResponse;
 import com.planetlandV2.response.PlanetResponse;
 import com.planetlandV2.service.PlanetService;
 
@@ -45,7 +46,7 @@ public class PlanetController {
 	}
 
 	@GetMapping("/planets/{planetId}")
-	public PlanetResponse get(@PathVariable Long planetId) {
+	public PlanetDetailResponse get(@PathVariable Long planetId) {
 		return planetService.get(planetId);
 	}
 
