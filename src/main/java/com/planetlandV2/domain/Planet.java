@@ -9,6 +9,7 @@ import jakarta.persistence.ManyToOne;
 import com.planetlandV2.Enum.PlanetStatus;
 import com.planetlandV2.request.PlanetEdit;
 import com.planetlandV2.request.PlanetSell;
+import com.planetlandV2.response.PlanetDetailResponse;
 import com.planetlandV2.response.PlanetResponse;
 
 import lombok.AccessLevel;
@@ -65,22 +66,29 @@ public class Planet {
 			.id(this.planetId)
 			.planetName(this.planetName)
 			.price(this.price)
+			.planetStatus(this.planetStatus)
+			.build();
+	}
+
+	public PlanetDetailResponse toDetailResponse() {
+		return PlanetDetailResponse.builder()
+			.id(this.planetId)
+			.planetName(this.planetName)
+			.price(this.price)
 			.population(this.population)
 			.satellite(this.satellite)
 			.planetStatus(this.planetStatus)
 			.owner(this.owner)
-			.imgName(this.imgName)
 			.imgPath(this.imgPath)
 			.build();
 	}
 
 	public void edit(PlanetEdit planetEdit) {
-		this.planetName = planetEdit.getPlanetName();
-		this.price = planetEdit.getPrice();
-		this.population = planetEdit.getPopulation();
-		this.satellite = planetEdit.getSatellite();
-		this.planetStatus = planetEdit.getPlanetStatus();
-		this.owner = planetEdit.getOwner();
+		this.planetName = (planetEdit.getPlanetName().isEmpty()) ? this.planetName : planetEdit.getPlanetName();
+		this.price = (planetEdit.getPrice() == null) ? this.price : planetEdit.getPrice();
+		this.population = (planetEdit.getPopulation() == null) ? this.population : planetEdit.getPopulation();
+		this.satellite = (planetEdit.getSatellite() == null) ? this.satellite : planetEdit.getSatellite();
+		this.planetStatus = (planetEdit.getPlanetStatus() == null) ? this.planetStatus : planetEdit.getPlanetStatus();
 	}
 
 	public void imgEdit(String imgName, String imgPath) {
