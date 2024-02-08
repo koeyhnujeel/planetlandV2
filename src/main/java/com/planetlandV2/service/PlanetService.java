@@ -18,6 +18,7 @@ import com.planetlandV2.repository.PlanetRepository;
 import com.planetlandV2.request.PlanetCreate;
 import com.planetlandV2.request.PlanetEdit;
 import com.planetlandV2.request.PlanetPage;
+import com.planetlandV2.response.PlanetDetailResponse;
 import com.planetlandV2.response.PlanetResponse;
 
 import lombok.RequiredArgsConstructor;
@@ -36,10 +37,10 @@ public class PlanetService {
 		planetRepository.save(planet);
 	}
 
-	public PlanetResponse get(Long planetId) {
+	public PlanetDetailResponse get(Long planetId) {
 		Planet planet = planetRepository.findById(planetId)
 			.orElseThrow(PlanetNotFound::new);
-		return planet.toResponse();
+		return planet.toDetailResponse();
 	}
 
 	@Transactional
@@ -51,7 +52,7 @@ public class PlanetService {
 			checkPlanetName(planetEdit.getPlanetName());
 		}
 
-		if (!imgFile.isEmpty()) {
+		if (imgFile != null) {
 			imageProcess.CheckExtension(imgFile);
 			String imgName = imageProcess.getImageNameAndSave(imgFile);
 			String imgPath = PATH + imgName;
