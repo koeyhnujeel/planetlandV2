@@ -1,9 +1,5 @@
 package com.planetlandV2.request;
 
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-
 import com.planetlandV2.Enum.PlanetStatus;
 import com.planetlandV2.exception.planet.InvalidRequest;
 
@@ -15,34 +11,26 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
+
 public class PlanetEdit {
 
-	@NotBlank(message = "행성 이름을 입력해주세요.")
 	private String planetName;
 
-	@Min(value = 1, message = "행성 최소 가격은 1원입니다.")
-	@NotNull(message = "행성 가격을 입력해주세요.")
 	private Integer price;
 
-	@NotNull(message = "행성 인구수를 입력해주세요.")
 	private Integer population;
 
-	@NotNull(message = "위성수를 입력해주세요.")
 	private Integer satellite;
 
-	@NotNull(message = "구매가능 여부를 입력해주세요.")
 	private PlanetStatus planetStatus;
 
-	private String owner;
-
 	@Builder
-	public PlanetEdit(String planetName, Integer price, Integer population, Integer satellite, PlanetStatus planetStatus, String owner) {
+	public PlanetEdit(String planetName, Integer price, Integer population, Integer satellite, PlanetStatus planetStatus) {
 		this.planetName = planetName;
 		this.price = price;
 		this.population = population;
 		this.satellite = satellite;
 		this.planetStatus = planetStatus;
-		this.owner = owner;
 	}
 
 	public void validate() {
