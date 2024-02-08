@@ -24,6 +24,7 @@ import com.planetlandV2.repository.PlanetRepository;
 import com.planetlandV2.request.PlanetCreate;
 import com.planetlandV2.request.PlanetEdit;
 import com.planetlandV2.request.PlanetPage;
+import com.planetlandV2.response.PlanetDetailResponse;
 import com.planetlandV2.response.PlanetResponse;
 
 @SpringBootTest
@@ -86,15 +87,13 @@ class PlanetServiceTest {
 		planetRepository.save(planet);
 
 		// when
-		PlanetResponse planetResponse = planetService.get(planet.getPlanetId());
+		PlanetDetailResponse planetDetailResponse = planetService.get(planet.getPlanetId());
 
 		// then
-		assertNotNull(planetResponse);
-		assertEquals("테스트 행성1", planetResponse.getPlanetName());
-		assertEquals(1000, planetResponse.getPrice());
-		assertEquals(100, planetResponse.getPopulation());
-		assertEquals(1, planetResponse.getSatellite());
-		assertEquals(PlanetStatus.FORSALE, planetResponse.getPlanetStatus());
+		assertNotNull(planetDetailResponse);
+		assertEquals("테스트 행성1", planetDetailResponse.getPlanetName());
+		assertEquals(1000, planetDetailResponse.getPrice());
+		assertEquals(PlanetStatus.FORSALE, planetDetailResponse.getPlanetStatus());
 	}
 
 	@Test

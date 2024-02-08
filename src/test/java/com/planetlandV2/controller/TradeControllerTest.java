@@ -125,7 +125,7 @@ class TradeControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(json))
 			.andExpect(status().isUnauthorized())
-			.andExpect(jsonPath("$.message").value("로그인이 필요한 서비스 입니다."))
+			.andExpect(jsonPath("$.message").value("Login required."))
 			.andDo(print());
 	}
 
@@ -207,7 +207,7 @@ class TradeControllerTest {
 				.contentType(MediaType.APPLICATION_JSON)
 			)
 			.andExpect(status().isUnauthorized())
-			.andExpect(jsonPath("$.message").value("로그인이 필요한 서비스 입니다."))
+			.andExpect(jsonPath("$.message").value("Login required."))
 			.andDo(print());
 	}
 

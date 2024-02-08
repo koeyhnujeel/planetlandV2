@@ -404,7 +404,7 @@ class PlanetControllerTest {
 			)
 			.andExpect(status().isNotFound())
 			.andExpect(jsonPath("$.code").value("404"))
-			.andExpect(jsonPath("$.message").value("이미지 파일을 업로드 해주세요."))
+			.andExpect(jsonPath("$.message").value("Please upload the image file."))
 			.andDo(print());
 	}
 
@@ -569,7 +569,7 @@ class PlanetControllerTest {
 			)
 			.andExpect(status().isConflict())
 			.andExpect(jsonPath("$.code").value("409"))
-			.andExpect(jsonPath("$.message").value("이미 존재하는 행성입니다."))
+			.andExpect(jsonPath("$.message").value("The planet already exists."))
 			.andDo(print());
 	}
 
@@ -618,7 +618,7 @@ class PlanetControllerTest {
 			)
 			.andExpect(status().isConflict())
 			.andExpect(jsonPath("$.code").value("409"))
-			.andExpect(jsonPath("$.message").value("이미 존재하는 행성입니다."))
+			.andExpect(jsonPath("$.message").value("The planet already exists."))
 			.andDo(print());
 	}
 

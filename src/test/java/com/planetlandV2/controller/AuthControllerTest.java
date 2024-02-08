@@ -80,7 +80,7 @@ class AuthControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isConflict())
 			.andExpect(jsonPath("$.code").value("409"))
-			.andExpect(jsonPath("$.message").value("이미 가입된 이메일입니다."))
+			.andExpect(jsonPath("$.message").value("This email is already registered."))
 			.andDo(print());
 	}
 
@@ -108,7 +108,7 @@ class AuthControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isConflict())
 			.andExpect(jsonPath("$.code").value("409"))
-			.andExpect(jsonPath("$.message").value("사용중인 닉네임 입니다."))
+			.andExpect(jsonPath("$.message").value("This nickname is already registered."))
 			.andDo(print());
 	}
 }
