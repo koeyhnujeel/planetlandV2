@@ -30,7 +30,7 @@ public class Http403Handler implements AccessDeniedHandler {
 
 		ErrorResponse errorResponse = ErrorResponse.builder()
 			.code(String.valueOf(HttpStatusCode.FORBIDDEN))
-			.message("접근할 수 없습니다.")
+			.message("Permission denied.")
 			.build();
 
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);

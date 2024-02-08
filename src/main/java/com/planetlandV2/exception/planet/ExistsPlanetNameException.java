@@ -5,7 +5,7 @@ import com.planetlandV2.exception.CustomException;
 
 public class ExistsPlanetNameException extends CustomException {
 
-	private static final String MESSAGE = "이미 존재하는 행성입니다.";
+	private static final String MESSAGE = "The planet already exists.";
 
 	public ExistsPlanetNameException() {
 		super(MESSAGE);

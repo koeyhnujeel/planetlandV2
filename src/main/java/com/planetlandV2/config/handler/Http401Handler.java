@@ -32,7 +32,7 @@ public class Http401Handler implements AuthenticationEntryPoint {
 
 		ErrorResponse errorResponse = ErrorResponse.builder()
 			.code(String.valueOf(HttpStatusCode.UNAUTHORIZED))
-			.message("로그인이 필요한 서비스 입니다.")
+			.message("Login required.")
 			.build();
 
 		response.setContentType(MediaType.APPLICATION_JSON_VALUE);
