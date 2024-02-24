@@ -71,7 +71,7 @@ public class SecurityConfig {
 				.logoutUrl("/logout")
 				.logoutSuccessHandler(new LogoutSuccessHandler(objectMapper))
 				.invalidateHttpSession(true)
-				.deleteCookies("SESSION")
+				.deleteCookies("SESSION", "JSESSIONID")
 				.permitAll()
 			.and()
 			// .formLogin()
