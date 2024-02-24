@@ -2,9 +2,17 @@ package com.planetlandV2.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,17 +20,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.planetlandV2.Enum.PlanetStatus;
-import com.planetlandV2.Enum.TradeType;
 import com.planetlandV2.config.UserPrincipal;
 import com.planetlandV2.domain.Planet;
-import com.planetlandV2.domain.TradeHistory;
+import com.planetlandV2.domain.Transaction;
 import com.planetlandV2.domain.User;
-import com.planetlandV2.exception.trade.NotEnoughBalance;
+import com.planetlandV2.exception.trade.NotEnoughBalanceException;
 import com.planetlandV2.exception.trade.NotOwnerException;
 import com.planetlandV2.exception.planet.PlanetNotFound;
 import com.planetlandV2.exception.UserNotFound;
 import com.planetlandV2.repository.PlanetRepository;
-import com.planetlandV2.repository.TradeHistoryRepository;
+import com.planetlandV2.repository.TransactionRepository;
 import com.planetlandV2.repository.UserRepository;
 import com.planetlandV2.request.PlanetSell;
 
@@ -30,7 +37,7 @@ import com.planetlandV2.request.PlanetSell;
 class TradeServiceTest {
 
 	@Autowired
-	private TradeHistoryRepository tradeHistoryRepository;
+	private TransactionRepository transactionRepository;
 
 	@Autowired
 	private UserRepository userRepository;
@@ -42,11 +49,11 @@ class TradeServiceTest {
 	private TradeService tradeService;
 
 
-	@AfterEach
+	@BeforeEach
 	void clean() {
+		transactionRepository.deleteAll();
 		userRepository.deleteAll();
 		planetRepository.deleteAll();
-		tradeHistoryRepository.deleteAll();
 	}
 
 	@Test
@@ -57,7 +64,6 @@ class TradeServiceTest {
 			.email("test@email.com")
 			.password("1234")
 			.nickname("zunza")
-			.balance(10000)
 			.build();
 		userRepository.save(user);
 
@@ -95,7 +101,6 @@ class TradeServiceTest {
 			.email("test@email.com")
 			.password("1234")
 			.nickname("zunza")
-			.balance(10000)
 			.build();
 		userRepository.save(user);
 
@@ -128,7 +133,6 @@ class TradeServiceTest {
 			.email("test1@email.com")
 			.password("1234")
 			.nickname("buyer")
-			.balance(10000)
 			.build();
 		userRepository.save(buyer);
 
@@ -136,44 +140,32 @@ class TradeServiceTest {
 			.email("test2@email.com")
 			.password("1234")
 			.nickname("seller")
-			.balance(10000)
 			.build();
 		userRepository.save(seller);
 
 		Planet planet = Planet.builder()
 			.planetName("test")
-			.price(5000)
+			.price(500)
 			.owner(seller.getNickname())
 			.planetStatus(PlanetStatus.FORSALE)
 			.build();
 		planetRepository.save(planet);
 
-		seller.getPlanets().add(planet);
 
 		UserPrincipal principal = new UserPrincipal(buyer);
 		// when
 		tradeService.buy(principal, planet.getPlanetId());
 
 		// then
-		User targetBuyer = userRepository.findById(buyer.getId())
-			.orElseThrow(() -> new UserNotFound());
-
-		User targetSeller = userRepository.findById(seller.getId())
-			.orElseThrow(() -> new UserNotFound());
-
-		Planet targetPlanet = planetRepository.findById(planet.getPlanetId())
-			.orElseThrow(() -> new PlanetNotFound());
-
-		assertEquals(1, targetBuyer.getPlanets().size());
-		assertEquals("test", targetBuyer.getPlanets().get(0).getPlanetName());
-		assertEquals(5000, targetBuyer.getBalance());
-		assertEquals(1, targetBuyer.getTradeHistoryList().size());
-		assertEquals(0, targetSeller.getPlanets().size());
-		assertEquals(15000, targetSeller.getBalance());
-		assertEquals(1, targetSeller.getTradeHistoryList().size());
-		assertEquals(PlanetStatus.NOTFORSALE, targetPlanet.getPlanetStatus());
-		assertEquals("buyer", targetPlanet.getOwner());
-		assertEquals(buyer, targetPlanet.getUser());
+		assertEquals(1, buyer.getPlanets().size());
+		assertEquals("test", buyer.getPlanets().get(0).getPlanetName());
+		assertEquals(500, buyer.getBalance());
+		assertEquals(0, seller.getPlanets().size());
+		assertEquals(1500, seller.getBalance());
+		assertEquals(PlanetStatus.NOTFORSALE, planet.getPlanetStatus());
+		assertEquals("buyer", planet.getOwner());
+		assertEquals(buyer, planet.getUser());
+		assertEquals(1, transactionRepository.findAll().size());
 	}
 
 	@Test
@@ -184,7 +176,6 @@ class TradeServiceTest {
 			.email("test1@email.com")
 			.password("1234")
 			.nickname("buyer")
-			.balance(10000)
 			.build();
 		userRepository.save(buyer);
 
@@ -192,13 +183,12 @@ class TradeServiceTest {
 			.email("test2@email.com")
 			.password("1234")
 			.nickname("seller")
-			.balance(10000)
 			.build();
 		userRepository.save(seller);
 
 		Planet planet = Planet.builder()
 			.planetName("test")
-			.price(5000)
+			.price(500)
 			.owner(seller.getNickname())
 			.planetStatus(PlanetStatus.FORSALE)
 			.build();
@@ -211,17 +201,11 @@ class TradeServiceTest {
 		tradeService.buy(principal, planet.getPlanetId());
 
 		// then
-		List<TradeHistory> bTradeHistory = tradeHistoryRepository.findByUserId(buyer.getId());
-		List<TradeHistory> sTradeHistory = tradeHistoryRepository.findByUserId(seller.getId());
-
-		assertEquals(1, bTradeHistory.size());
-		assertEquals("buyer", bTradeHistory.get(0).getUser().getNickname());
-		assertEquals("test", bTradeHistory.get(0).getPlanetName());
-		assertEquals(TradeType.BUY, bTradeHistory.get(0).getTradeType());
-		assertEquals(1, sTradeHistory.size());
-		assertEquals("seller", sTradeHistory.get(0).getUser().getNickname());
-		assertEquals("test", sTradeHistory.get(0).getPlanetName());
-		assertEquals(TradeType.SELL, sTradeHistory.get(0).getTradeType());
+		List<Transaction> allTransactions = transactionRepository.findAll();
+		assertEquals(1, allTransactions.size());
+		assertEquals("buyer", allTransactions.get(0).getBuyer().getNickname());
+		assertEquals("seller", allTransactions.get(0).getSeller().getNickname());
+		assertEquals("test", allTransactions.get(0).getPlanet().getPlanetName());
 	}
 
 	@Test
@@ -232,7 +216,6 @@ class TradeServiceTest {
 			.email("test1@email.com")
 			.password("1234")
 			.nickname("buyer")
-			.balance(4000)
 			.build();
 		userRepository.save(buyer);
 
@@ -240,7 +223,6 @@ class TradeServiceTest {
 			.email("test2@email.com")
 			.password("1234")
 			.nickname("seller")
-			.balance(10000)
 			.build();
 		userRepository.save(seller);
 
@@ -256,7 +238,7 @@ class TradeServiceTest {
 		UserPrincipal principal = new UserPrincipal(buyer);
 
 		// expected
-		assertThrows(NotEnoughBalance.class,
+		assertThrows(NotEnoughBalanceException.class,
 			() -> tradeService.buy(principal, planet.getPlanetId()));
 	}
 
@@ -268,7 +250,6 @@ class TradeServiceTest {
 			.email("test2@email.com")
 			.password("1234")
 			.nickname("seller")
-			.balance(10000)
 			.build();
 		userRepository.save(seller);
 
@@ -302,7 +283,6 @@ class TradeServiceTest {
 			.email("test@email.com")
 			.password("1234")
 			.nickname("other")
-			.balance(10000)
 			.build();
 		userRepository.save(other);
 
@@ -310,7 +290,6 @@ class TradeServiceTest {
 			.email("test2@email.com")
 			.password("1234")
 			.nickname("seller")
-			.balance(10000)
 			.build();
 		userRepository.save(seller);
 
@@ -329,4 +308,61 @@ class TradeServiceTest {
 		assertThrows(NotOwnerException.class,
 			() -> tradeService.cancel(principal, planet.getPlanetId()));
 	}
+
+	// @Test
+	// @DisplayName("[비관적 락] 여러 명이 동시에 하나에 행성을 구매하려 할 때")
+	// void test8() throws InterruptedException {
+	// 	List<User> users = IntStream.range(1, 11)
+	// 		.mapToObj(i -> User.builder()
+	// 			.nickname("user" + i)
+	// 			.password("password")
+	// 			.email("test" + i + "@email.com")
+	// 			.build())
+	// 		.collect(Collectors.toList());
+	// 	userRepository.saveAll(users);
+	//
+	// 	User admin = User.builder()
+	// 		.email("admin@email.com")
+	// 		.password("password")
+	// 		.nickname("ADMIN")
+	// 		.build();
+	// 	userRepository.save(admin);
+	//
+	// 	Planet planet = Planet.builder()
+	// 		.planetName("test")
+	// 		.price(100)
+	// 		.population(10)
+	// 		.satellite(1)
+	// 		.planetStatus(PlanetStatus.FORSALE)
+	// 		.owner("ADMIN")
+	// 		.build();
+	// 	planetRepository.save(planet);
+	//
+	// 	final int numberOfUsers = 10;
+	//
+	// 	ExecutorService executorService = Executors.newFixedThreadPool(numberOfUsers);
+	//
+	// 	for (int i = 0; i < numberOfUsers; i++) {
+	// 		final Long userId = (long) i + 1;
+	//
+	// 		executorService.execute(() -> {
+	// 			UserPrincipal userPrincipal = new UserPrincipal(userRepository.findById(userId).get());
+	// 			try {
+	// 				tradeService.buy(userPrincipal, planet.getPlanetId());
+	// 			} catch (Exception e) {
+	// 				e.printStackTrace();
+	// 			}
+	// 		});
+	// 	}
+	//
+	// 	executorService.shutdown();
+	// 	executorService.awaitTermination(1, TimeUnit.MINUTES);
+	//
+	// 	List<Transaction> allTransactions = transactionRepository.findAll();
+	// 	Planet target = planetRepository.findById(planet.getPlanetId())
+	// 		.orElseThrow(PlanetNotFound::new);
+	//
+	// 	assertEquals(1, allTransactions.size());
+	// 	assertEquals("미판매", target.getPlanetStatus().getValue());
+	// }
 }
