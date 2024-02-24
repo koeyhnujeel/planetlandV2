@@ -42,7 +42,7 @@ class AuthControllerTest {
 		// given
 		Signup signup = Signup.builder()
 			.email("test@email.com")
-			.password("1111")
+			.password("11111111")
 			.nickname("test")
 			.build();
 
@@ -62,13 +62,13 @@ class AuthControllerTest {
 		// given
 		userRepository.save(User.builder()
 			.email("test@email.com")
-			.password("1234")
+			.password("12341111")
 			.nickname("zunza")
 			.build());
 
 		Signup signup = Signup.builder()
 			.email("test@email.com")
-			.password("1111")
+			.password("11111111")
 			.nickname("test")
 			.build();
 
@@ -80,7 +80,7 @@ class AuthControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isConflict())
 			.andExpect(jsonPath("$.code").value("409"))
-			.andExpect(jsonPath("$.message").value("This email is already registered."))
+			.andExpect(jsonPath("$.validation.email").value("This email is already registered."))
 			.andDo(print());
 	}
 
@@ -90,13 +90,13 @@ class AuthControllerTest {
 		// given
 		userRepository.save(User.builder()
 			.email("test@email.com")
-			.password("1234")
+			.password("12341111")
 			.nickname("zunza")
 			.build());
 
 		Signup signup = Signup.builder()
 			.email("test11@email.com")
-			.password("1111")
+			.password("111111111")
 			.nickname("zunza")
 			.build();
 
@@ -108,7 +108,7 @@ class AuthControllerTest {
 				.contentType(MediaType.APPLICATION_JSON))
 			.andExpect(status().isConflict())
 			.andExpect(jsonPath("$.code").value("409"))
-			.andExpect(jsonPath("$.message").value("This nickname is already registered."))
+			.andExpect(jsonPath("$.validation.nickname").value("This nickname is already registered."))
 			.andDo(print());
 	}
 }

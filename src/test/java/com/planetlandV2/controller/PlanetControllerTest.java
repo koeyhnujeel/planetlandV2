@@ -394,17 +394,13 @@ class PlanetControllerTest {
 		MockMultipartFile request = new MockMultipartFile("planetCreate", null,
 			"application/json", json.getBytes(StandardCharsets.UTF_8));
 
-		MockMultipartFile imgFile = new MockMultipartFile("imgFile", "test.png",
-			"multipart/form-data",bytes);
-
 		//expected
 		mockMvc.perform(multipart(HttpMethod.POST, "/planets")
 				.file(request)
-				.file(imgFile)
 			)
-			.andExpect(status().isNotFound())
-			.andExpect(jsonPath("$.code").value("404"))
-			.andExpect(jsonPath("$.message").value("Please upload the image file."))
+			.andExpect(status().isBadRequest())
+			.andExpect(jsonPath("$.code").value("400"))
+			.andExpect(jsonPath("$.validation.imgFile").value("Please upload an image file."))
 			.andDo(print());
 	}
 
@@ -569,7 +565,7 @@ class PlanetControllerTest {
 			)
 			.andExpect(status().isConflict())
 			.andExpect(jsonPath("$.code").value("409"))
-			.andExpect(jsonPath("$.message").value("The planet already exists."))
+			.andExpect(jsonPath("$.validation.planetName").value("The planet already exists."))
 			.andDo(print());
 	}
 
@@ -618,7 +614,7 @@ class PlanetControllerTest {
 			)
 			.andExpect(status().isConflict())
 			.andExpect(jsonPath("$.code").value("409"))
-			.andExpect(jsonPath("$.message").value("The planet already exists."))
+			.andExpect(jsonPath("$.validation.planetName").value("The planet already exists."))
 			.andDo(print());
 	}
 

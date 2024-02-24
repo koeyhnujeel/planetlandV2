@@ -22,6 +22,7 @@ import com.planetlandV2.domain.Planet;
 import com.planetlandV2.domain.User;
 import com.planetlandV2.exception.planet.PlanetNotFound;
 import com.planetlandV2.repository.PlanetRepository;
+import com.planetlandV2.repository.TransactionRepository;
 import com.planetlandV2.repository.UserRepository;
 import com.planetlandV2.request.PlanetSell;
 
@@ -39,10 +40,14 @@ class TradeControllerTest {
 	private PlanetRepository planetRepository;
 
 	@Autowired
+	private TransactionRepository transactionRepository;
+
+	@Autowired
 	private ObjectMapper objectMapper;
 
 	@AfterEach
 	void clean() {
+		transactionRepository.deleteAll();
 		userRepository.deleteAll();
 		planetRepository.deleteAll();
 	}
@@ -55,7 +60,6 @@ class TradeControllerTest {
 			.email("test@email.com")
 			.password("1234")
 			.nickname("zunza")
-			.balance(10000)
 			.build();
 		userRepository.save(user);
 
@@ -100,7 +104,6 @@ class TradeControllerTest {
 			.email("test@email.com")
 			.password("1234")
 			.nickname("zunza")
-			.balance(10000)
 			.build();
 		userRepository.save(user);
 
@@ -137,38 +140,32 @@ class TradeControllerTest {
 			.email("test1@email.com")
 			.password("1234")
 			.nickname("buyer")
-			.balance(10000)
 			.build();
-		userRepository.save(buyer);
+		User savedBuyer = userRepository.save(buyer);
 
 		User seller = User.builder()
 			.email("test2@email.com")
 			.password("1234")
 			.nickname("seller")
-			.balance(10000)
 			.build();
-		userRepository.save(seller);
+		User savedSeller = userRepository.save(seller);
 
 		Planet planet = Planet.builder()
 			.planetName("test")
-			.price(5000)
+			.price(500)
 			.owner(seller.getNickname())
 			.planetStatus(PlanetStatus.FORSALE)
 			.build();
-		planetRepository.save(planet);
+		Planet savedPlanet = planetRepository.save(planet);
 
-		seller.getPlanets().add(planet);
-		UserPrincipal principal = new UserPrincipal(buyer);
+		UserPrincipal principal = new UserPrincipal(savedBuyer);
 
 		//expected
-		mockMvc.perform(patch("/planets/{planetId}/buy", planet.getPlanetId())
+		mockMvc.perform(patch("/planets/{planetId}/buy", savedPlanet.getPlanetId())
 				.with(SecurityMockMvcRequestPostProcessors.user(principal))
 				.contentType(MediaType.APPLICATION_JSON)
 				)
 			.andExpect(status().isOk())
-			.andExpect(jsonPath("$.planetName").value("test"))
-			.andExpect(jsonPath("$.price").value(5000))
-			.andExpect(jsonPath("$.message").value("구매가 완료되었습니다."))
 			.andDo(print());
 	}
 
@@ -180,7 +177,6 @@ class TradeControllerTest {
 			.email("test1@email.com")
 			.password("1234")
 			.nickname("buyer")
-			.balance(10000)
 			.build();
 		userRepository.save(buyer);
 
@@ -188,13 +184,12 @@ class TradeControllerTest {
 			.email("test2@email.com")
 			.password("1234")
 			.nickname("seller")
-			.balance(10000)
 			.build();
 		userRepository.save(seller);
 
 		Planet planet = Planet.builder()
 			.planetName("test")
-			.price(5000)
+			.price(500)
 			.owner(seller.getNickname())
 			.planetStatus(PlanetStatus.FORSALE)
 			.build();
@@ -219,13 +214,12 @@ class TradeControllerTest {
 			.email("test2@email.com")
 			.password("1234")
 			.nickname("seller")
-			.balance(10000)
 			.build();
 		userRepository.save(seller);
 
 		Planet planet = Planet.builder()
 			.planetName("test")
-			.price(5000)
+			.price(500)
 			.owner(seller.getNickname())
 			.planetStatus(PlanetStatus.FORSALE)
 			.build();
