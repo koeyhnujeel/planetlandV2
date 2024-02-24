@@ -14,7 +14,7 @@ import com.planetlandV2.exception.planet.NotSupportedExtension;
 
 @Component
 public class ImageProcess {
-	public static final String PATH = System.getProperty("user.dir") + "/src/main/resources/images/";
+	public static final String PATH = System.getProperty("user.dir") + "/src/main/resources/static/images/";
 
 	private final List<String> extensionList = new ArrayList<>(List.of("jpg", "jpeg", "png", "bmp"));
 
@@ -28,8 +28,7 @@ public class ImageProcess {
 	public String getImageNameAndSave(MultipartFile imgFile) throws IOException {
 		String originName = imgFile.getOriginalFilename();
 		UUID uuid = UUID.randomUUID();
-		String imgName = uuid + "_" + originName;
-
+		String imgName = uuid + "-" + originName;
 		imgFile.transferTo(new File(PATH + imgName));
 		return imgName;
 	}

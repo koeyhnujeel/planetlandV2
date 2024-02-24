@@ -4,15 +4,13 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.planetlandV2.constant.Balance;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
-
-import com.planetlandV2.Enum.TradeType;
-
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -40,15 +38,12 @@ public class User {
 	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
 	private List<Planet> planets = new ArrayList<>();
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-	private List<TradeHistory> tradeHistoryList = new ArrayList<>();
-
 	@Builder
-	public User(String email, String password, String nickname, Integer balance) {
+	public User(String email, String password, String nickname) {
 		this.email = email;
 		this.password = password;
 		this.nickname = nickname;
-		this.balance = balance;
+		this.balance = Balance.INITIAL_CAPITAL;
 		this.createdAt = LocalDateTime.now();
 	}
 
@@ -62,13 +57,15 @@ public class User {
 		this.balance += planet.getPrice();
 	}
 
-	public void addTradeHistory(Planet planet, TradeType tradeType) {
-		TradeHistory tradeHistory = TradeHistory.builder()
-			.planetName(planet.getPlanetName())
-			.tradeType(tradeType)
-			.price(planet.getPrice())
-			.user(this)
-			.build();
-		this.tradeHistoryList.add(tradeHistory);
+	@Override
+	public String toString() {
+		return "User{" +
+			"id=" + id +
+			", email='" + email + '\'' +
+			", password='" + password + '\'' +
+			", nickname='" + nickname + '\'' +
+			", balance=" + balance +
+			", createdAt=" + createdAt +
+			'}';
 	}
 }
