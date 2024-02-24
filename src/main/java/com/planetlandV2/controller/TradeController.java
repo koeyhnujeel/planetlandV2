@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.planetlandV2.config.UserPrincipal;
 import com.planetlandV2.request.PlanetSell;
-import com.planetlandV2.response.TradeResponse;
 import com.planetlandV2.service.TradeService;
 
 import lombok.RequiredArgsConstructor;
@@ -32,8 +31,8 @@ public class TradeController {
 
 	@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
 	@PatchMapping("/planets/{planetId}/buy")
-	public TradeResponse buy(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long planetId) {
-		return tradeService.buy(userPrincipal, planetId);
+	public void buy(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long planetId) {
+		tradeService.buy(userPrincipal, planetId);
 	}
 
 	@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
