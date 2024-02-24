@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.planetlandV2.domain.Planet;
 import com.planetlandV2.domain.QPlanet;
+import com.planetlandV2.request.MyPlanetPage;
 import com.planetlandV2.request.PlanetPage;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
@@ -23,6 +24,14 @@ public class PlanetRepositoryCustomImpl implements PlanetRepositoryCustom {
 			.limit(planetPage.getSize())
 			.offset(planetPage.getOffset())
 			.orderBy(getOrderSpecifier(planetPage))
+			.fetch();
+	}
+
+	@Override
+	public List<Planet> getMyPlanetList(MyPlanetPage myPlanetPage) {
+		return jpaQueryFactory.selectFrom(QPlanet.planet)
+			.limit(myPlanetPage.getSize())
+			.offset(myPlanetPage.getOffset())
 			.fetch();
 	}
 
