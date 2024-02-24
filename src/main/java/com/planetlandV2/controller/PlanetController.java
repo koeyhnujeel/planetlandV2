@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.planetlandV2.exception.planet.ImageFileNotFound;
 import com.planetlandV2.image.ImageProcess;
 import com.planetlandV2.request.PlanetCreate;
 import com.planetlandV2.request.PlanetEdit;
@@ -39,7 +38,6 @@ public class PlanetController {
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping("/planets")
 	public void create(@RequestPart @Valid PlanetCreate planetCreate, @RequestPart MultipartFile imgFile) throws IOException {
-		if (imgFile.isEmpty()) throw new ImageFileNotFound();
 		imageProcess.CheckExtension(imgFile);
 		planetCreate.validate();
 		planetService.create(planetCreate, imgFile);

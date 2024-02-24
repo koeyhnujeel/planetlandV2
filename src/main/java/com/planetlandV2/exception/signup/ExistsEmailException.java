@@ -5,11 +5,11 @@ import com.planetlandV2.exception.CustomException;
 
 public class ExistsEmailException extends CustomException {
 
-	private static final String MESSAGE = "This email is already registered.";
+	private static final String MESSAGE = "잘못된 요청입니다.";
 
 	public ExistsEmailException() {
 		super(MESSAGE);
-		addValidation("email", "이미 가입된 이메일입니다.");
+		addValidation("email", "This email is already registered.");
 	}
 
 	@Override

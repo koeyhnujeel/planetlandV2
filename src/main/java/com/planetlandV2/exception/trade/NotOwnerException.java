@@ -5,7 +5,7 @@ import com.planetlandV2.exception.CustomException;
 
 public class NotOwnerException extends CustomException {
 
-	private static final String MESSAGE = "본인 소유에 행성이 아닙니다.";
+	private static final String MESSAGE = "This is not your own planet.";
 
 	public NotOwnerException() {
 		super(MESSAGE);
