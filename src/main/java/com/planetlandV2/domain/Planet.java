@@ -1,6 +1,7 @@
 package com.planetlandV2.domain;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -44,13 +45,12 @@ public class Planet {
 
 	private String imgPath;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY)
 	private User user;
 
 	@Builder
-	public Planet(Long planetId, String planetName, Integer price, Integer population, Integer satellite, PlanetStatus planetStatus,
+	public Planet(String planetName, Integer price, Integer population, Integer satellite, PlanetStatus planetStatus,
 		String owner, String imgName, String imgPath) {
-		this.planetId = planetId;
 		this.planetName = planetName;
 		this.price = price;
 		this.population = population;
@@ -79,6 +79,7 @@ public class Planet {
 			.satellite(this.satellite)
 			.planetStatus(this.planetStatus)
 			.owner(this.owner)
+			.imgName(this.imgName)
 			.imgPath(this.imgPath)
 			.build();
 	}
