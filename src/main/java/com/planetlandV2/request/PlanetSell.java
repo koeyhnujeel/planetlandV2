@@ -13,8 +13,8 @@ import lombok.Setter;
 @NoArgsConstructor
 public class PlanetSell {
 
-	@Min(value = 1, message = "행성 최소 가격은 1원입니다.")
-	@NotNull(message = "판매 가격을 입력해주세요.")
+	@Min(value = 1, message = "The minimum price is 1 won.")
+	@NotNull(message = "Please enter the price.")
 	private Integer sellPrice;
 
 	@Builder
