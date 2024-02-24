@@ -4,17 +4,20 @@ import static com.planetlandV2.image.ImageProcess.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.planetlandV2.domain.Transaction;
 import com.planetlandV2.exception.planet.ExistsPlanetNameException;
 import com.planetlandV2.exception.planet.PlanetNotFound;
 import com.planetlandV2.domain.Planet;
 import com.planetlandV2.image.ImageProcess;
 import com.planetlandV2.repository.PlanetRepository;
+import com.planetlandV2.repository.TransactionRepository;
 import com.planetlandV2.request.PlanetCreate;
 import com.planetlandV2.request.PlanetEdit;
 import com.planetlandV2.request.PlanetPage;
@@ -28,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 public class PlanetService {
 
 	private final PlanetRepository planetRepository;
+	private final TransactionRepository transactionRepository;
 	private final ImageProcess imageProcess;
 
 	public void create(PlanetCreate planetCreate, MultipartFile imgFile) throws IOException {
@@ -61,11 +65,11 @@ public class PlanetService {
 		planet.edit(planetEdit);
 	}
 
+	@Transactional
 	public void delete(Long planetId) {
-		Planet planet = planetRepository.findById(planetId)
-			.orElseThrow(PlanetNotFound::new);
-
-		planetRepository.deleteById(planet.getPlanetId());
+		Optional<List<Transaction>> transactionList = transactionRepository.findByPlanet_id(planetId);
+		transactionList.ifPresent(transactions -> transactions.forEach(Transaction::deletePlanet));
+		planetRepository.deleteById(planetId);
 	}
 
 	public List<PlanetResponse> getList(PlanetPage planetPage) {
