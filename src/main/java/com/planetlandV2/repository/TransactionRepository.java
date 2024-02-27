@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.planetlandV2.domain.Transaction;
@@ -16,5 +18,7 @@ public interface TransactionRepository extends JpaRepository<Transaction, Long>,
 
 	Optional<List<Transaction>> findByBuyer_idOrSeller_id(Long buyerId, Long sellerId);
 
-	void deleteAllByTransactionDateBefore(LocalDateTime date);
+	@Modifying
+	@Query("DELETE FROM Transaction t WHERE t.isBuyerWithdrawal = TRUE AND t.isSellerWithdrawal = TRUE")
+	void deleteAllByTransactionsWithdrawals();
 }
