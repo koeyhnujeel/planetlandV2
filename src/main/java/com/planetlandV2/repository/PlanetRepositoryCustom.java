@@ -10,5 +10,5 @@ public interface PlanetRepositoryCustom {
 
 	List<Planet> getList(PlanetPage planetPage);
 
-	List<Planet> getMyPlanetList(MyPlanetPage myPlanetPage);
+	List<Planet> getMyPlanetList(Long userId, MyPlanetPage myPlanetPage);
 }

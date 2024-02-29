@@ -42,7 +42,7 @@ public class UserService {
 	}
 
 	public List<PlanetResponse> getUserPlanetList(Long userId, MyPlanetPage myPlanetPage) {
-		List<Planet> myPlanetsList = planetRepository.getMyPlanetList(myPlanetPage);
+		List<Planet> myPlanetsList = planetRepository.getMyPlanetList(userId, myPlanetPage);
 		return myPlanetsList.stream()
 			.map(Planet::toResponse)
 			.collect(Collectors.toList());

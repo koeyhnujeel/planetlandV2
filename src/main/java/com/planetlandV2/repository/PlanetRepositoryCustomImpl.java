@@ -28,8 +28,9 @@ public class PlanetRepositoryCustomImpl implements PlanetRepositoryCustom {
 	}
 
 	@Override
-	public List<Planet> getMyPlanetList(MyPlanetPage myPlanetPage) {
+	public List<Planet> getMyPlanetList(Long userId, MyPlanetPage myPlanetPage) {
 		return jpaQueryFactory.selectFrom(QPlanet.planet)
+			.where(QPlanet.planet.user.id.eq(userId))
 			.limit(myPlanetPage.getSize())
 			.offset(myPlanetPage.getOffset())
 			.fetch();
