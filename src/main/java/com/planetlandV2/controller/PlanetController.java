@@ -37,32 +37,32 @@ public class PlanetController {
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PostMapping("/planets")
-	public void create(@RequestPart @Valid PlanetCreate planetCreate, @RequestPart MultipartFile imgFile) throws IOException {
+	public void planetAdd(@RequestPart @Valid PlanetCreate planetCreate, @RequestPart MultipartFile imgFile) throws IOException {
 		imageProcess.CheckExtension(imgFile);
 		planetCreate.validate();
-		planetService.create(planetCreate, imgFile);
+		planetService.addPlanet(planetCreate, imgFile);
 	}
 
 	@GetMapping("/planets/{planetId}")
-	public PlanetDetailResponse get(@PathVariable Long planetId) {
-		return planetService.get(planetId);
+	public PlanetDetailResponse planetDetails(@PathVariable Long planetId) {
+		return planetService.findPlanet(planetId);
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@PatchMapping("/planets/{planetId}")
-	public void edit(@PathVariable Long planetId, @RequestPart @Valid PlanetEdit planetEdit, @RequestPart(required = false) MultipartFile imgFile) throws IOException {
+	public void planetModify(@PathVariable Long planetId, @RequestPart @Valid PlanetEdit planetEdit, @RequestPart(required = false) MultipartFile imgFile) throws IOException {
 		planetEdit.validate();
-		planetService.edit(planetId, planetEdit, imgFile);
+		planetService.modifyPlanet(planetId, planetEdit, imgFile);
 	}
 
 	@PreAuthorize("hasRole('ROLE_ADMIN')")
 	@DeleteMapping("/planets/{planetId}")
-	public void delete(@PathVariable Long planetId) {
-		planetService.delete(planetId);
+	public void planetRemove(@PathVariable Long planetId) {
+		planetService.removePlanet(planetId);
 	}
 
 	@GetMapping("/planets")
-	public List<PlanetResponse> getList(@ModelAttribute PlanetPage planetPage) {
-		return planetService.getList(planetPage);
+	public List<PlanetResponse> planetList(@ModelAttribute PlanetPage planetPage) {
+		return planetService.findPlanetList(planetPage);
 	}
 }

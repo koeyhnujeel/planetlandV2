@@ -34,21 +34,21 @@ public class PlanetService {
 	private final TransactionRepository transactionRepository;
 	private final ImageProcess imageProcess;
 
-	public void create(PlanetCreate planetCreate, MultipartFile imgFile) throws IOException {
+	public void addPlanet(PlanetCreate planetCreate, MultipartFile imgFile) throws IOException {
 		checkPlanetName(planetCreate.getPlanetName());
 		String imgName = imageProcess.getImageNameAndSave(imgFile);
 		Planet planet = planetCreate.toEntity(imgName);
 		planetRepository.save(planet);
 	}
 
-	public PlanetDetailResponse get(Long planetId) {
+	public PlanetDetailResponse findPlanet(Long planetId) {
 		Planet planet = planetRepository.findById(planetId)
 			.orElseThrow(PlanetNotFound::new);
 		return planet.toDetailResponse();
 	}
 
 	@Transactional
-	public void edit(Long planetId, PlanetEdit planetEdit, MultipartFile imgFile) throws IOException {
+	public void modifyPlanet(Long planetId, PlanetEdit planetEdit, MultipartFile imgFile) throws IOException {
 		Planet planet = planetRepository.findById(planetId)
 			.orElseThrow(PlanetNotFound::new);
 
@@ -66,13 +66,13 @@ public class PlanetService {
 	}
 
 	@Transactional
-	public void delete(Long planetId) {
-		Optional<List<Transaction>> transactionList = transactionRepository.findByPlanet_id(planetId);
+	public void removePlanet(Long planetId) {
+		Optional<List<Transaction>> transactionList = transactionRepository.findByPlanet_planetId(planetId);
 		transactionList.ifPresent(transactions -> transactions.forEach(Transaction::deletePlanet));
 		planetRepository.deleteById(planetId);
 	}
 
-	public List<PlanetResponse> getList(PlanetPage planetPage) {
+	public List<PlanetResponse> findPlanetList(PlanetPage planetPage) {
 		return planetRepository.getList(planetPage).stream()
 			.map(Planet::toResponse)
 			.collect(Collectors.toList());

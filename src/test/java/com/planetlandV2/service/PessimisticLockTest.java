@@ -86,7 +86,7 @@ public class PessimisticLockTest {
 			executorService.execute(() -> {
 				UserPrincipal userPrincipal = new UserPrincipal(userRepository.findById(userId).get());
 				try {
-					tradeService.buy(userPrincipal, planet.getPlanetId());
+					tradeService.buyPlanet(userPrincipal, planet.getPlanetId());
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

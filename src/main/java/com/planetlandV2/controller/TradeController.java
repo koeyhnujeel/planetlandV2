@@ -25,19 +25,19 @@ public class TradeController {
 
 	@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
 	@PatchMapping("/planets/{planetId}/sell")
-	public void salesRegistration(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long planetId, @RequestBody @Valid PlanetSell planetSell) {
-		tradeService.sell(userPrincipal, planetId, planetSell);
+	public void planetSell(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long planetId, @RequestBody @Valid PlanetSell planetSell) {
+		tradeService.sellPlanet(userPrincipal, planetId, planetSell);
 	}
 
 	@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
 	@PatchMapping("/planets/{planetId}/buy")
-	public void buy(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long planetId) {
-		tradeService.buy(userPrincipal, planetId);
+	public void planetBuy(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long planetId) {
+		tradeService.buyPlanet(userPrincipal, planetId);
 	}
 
 	@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
 	@PatchMapping("/planets/{planetId}/sellCancel")
-	public void sellCancel(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long planetId) {
-		tradeService.cancel(userPrincipal, planetId);
+	public void planetSellCancel(@AuthenticationPrincipal UserPrincipal userPrincipal, @PathVariable Long planetId) {
+		tradeService.sellCancelPlanet(userPrincipal, planetId);
 	}
 }

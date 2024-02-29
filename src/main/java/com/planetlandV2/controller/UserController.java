@@ -26,21 +26,21 @@ public class UserController {
 
 	@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
 	@DeleteMapping("/user/withdrawal")
-	public void delete(@AuthenticationPrincipal UserPrincipal userPrincipal) {
-		userService.cancelMembership(userPrincipal.getUserId());
+	public void userRemove(@AuthenticationPrincipal UserPrincipal userPrincipal) {
+		userService.removeUser(userPrincipal.getUserId());
 	}
 
 	@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
 	@GetMapping("/user/transactions")
-	public List<TransactionResponse> getTransactionList(
+	public List<TransactionResponse> userTransactionList(
 		@AuthenticationPrincipal UserPrincipal userPrincipal, @ModelAttribute TransactionPage transactionPage) {
-		return userService.getUserTransactionList(userPrincipal.getUserId(), transactionPage);
+		return userService.findUserTransactionList(userPrincipal.getUserId(), transactionPage);
 	}
 
 	@PreAuthorize("hasAnyRole('ROLE_USER', 'ROLE_ADMIN')")
 	@GetMapping("/user/planets")
-	public List<PlanetResponse> getMyPlanetList(
+	public List<PlanetResponse> userPlanetList(
 		@AuthenticationPrincipal UserPrincipal userPrincipal, @ModelAttribute MyPlanetPage myPlanetPage) {
-		return userService.getUserPlanetList(userPrincipal.getUserId(), myPlanetPage);
+		return userService.findUserPlanetList(userPrincipal.getUserId(), myPlanetPage);
 	}
 }

@@ -2,16 +2,8 @@ package com.planetlandV2.service;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,7 +19,6 @@ import com.planetlandV2.domain.User;
 import com.planetlandV2.exception.trade.NotEnoughBalanceException;
 import com.planetlandV2.exception.trade.NotOwnerException;
 import com.planetlandV2.exception.planet.PlanetNotFound;
-import com.planetlandV2.exception.UserNotFound;
 import com.planetlandV2.repository.PlanetRepository;
 import com.planetlandV2.repository.TransactionRepository;
 import com.planetlandV2.repository.UserRepository;
@@ -83,7 +74,7 @@ class TradeServiceTest {
 
 		UserPrincipal userPrincipal = new UserPrincipal(user);
 		// when
-		tradeService.sell(userPrincipal, planet.getPlanetId(), planetSell);
+		tradeService.sellPlanet(userPrincipal, planet.getPlanetId(), planetSell);
 
 		// then
 		Planet targetPlanet = planetRepository.findById(planet.getPlanetId())
@@ -121,7 +112,7 @@ class TradeServiceTest {
 		UserPrincipal userPrincipal = new UserPrincipal(user);
 		// expected
 		assertThrows(NotOwnerException.class,
-			() -> tradeService.sell(userPrincipal, planet.getPlanetId(), planetSell));
+			() -> tradeService.sellPlanet(userPrincipal, planet.getPlanetId(), planetSell));
 	}
 
 	@Test
@@ -154,7 +145,7 @@ class TradeServiceTest {
 
 		UserPrincipal principal = new UserPrincipal(buyer);
 		// when
-		tradeService.buy(principal, planet.getPlanetId());
+		tradeService.buyPlanet(principal, planet.getPlanetId());
 
 		// then
 		assertEquals(1, buyer.getPlanets().size());
@@ -198,7 +189,7 @@ class TradeServiceTest {
 		UserPrincipal principal = new UserPrincipal(buyer);
 
 		// when
-		tradeService.buy(principal, planet.getPlanetId());
+		tradeService.buyPlanet(principal, planet.getPlanetId());
 
 		// then
 		List<Transaction> allTransactions = transactionRepository.findAll();
@@ -239,7 +230,7 @@ class TradeServiceTest {
 
 		// expected
 		assertThrows(NotEnoughBalanceException.class,
-			() -> tradeService.buy(principal, planet.getPlanetId()));
+			() -> tradeService.buyPlanet(principal, planet.getPlanetId()));
 	}
 
 	@Test
@@ -266,7 +257,7 @@ class TradeServiceTest {
 
 
 		// when
-		tradeService.cancel(principal, planet.getPlanetId());
+		tradeService.sellCancelPlanet(principal, planet.getPlanetId());
 
 		// then
 		Planet targetPlanet = planetRepository.findById(planet.getPlanetId())
@@ -306,7 +297,7 @@ class TradeServiceTest {
 
 		// expected
 		assertThrows(NotOwnerException.class,
-			() -> tradeService.cancel(principal, planet.getPlanetId()));
+			() -> tradeService.sellCancelPlanet(principal, planet.getPlanetId()));
 	}
 
 	// @Test

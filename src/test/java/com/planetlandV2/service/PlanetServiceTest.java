@@ -65,7 +65,7 @@ class PlanetServiceTest {
 			"<<jpeg data>>".getBytes());
 
 		// when
-		planetService.create(request, imgFile);
+		planetService.addPlanet(request, imgFile);
 
 		//then
 		assertEquals(1, planetRepository.count());
@@ -95,7 +95,7 @@ class PlanetServiceTest {
 		planetRepository.save(planet);
 
 		// when
-		PlanetDetailResponse planetDetailResponse = planetService.get(planet.getPlanetId());
+		PlanetDetailResponse planetDetailResponse = planetService.findPlanet(planet.getPlanetId());
 
 		// then
 		assertNotNull(planetDetailResponse);
@@ -129,7 +129,7 @@ class PlanetServiceTest {
 			"<<jpeg data>>".getBytes());
 
 		// when
-		planetService.edit(planet.getPlanetId(), planetEdit, imgFile);
+		planetService.modifyPlanet(planet.getPlanetId(), planetEdit, imgFile);
 
 		//then
 		Planet changedPlanet = planetRepository.findById(planet.getPlanetId())
@@ -160,7 +160,7 @@ class PlanetServiceTest {
 		planetRepository.save(planet);
 
 		//when
-		planetService.delete(planet.getPlanetId());
+		planetService.removePlanet(planet.getPlanetId());
 
 		//then
 		assertEquals(0, planetRepository.count());
@@ -184,7 +184,7 @@ class PlanetServiceTest {
 			.build();
 
 		// then
-		List<PlanetResponse> list = planetService.getList(planetPage);
+		List<PlanetResponse> list = planetService.findPlanetList(planetPage);
 
 		assertEquals(10L, list.size());
 		assertEquals("행성 0", list.get(9).getPlanetName());
@@ -210,7 +210,7 @@ class PlanetServiceTest {
 			.build();
 
 		// then
-		List<PlanetResponse> list = planetService.getList(planetPage);
+		List<PlanetResponse> list = planetService.findPlanetList(planetPage);
 
 		assertEquals(10L, list.size());
 		assertEquals("행성 0", list.get(0).getPlanetName());
@@ -249,7 +249,7 @@ class PlanetServiceTest {
 			.build();
 
 		// then
-		List<PlanetResponse> list = planetService.getList(planetPage);
+		List<PlanetResponse> list = planetService.findPlanetList(planetPage);
 
 		assertEquals(10L, list.size());
 		assertEquals("제일 비싼 행성", list.get(0).getPlanetName());
@@ -289,7 +289,7 @@ class PlanetServiceTest {
 			.build();
 
 		// then
-		List<PlanetResponse> list = planetService.getList(planetPage);
+		List<PlanetResponse> list = planetService.findPlanetList(planetPage);
 
 		assertEquals(10L, list.size());
 		assertEquals("제일 싼 행성", list.get(0).getPlanetName());
@@ -313,7 +313,7 @@ class PlanetServiceTest {
 
 		//expected
 		assertThrows(PlanetNotFound.class, () -> {
-			planetService.get(planet.getPlanetId() + 1);
+			planetService.findPlanet(planet.getPlanetId() + 1);
 		});
 	}
 
@@ -345,7 +345,7 @@ class PlanetServiceTest {
 
 		//expected
 		assertThrows(PlanetNotFound.class, () -> {
-			planetService.edit(planet.getPlanetId() + 1, planetEdit, imgFile);
+			planetService.modifyPlanet(planet.getPlanetId() + 1, planetEdit, imgFile);
 		});
 	}
 
@@ -364,7 +364,7 @@ class PlanetServiceTest {
 
 		//expected
 		assertThrows(PlanetNotFound.class, () -> {
-			planetService.delete(planet.getPlanetId() + 1);
+			planetService.removePlanet(planet.getPlanetId() + 1);
 		});
 	}
 
@@ -394,7 +394,7 @@ class PlanetServiceTest {
 
 		//expected
 		assertThrows(ExistsPlanetNameException.class, () ->
-			planetService.create(planetCreate, imgFile)
+			planetService.addPlanet(planetCreate, imgFile)
 		);
 	}
 
@@ -433,7 +433,7 @@ class PlanetServiceTest {
 
 		//expected
 		assertThrows(ExistsPlanetNameException.class, () ->
-			planetService.edit(planet1.getPlanetId(), planetEdit, imgFile)
+			planetService.modifyPlanet(planet1.getPlanetId(), planetEdit, imgFile)
 		);
 	}
 
@@ -463,6 +463,6 @@ class PlanetServiceTest {
 
 		//expected
 		assertThrows(NotSupportedExtension.class, () ->
-			planetService.edit(planet.getPlanetId(), planetEdit, imgFile));
+			planetService.modifyPlanet(planet.getPlanetId(), planetEdit, imgFile));
 	}
 }

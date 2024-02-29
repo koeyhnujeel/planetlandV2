@@ -28,20 +28,20 @@ public class UserService {
 	private final UserRepository userRepository;
 
 	@Transactional
-	public void cancelMembership(Long userId) {
+	public void removeUser(Long userId) {
 		Optional<List<Transaction>> userTransactions = transactionRepository.findByBuyer_idOrSeller_id(userId, userId);
 		userTransactions.ifPresent(transactions -> transactions.forEach(transaction -> transaction.deleteUser(userId)));
 		userRepository.deleteById(userId);
 	}
 
-	public List<TransactionResponse> getUserTransactionList(Long userId, TransactionPage transactionPage) {
+	public List<TransactionResponse> findUserTransactionList(Long userId, TransactionPage transactionPage) {
 		List<Transaction> transactionList = transactionRepository.getTransactionList(userId, transactionPage);
 		return transactionList.stream()
 			.map(Transaction::toResponse)
 			.collect(Collectors.toList());
 	}
 
-	public List<PlanetResponse> getUserPlanetList(Long userId, MyPlanetPage myPlanetPage) {
+	public List<PlanetResponse> findUserPlanetList(Long userId, MyPlanetPage myPlanetPage) {
 		List<Planet> myPlanetsList = planetRepository.getMyPlanetList(userId, myPlanetPage);
 		return myPlanetsList.stream()
 			.map(Planet::toResponse)
