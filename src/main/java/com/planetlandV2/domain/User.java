@@ -1,16 +1,13 @@
 package com.planetlandV2.domain;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 import com.planetlandV2.constant.Balance;
-import jakarta.persistence.CascadeType;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,9 +32,6 @@ public class User {
 
 	private LocalDateTime createdAt;
 
-	@OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
-	private List<Planet> planets = new ArrayList<>();
-
 	@Builder
 	public User(String email, String password, String nickname) {
 		this.email = email;
@@ -47,13 +41,11 @@ public class User {
 		this.createdAt = LocalDateTime.now();
 	}
 
-	public void addPlanetAndBalanceDecrease(Planet planet) {
-		this.planets.add(planet);
+	public void decreaseBalance(Planet planet) {
 		this.balance -= planet.getPrice();
 	}
 
-	public void deletePlanetAndBalanceIncrease(Planet planet) {
-		this.planets.remove(planet);
+	public void increaseBalance(Planet planet) {
 		this.balance += planet.getPrice();
 	}
 
