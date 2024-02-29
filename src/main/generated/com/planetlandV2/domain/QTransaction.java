@@ -26,6 +26,10 @@ public class QTransaction extends EntityPathBase<Transaction> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final BooleanPath isBuyerWithdrawal = createBoolean("isBuyerWithdrawal");
+
+    public final BooleanPath isSellerWithdrawal = createBoolean("isSellerWithdrawal");
+
     public final QPlanet planet;
 
     public final NumberPath<Integer> price = createNumber("price", Integer.class);
