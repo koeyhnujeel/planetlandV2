@@ -1,8 +1,4 @@
 package com.planetlandV2.Enum;
-
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
-
 public enum TransactionType {
 	ALL("전체"),
 	BUY("구매"),
@@ -15,7 +11,6 @@ public enum TransactionType {
 		this.value = value;
 	}
 
-	@JsonCreator
 	public static TransactionType from(String value) {
 		for (TransactionType type : TransactionType.values()) {
 			if (type.getValue().equals(value)) {
@@ -25,7 +20,6 @@ public enum TransactionType {
 		return null;
 	}
 
-	@JsonValue
 	public String getValue() {
 		return value;
 	}
