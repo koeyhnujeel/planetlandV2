@@ -97,7 +97,7 @@ public class Planet {
 		this.imgPath = imgPath;
 	}
 
-	public void editPriceAndStatus(PlanetSell planetSell) {
+	public void salesSetting(PlanetSell planetSell) {
 		this.price = planetSell.getSellPrice();
 		this.planetStatus = PlanetStatus.FORSALE;
 	}
@@ -108,7 +108,7 @@ public class Planet {
 		this.user = buyer;
 	}
 
-	public void changeStatus(PlanetStatus planetStatus) {
+	public void cancelSale(PlanetStatus planetStatus) {
 		this.planetStatus = planetStatus;
 	}
 }
