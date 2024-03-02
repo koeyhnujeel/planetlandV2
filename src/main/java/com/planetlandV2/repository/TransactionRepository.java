@@ -8,12 +8,13 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import com.planetlandV2.domain.Planet;
 import com.planetlandV2.domain.Transaction;
 
 @Repository
 public interface TransactionRepository extends JpaRepository<Transaction, Long>, TransactionRepositoryCustom {
 
-	Optional<List<Transaction>> findByPlanet_planetId(Long planetId);
+	Optional<List<Transaction>> findByPlanet(Planet planet);
 
 	Optional<List<Transaction>> findByBuyer_idOrSeller_id(Long buyerId, Long sellerId);
 
