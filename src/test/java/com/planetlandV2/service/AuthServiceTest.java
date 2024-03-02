@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import com.planetlandV2.domain.User;
 import com.planetlandV2.exception.signup.ExistsEmailException;
 import com.planetlandV2.exception.signup.ExistsNicknameException;
+import com.planetlandV2.repository.PlanetRepository;
 import com.planetlandV2.repository.TransactionRepository;
 import com.planetlandV2.repository.UserRepository;
 import com.planetlandV2.request.Signup;
@@ -21,6 +22,9 @@ class AuthServiceTest {
 
 	@Autowired
 	private UserRepository userRepository;
+
+	@Autowired
+	private PlanetRepository planetRepository;
 
 	@Autowired
 	private TransactionRepository transactionRepository;
@@ -34,6 +38,7 @@ class AuthServiceTest {
 	@BeforeEach
 	void clean() {
 		transactionRepository.deleteAll();
+		planetRepository.deleteAll();
 		userRepository.deleteAll();
 	}
 

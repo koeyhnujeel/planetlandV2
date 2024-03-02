@@ -43,8 +43,8 @@ public class PessimisticLockTest {
 	@BeforeEach
 	void clean() {
 		transactionRepository.deleteAll();
-		userRepository.deleteAll();
 		planetRepository.deleteAll();
+		userRepository.deleteAll();
 	}
 
 	@Test

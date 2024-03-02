@@ -449,7 +449,7 @@ class PlanetControllerTest {
 	@DisplayName("존재하지 않는 행성 삭제")
 	void test14() throws Exception {
 		// expected
-		mockMvc.perform(delete("/planets/{planetId}", 10L)
+		mockMvc.perform(delete("/planets/{planetId}", 10000000000L)
 				.contentType(APPLICATION_JSON)
 			)
 			.andExpect(status().isNotFound())

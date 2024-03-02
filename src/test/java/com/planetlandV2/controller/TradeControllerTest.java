@@ -48,8 +48,8 @@ class TradeControllerTest {
 	@AfterEach
 	void clean() {
 		transactionRepository.deleteAll();
-		userRepository.deleteAll();
 		planetRepository.deleteAll();
+		userRepository.deleteAll();
 	}
 
 	@Test
@@ -74,8 +74,6 @@ class TradeControllerTest {
 		PlanetSell planetSell = PlanetSell.builder()
 			.sellPrice(5000)
 			.build();
-
-		user.getPlanets().add(planet);
 
 		String json = objectMapper.writeValueAsString(planetSell);
 
@@ -118,8 +116,6 @@ class TradeControllerTest {
 		PlanetSell planetSell = PlanetSell.builder()
 			.sellPrice(5000)
 			.build();
-
-		user.getPlanets().add(planet);
 
 		String json = objectMapper.writeValueAsString(planetSell);
 
@@ -195,8 +191,6 @@ class TradeControllerTest {
 			.build();
 		planetRepository.save(planet);
 
-		seller.getPlanets().add(planet);
-
 		//expected
 		mockMvc.perform(patch("/planets/{planetId}/buy", planet.getPlanetId())
 				.contentType(MediaType.APPLICATION_JSON)
@@ -224,8 +218,6 @@ class TradeControllerTest {
 			.planetStatus(PlanetStatus.FORSALE)
 			.build();
 		planetRepository.save(planet);
-
-		seller.getPlanets().add(planet);
 
 		UserPrincipal principal = new UserPrincipal(seller);
 

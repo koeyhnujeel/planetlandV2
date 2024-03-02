@@ -43,8 +43,8 @@ class TradeServiceTest {
 	@BeforeEach
 	void clean() {
 		transactionRepository.deleteAll();
-		userRepository.deleteAll();
 		planetRepository.deleteAll();
+		userRepository.deleteAll();
 	}
 
 	@Test
@@ -65,8 +65,6 @@ class TradeServiceTest {
 			.planetStatus(PlanetStatus.NOTFORSALE)
 			.build();
 		planetRepository.save(planet);
-
-		user.getPlanets().add(planet);
 
 		PlanetSell planetSell = PlanetSell.builder()
 			.sellPrice(6000)
@@ -102,8 +100,6 @@ class TradeServiceTest {
 			.planetStatus(PlanetStatus.NOTFORSALE)
 			.build();
 		planetRepository.save(planet);
-
-		user.getPlanets().add(planet);
 
 		PlanetSell planetSell = PlanetSell.builder()
 			.sellPrice(6000)
@@ -148,10 +144,7 @@ class TradeServiceTest {
 		tradeService.buyPlanet(principal, planet.getPlanetId());
 
 		// then
-		assertEquals(1, buyer.getPlanets().size());
-		assertEquals("test", buyer.getPlanets().get(0).getPlanetName());
 		assertEquals(500, buyer.getBalance());
-		assertEquals(0, seller.getPlanets().size());
 		assertEquals(1500, seller.getBalance());
 		assertEquals(PlanetStatus.NOTFORSALE, planet.getPlanetStatus());
 		assertEquals("buyer", planet.getOwner());
@@ -185,7 +178,6 @@ class TradeServiceTest {
 			.build();
 		planetRepository.save(planet);
 
-		seller.getPlanets().add(planet);
 		UserPrincipal principal = new UserPrincipal(buyer);
 
 		// when
@@ -225,7 +217,6 @@ class TradeServiceTest {
 			.build();
 		planetRepository.save(planet);
 
-		seller.getPlanets().add(planet);
 		UserPrincipal principal = new UserPrincipal(buyer);
 
 		// expected
@@ -252,7 +243,6 @@ class TradeServiceTest {
 			.build();
 		planetRepository.save(planet);
 
-		seller.getPlanets().add(planet);
 		UserPrincipal principal = new UserPrincipal(seller);
 
 
@@ -292,68 +282,10 @@ class TradeServiceTest {
 			.build();
 		planetRepository.save(planet);
 
-		seller.getPlanets().add(planet);
 		UserPrincipal principal = new UserPrincipal(other);
 
 		// expected
 		assertThrows(NotOwnerException.class,
 			() -> tradeService.sellCancelPlanet(principal, planet.getPlanetId()));
 	}
-
-	// @Test
-	// @DisplayName("[비관적 락] 여러 명이 동시에 하나에 행성을 구매하려 할 때")
-	// void test8() throws InterruptedException {
-	// 	List<User> users = IntStream.range(1, 11)
-	// 		.mapToObj(i -> User.builder()
-	// 			.nickname("user" + i)
-	// 			.password("password")
-	// 			.email("test" + i + "@email.com")
-	// 			.build())
-	// 		.collect(Collectors.toList());
-	// 	userRepository.saveAll(users);
-	//
-	// 	User admin = User.builder()
-	// 		.email("admin@email.com")
-	// 		.password("password")
-	// 		.nickname("ADMIN")
-	// 		.build();
-	// 	userRepository.save(admin);
-	//
-	// 	Planet planet = Planet.builder()
-	// 		.planetName("test")
-	// 		.price(100)
-	// 		.population(10)
-	// 		.satellite(1)
-	// 		.planetStatus(PlanetStatus.FORSALE)
-	// 		.owner("ADMIN")
-	// 		.build();
-	// 	planetRepository.save(planet);
-	//
-	// 	final int numberOfUsers = 10;
-	//
-	// 	ExecutorService executorService = Executors.newFixedThreadPool(numberOfUsers);
-	//
-	// 	for (int i = 0; i < numberOfUsers; i++) {
-	// 		final Long userId = (long) i + 1;
-	//
-	// 		executorService.execute(() -> {
-	// 			UserPrincipal userPrincipal = new UserPrincipal(userRepository.findById(userId).get());
-	// 			try {
-	// 				tradeService.buy(userPrincipal, planet.getPlanetId());
-	// 			} catch (Exception e) {
-	// 				e.printStackTrace();
-	// 			}
-	// 		});
-	// 	}
-	//
-	// 	executorService.shutdown();
-	// 	executorService.awaitTermination(1, TimeUnit.MINUTES);
-	//
-	// 	List<Transaction> allTransactions = transactionRepository.findAll();
-	// 	Planet target = planetRepository.findById(planet.getPlanetId())
-	// 		.orElseThrow(PlanetNotFound::new);
-	//
-	// 	assertEquals(1, allTransactions.size());
-	// 	assertEquals("미판매", target.getPlanetStatus().getValue());
-	// }
 }
