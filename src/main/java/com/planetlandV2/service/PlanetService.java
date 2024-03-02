@@ -67,9 +67,11 @@ public class PlanetService {
 
 	@Transactional
 	public void removePlanet(Long planetId) {
-		Optional<List<Transaction>> transactionList = transactionRepository.findByPlanet_planetId(planetId);
+		Planet planet = planetRepository.findById(planetId)
+			.orElseThrow(PlanetNotFound::new);
+		Optional<List<Transaction>> transactionList = transactionRepository.findByPlanet(planet);
 		transactionList.ifPresent(transactions -> transactions.forEach(Transaction::deletePlanet));
-		planetRepository.deleteById(planetId);
+		planetRepository.deleteById(planet.getPlanetId());
 	}
 
 	public List<PlanetResponse> findPlanetList(PlanetPage planetPage) {
