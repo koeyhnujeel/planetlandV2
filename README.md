@@ -6,7 +6,7 @@
 기존 Planetland 리팩토링 프로젝트 [링크](https://github.com/koeyhnujeel/planetland) <br />
 명령어를 통해 즐기는 행성 매매 게임 
 
-## 🧑‍💻 개발 환경
+## 🛠️ 개발 환경
 `Java 17` `Spring boot 3.0.5` `Spring Data JPA` `Spring Security` `H2 database` `IntelliJ`
 
 ## ⌨️ 명령어 목록
@@ -24,5 +24,5 @@
 `quit` 회원가입 취소, 로그인 취소, 행성 등록 취소, 행성 수정 취소, 행성 판매 등록 취소 <br />
 `close` 행성 목록 닫기
 
-## 구현 사항
+## 🧑‍💻 구현 내용
 `로그인/회원가입` `행성CRUD` `행성 거래` `거래 내역, 행성 목록 페이징`
