@@ -26,4 +26,4 @@
 
 ## 🧑‍💻 구현 내용
 ⬇️ 클릭! <br />
-[`로그인/회원가입`](https://www.naver.com) `행성CRUD` `행성 거래` `거래 내역, 행성 목록 페이징` `테스트 코드`
+[`로그인/회원가입`](https://www.naver.com) [`행성CRUD`](https://github.com/koeyhnujeel/planetlandV2/wiki/%EA%B5%AC%ED%98%84-%EB%82%B4%EC%9A%A9-%EC%86%8C%EA%B0%9C#%ED%96%89%EC%84%B1crud) `행성 거래` `거래 내역, 행성 목록 페이징` `테스트 코드`
