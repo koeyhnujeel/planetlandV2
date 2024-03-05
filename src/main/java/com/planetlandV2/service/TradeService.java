@@ -43,7 +43,7 @@ public class TradeService {
 	@Transactional
 	public void buyPlanet(@AuthenticationPrincipal UserPrincipal userPrincipal, Long planetId) {
 
-		Planet planet = planetReader.readForBuy(planetId);
+		Planet planet = planetReader.read(planetId);
 		checkForSale(planet.getPlanetStatus());
 
 		User buyer = userReader.read(userPrincipal.getUserId());

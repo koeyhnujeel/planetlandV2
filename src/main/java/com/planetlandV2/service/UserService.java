@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.planetlandV2.Manager.TransactionManager;
 import com.planetlandV2.domain.Planet;
 import com.planetlandV2.domain.Transaction;
 import com.planetlandV2.repository.PlanetRepository;
@@ -23,6 +24,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class UserService {
 
+	private final TransactionManager transactionManager;
+
 	private final TransactionRepository transactionRepository;
 	private final PlanetRepository planetRepository;
 	private final UserRepository userRepository;
@@ -35,10 +38,7 @@ public class UserService {
 	}
 
 	public List<TransactionResponse> findUserTransactionList(Long userId, TransactionPage transactionPage) {
-		List<Transaction> transactionList = transactionRepository.getTransactionList(userId, transactionPage);
-		return transactionList.stream()
-			.map(Transaction::toResponse)
-			.collect(Collectors.toList());
+		return transactionManager.readList(userId, transactionPage);
 	}
 
 	public List<PlanetResponse> findUserPlanetList(Long userId, MyPlanetPage myPlanetPage) {
