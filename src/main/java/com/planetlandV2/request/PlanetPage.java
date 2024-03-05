@@ -4,10 +4,8 @@ import static java.lang.Math.*;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
 @Builder
 public class PlanetPage {
 
